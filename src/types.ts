@@ -7,3 +7,12 @@ export interface HttpResponse {
     [key: string]: any;
   };
 }
+
+export enum PageEnum {
+  // 登录
+  BASE_LOGIN = '/login',
+  BASE_LOGIN_NAME = 'Login',
+
+  BASE_HOME = '/project',
+  BASE_HOME_NAME = 'project',
+}

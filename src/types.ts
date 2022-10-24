@@ -13,6 +13,8 @@ export enum PageEnum {
   BASE_LOGIN = '/login',
   BASE_LOGIN_NAME = 'Login',
 
-  BASE_HOME = '/project',
-  BASE_HOME_NAME = 'project',
+  BASE_HOME = '/layout',
+  BASE_HOME_NAME = 'layout',
+
+  ERROR_PAGE_NAME_404 = '404',
 }

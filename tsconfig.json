@@ -9,7 +9,7 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "lib": ["es6", "esnext", "dom"],
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
     "baseUrl": ".",
@@ -17,5 +17,10 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.js"
+  ]
 }

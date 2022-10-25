@@ -1,9 +1,13 @@
 <script setup lang="ts">
-const handleSelect = (index, indexPath) => {};
+import { useMainStore } from "@/store/main";
+const mainStore = useMainStore();
+const handleSelect = (index, indexPath) => {
+  console.log(index);
+};
 </script>
 <template>
   <el-menu
-    :default-active="'dashboardManage'"
+    :default-active="mainStore.default_navication"
     class="el-menu-vertical-demo"
     :router="true"
     @select="handleSelect"

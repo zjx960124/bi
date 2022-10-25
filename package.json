@@ -9,6 +9,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "@types/nprogress": "^0.2.0",
     "@vueuse/core": "^8.7.5",
     "axios": "^0.24.0",

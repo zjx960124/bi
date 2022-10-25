@@ -17,4 +17,15 @@ export enum PageEnum {
   BASE_HOME_NAME = 'layout',
 
   ERROR_PAGE_NAME_404 = '404',
+
+  DASHBOARD_MANAGE = '/dashboardManage',
+  DASHBOARD_MANAGE_NAME = 'dashboardManage',
+
+  SCREEN_MANAGE = '/screenManage',
+  SCREEN_MANAGE_NAME = 'screenManage',
+}
+
+export interface breadcrumbItem {
+  name: string;
+  path: string;
 }

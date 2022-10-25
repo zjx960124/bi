@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@element-plus/icons-vue': ^2.0.10
   '@types/node': ^16.11.11
   '@types/nprogress': ^0.2.0
   '@types/qs': ^6.9.7
@@ -36,6 +37,7 @@ specifiers:
   vuedraggable: ^4.1.0
 
 dependencies:
+  '@element-plus/icons-vue': 2.0.10_vue@3.2.37
   '@types/nprogress': 0.2.0
   '@vueuse/core': 8.7.5_vue@3.2.37
   axios: 0.24.0
@@ -377,6 +379,14 @@ packages:
 
   /@element-plus/icons-vue/0.2.7_vue@3.2.37:
     resolution: {integrity: sha512-S8kDbfVaWkQvbUYQE1ui448tzaHfUvyESCep9J6uPRlViyQPXjdIfwLBhV6AmQSOfFS8rL+xehJGhvzPXLrSBg==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: 3.2.37
+    dev: false
+
+  /@element-plus/icons-vue/2.0.10_vue@3.2.37:
+    resolution: {integrity: sha512-ygEZ1mwPjcPo/OulhzLE7mtDrQBWI8vZzEWSNB2W/RNCRjoQGwbaK4N8lV4rid7Ts4qvySU3njMN7YCiSlSaTQ==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:

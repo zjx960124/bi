@@ -1,17 +1,11 @@
 <script setup lang="ts">
-const handleOpen = (index) => {};
-const handleClose = (index) => {};
-const handleSelect = (index, indexPath) => {
-  console.log(index, indexPath);
-};
+const handleSelect = (index, indexPath) => {};
 </script>
 <template>
   <el-menu
-    :default-active="'1-dashboardManage'"
+    :default-active="'dashboardManage'"
     class="el-menu-vertical-demo"
     :router="true"
-    @open="handleOpen"
-    @close="handleClose"
     @select="handleSelect"
   >
     <el-sub-menu index="1">

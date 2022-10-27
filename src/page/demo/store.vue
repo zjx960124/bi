@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useMainStore } from "@/store/main";
-const mainStore = useMainStore();
+import { useRouteStore } from "@/store/useRoute/useRoute";
+const mainStore = useRouteStore();
 const updateName = () => {
   mainStore.$patch({
     name: "测试成功",
   });
 };
-let b:number;
-let a
+let b: number;
+let a;
 </script>
 
 <template>

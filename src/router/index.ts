@@ -6,6 +6,7 @@ import { createRouterGuards } from './router-guards';
 import modules from '@/router/modules';
 
 const Layout = import('@/views/layout/index.vue');
+const editor = import('@/views/editor');
 
 const RootRoute: Array<RouteRecordRaw> = [
   {
@@ -20,9 +21,20 @@ const RootRoute: Array<RouteRecordRaw> = [
   },
 ];
 
+const EditorRoute: Array<RouteRecordRaw> = [
+  {
+    path: '/editor',
+    name: 'editor',
+    component: editor,
+    meta: {
+      title: 'editor',
+    },
+  },
+];
+
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: [...RootRoute],
+  routes: [...RootRoute, ...EditorRoute],
 });
 
 export function setupRouter(app: App) {

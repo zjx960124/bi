@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ArrowRight } from "@element-plus/icons-vue";
-import { useMainStore } from "@/store/main";
+import { useRouteStore } from "@/store/useRoute/useRoute";
 import { ref } from "vue";
-const mainStore = useMainStore();
-const breadcrumbList = ref(mainStore.breadcrumbList);
+const routeStore = useRouteStore();
+const breadcrumbList = ref(routeStore.breadcrumbList);
 </script>
 <template>
   <el-breadcrumb :separator-icon="ArrowRight">

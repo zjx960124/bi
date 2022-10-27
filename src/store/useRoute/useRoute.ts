@@ -1,10 +1,8 @@
 import { breadcrumbItem } from '@/types';
 import { defineStore } from 'pinia';
-import router from '@/router';
-import changeBreadcrumb from '@/utils/directive/changeBreadcrumb';
 
-export const useMainStore = defineStore({
-  id: 'main',
+export const useRouteStore = defineStore({
+  id: 'route',
   state: () => ({
     name: '超级管理员',
     hook_active: 'store',

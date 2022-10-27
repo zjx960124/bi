@@ -1,11 +1,11 @@
 import { App } from 'vue';
-import { useMainStore } from '@/store/main';
+import { useRouteStore } from '@/store/useRoute/useRoute';
 
 export default {
   install(app: App<Element>) {
     app.directive('registed', {
       created(el, binding) {
-        const mainStore = useMainStore();
+        const mainStore = useRouteStore();
         function eventHandler(e: any) {
           if (!el.contains(e.target)) {
             return false;

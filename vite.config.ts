@@ -1,10 +1,10 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import path from "path";
-import { viteMockServe } from "vite-plugin-mock";
-import vueJsx from "@vitejs/plugin-vue-jsx"; // 使用jsx
-import Components from "unplugin-vue-components/vite"; // 按需自动引入组件
-const { ElementPlusResolver } = require('unplugin-vue-components/resolvers') // 引入UI组件库解析器
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
+import { viteMockServe } from 'vite-plugin-mock';
+import vueJsx from '@vitejs/plugin-vue-jsx'; // 使用jsx
+import Components from 'unplugin-vue-components/vite'; // 按需自动引入组件
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers'); // 引入UI组件库解析器
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,23 +20,23 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
       extensions: ['vue'],
       // 配置文件生成位置
-      dts: 'src/components.d.ts'
+      dts: 'src/components.d.ts',
     }),
   ],
-  base: "./",
+  base: './',
   resolve: {
     // resolve.alias: 更轻松地为import或require某些模块创建别名
     alias: {
       // 如果报错__dirname找不到，需要安装node,执行npm install @types/node --save-dev
-      "@": path.resolve(__dirname, "./src"),
-      "@assets": path.resolve(__dirname, "./src/assets"),
-      "@components": path.resolve(__dirname, "./src/components"),
-      "@views": path.resolve(__dirname, "./src/views"),
-      "@store": path.resolve(__dirname, "./src/store"),
+      '@': path.resolve(__dirname, './src'),
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@views': path.resolve(__dirname, './src/views'),
+      '@store': path.resolve(__dirname, './src/store'),
     },
   },
   build: {
-    outDir: "dist",
+    outDir: 'dist',
     terserOptions: {
       compress: {
         drop_console: true,
@@ -50,18 +50,18 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 8001,
     proxy: {
-      "/api": {
-        target: "http://localhost:3000", // 后台接口
+      '/api': {
+        target: 'http://localhost:3000', // 后台接口
         changeOrigin: true,
         // secure: false, // 如果是https接口，需要配置这个参数
         // ws: true, //websocket支持
         // 截取api，并用api代替
         // rewrite: (path) => path.replace(/^\/api/, "/api"),
       },
-      "/gapi": {
-        target: "http://localhost:8001/", //对mock进行代理，为了区别非mock的代理
+      '/gapi': {
+        target: 'http://localhost:8001/', //对mock进行代理，为了区别非mock的代理
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/gapi/, ""),
+        rewrite: (path) => path.replace(/^\/gapi/, ''),
       },
     },
   },
@@ -72,7 +72,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@import "@/style/main.scss";',
+        additionalData: `@import "src/styles/common/style.scss";`,
       },
     },
   },

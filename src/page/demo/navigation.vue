@@ -5,10 +5,10 @@ const routerList = router
   .getRoutes()
   .filter((item) => item.path === "/hook/hookList")?.[0].components;
 
-import { useMainStore } from "@/store/main";
-const mainStore = useMainStore();
+import { useRouteStore } from "@/store/useRoute/useRoute";
+const routeStore = useRouteStore();
 const handleSelect = (index: string) => {
-  mainStore.$patch({
+  routeStore.$patch({
     hook_active: index,
   });
 };

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { useMainStore } from "@/store/main";
-const mainStore = useMainStore();
+import { useRouteStore } from "@/store/useRoute/useRoute";
+const routeStore = useRouteStore();
 </script>
 
 <template>
   <div class="container">
     <div class="container-main">
       <div class="hook-list-view"><Navigation></Navigation></div>
-      <div class="hook-view"><router-view :name="mainStore.hook_active" /></div>
+      <div class="hook-view"><router-view :name="routeStore.hook_active" /></div>
     </div>
   </div>
 </template>

@@ -4,14 +4,20 @@ import { loadAsyncComponent } from "@/utils";
 import { useContextMenu } from "./charts/hooks/useContextMenu.hook";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
+import { useRouter } from "vue-router";
 
 const charts = loadAsyncComponent(() => import("./charts/index.vue"));
+const pages = loadAsyncComponent(() => import("./pages/index.vue"));
 const operation = loadAsyncComponent(() => import("./operation/index.vue"));
 
 const chartHistoryStoreStore = useChartHistoryStore();
 const chartEditStore = useChartEditStore();
 // 记录初始化
 chartHistoryStoreStore.canvasInit(chartEditStore.getEditCanvas);
+
+// 路由
+const router = useRouter();
+const currentRoute = router.currentRoute.value.name;
 
 // 右键
 const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
@@ -20,7 +26,11 @@ const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
 <template>
   <div class="editor">
     <header-plugin>
-      <template #left> 大屏名称</template>
+      <template #left>
+        <span>大屏名称</span>
+        <el-button>撤销</el-button>
+        <el-button>下一步</el-button>
+      </template>
       <template #center></template>
       <template #ri-left>
         <el-button>预览</el-button>
@@ -29,7 +39,8 @@ const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
       </template>
     </header-plugin>
     <main>
-      <charts></charts>
+      <charts v-if="currentRoute === 'dashboardEditor'"></charts>
+      <pages v-else></pages>
       <operation></operation>
     </main>
   </div>

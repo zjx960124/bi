@@ -28,8 +28,8 @@ import changeBreadcrumb from '@/utils/directive/changeBreadcrumb';
 const app = createApp(App);
 
 app
-  .use(router)
   .use(createPinia())
+  .use(router)
   .use(ElementPlus)
   .use(directPlugin)
   .use(registedBreadcrumb)

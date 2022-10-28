@@ -29,6 +29,7 @@ const {
 import { editorCanvas } from "./editorCanvas";
 import { EditShapeBox } from "./EditShapeBox";
 import { EditRange } from "./EditRange";
+import { editorToolbar } from "./editorToolbar";
 </script>
 <template>
   <div class="editor-operation">

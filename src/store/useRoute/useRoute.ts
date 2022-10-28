@@ -1,13 +1,14 @@
 import { breadcrumbItem } from '@/types';
 import { defineStore } from 'pinia';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 export const useRouteStore = defineStore({
   id: 'route',
   state: () => ({
-    name: '超级管理员',
-    hook_active: 'store',
+    currentEditorRoute: '',
     default_navication: 'dashboardManage',
-    breadcrumb_list: [
+    breadcrumbList: [
       {
         name: '仪表盘',
         path: 'dashboardManage',
@@ -15,19 +16,15 @@ export const useRouteStore = defineStore({
     ],
   }),
   getters: {
-    nameLength: (state) => state.name.length,
-    hookActive: (state) => state.hook_active,
-    breadcrumbList: (state) => {
-      return state.breadcrumb_list;
+    getBreadcrumbList(): breadcrumbItem[] {
+      return this.breadcrumbList;
+    },
+    getcurrentEditorRoute(): string {
+      return this.currentEditorRoute;
     },
   },
   actions: {
-    async insertPost(data: string) {
-      // 可以做异步
-      // await doAjaxRequest(data);
-      this.name = data;
-    },
-    async registerBreadcrumb(data: breadcrumbItem) {
+    async registerBreadcrumb(data: breadcrumbItem): Promise<void> {
       const current = this.breadcrumbList.findIndex(function (val) {
         return val.name === data.name;
       });
@@ -36,13 +33,16 @@ export const useRouteStore = defineStore({
         this.breadcrumbList.push(...this.breadcrumbList.splice(current, 1));
       this.changeDefaultNavication();
     },
-    async changeBreadcrumb(index: number) {
+    async changeBreadcrumb(index: number): Promise<void> {
       this.breadcrumbList.push(...this.breadcrumbList.splice(index, 1));
       this.changeDefaultNavication();
     },
-    async changeDefaultNavication() {
+    async changeDefaultNavication(): Promise<void> {
       this.default_navication =
         this.breadcrumbList[this.breadcrumbList.length - 1]['path'];
+    },
+    async setCurrentEditorRoute(): Promise<void> {
+      this.currentEditorRoute = router.currentRoute.value.name as string;
     },
   },
 });

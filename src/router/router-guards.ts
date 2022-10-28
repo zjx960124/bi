@@ -1,4 +1,4 @@
-import { Router } from 'vue-router';
+import { Router, useRoute } from 'vue-router';
 import { PageEnum } from '@/types';
 import { loginCheck } from '@/utils';
 import NProgress from 'nprogress'; // progress bar

@@ -2,6 +2,7 @@
 </script>
 <template>
   <div>
+    <slot name="toolbar"></slot>
     <slot></slot>
   </div>
 </template>

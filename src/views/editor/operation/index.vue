@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { loadAsyncComponent } from "@/utils";
+import { chartColors } from "@/settings/chartThemes/index";
 import {
   dragHandle,
   dragoverHandle,
@@ -30,9 +32,24 @@ import { editorCanvas } from "./editorCanvas";
 import { EditShapeBox } from "./EditShapeBox";
 import { EditRange } from "./EditRange";
 import { editorToolbar } from "./editorToolbar";
+import { editorConfigurations } from "./editorConfigurations";
+
+// 主题色
+const themeSetting = computed(() => {
+  const chartThemeSetting =
+    chartEditStore.getEditCanvasConfig.chartThemeSetting;
+  return chartThemeSetting;
+});
+
+// 配置项
+const themeColor = computed(() => {
+  const chartThemeColor = chartEditStore.getEditCanvasConfig.chartThemeColor;
+  return chartColors[chartThemeColor];
+});
 </script>
 <template>
   <div class="editor-operation">
+    <editor-toolbar></editor-toolbar>
     <editor-canvas
       id="go-chart-edit-layout"
       class="editor-canvas"
@@ -41,6 +58,7 @@ import { editorToolbar } from "./editorToolbar";
       @dragover="dragoverHandle"
       @dragenter="dragoverHandle"
     >
+      <template #toolbar> </template>
       <div
         id="go-chart-edit-content"
         class="editor-content"
@@ -78,7 +96,9 @@ import { editorToolbar } from "./editorToolbar";
         </edit-range>
       </div>
     </editor-canvas>
-    <div class="editor-configurations">配置区域</div>
+    <div class="editor-configurations">
+      <editor-configurations></editor-configurations>
+    </div>
   </div>
 </template>
 <style lang='scss' scoped>
@@ -87,10 +107,12 @@ import { editorToolbar } from "./editorToolbar";
   flex: auto;
   height: 100%;
   width: 0;
+  position: relative;
   .editor-canvas {
     flex: auto;
     width: calc(100% - 350px);
     height: 100%;
+    padding-top: 55px;
     background-color: aquamarine;
     .editor-content {
       background-color: azure;

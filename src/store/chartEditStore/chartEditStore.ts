@@ -895,7 +895,6 @@ export const useChartEditStore = defineStore({
     },
     // * 计算缩放
     computedScale() {
-      console.log(this.getEditCanvas.editLayoutDom);
       if (this.getEditCanvas.editLayoutDom) {
         // 现有展示区域
         const width =
@@ -905,8 +904,6 @@ export const useChartEditStore = defineStore({
         const height =
           this.getEditCanvas.editLayoutDom.clientHeight -
           this.getEditCanvas.offset * 4;
-
-        console.log(width, height);
 
         // 用户设定大小
         const editCanvasWidth = this.editCanvasConfig.width;

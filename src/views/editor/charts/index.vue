@@ -69,8 +69,6 @@ watch(
 const clickItemHandle = (key: string) => {
   packages.selectOptions = packages.categorys[key];
 };
-
-console.log(packages);
 </script>
 <template>
   <div class="editor-charts">

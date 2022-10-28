@@ -1,4 +1,6 @@
+import { GenreEnum, GenreEnumName } from './components/Charts/index.d';
 import type { GlobalThemeJsonType } from '@/settings/chartThemes/index';
+
 // 组件配置
 export type ConfigType = {
   key: string;
@@ -34,6 +36,22 @@ export type PackagesType = {
   [PackagesCategoryEnum.TEXT]?: ConfigType[];
   [PackagesCategoryEnum.MEDIA]?: ConfigType[];
   [PackagesCategoryEnum.MATERIAL]?: ConfigType[];
+};
+
+export type GenreType = {
+  [GenreEnum.COMPARE]?: ConfigType[];
+  [GenreEnum.TREND]?: ConfigType[];
+  [GenreEnum.TABLE]?: ConfigType[];
+  [GenreEnum.TARGET]?: ConfigType[];
+  [GenreEnum.DISTRIBUTION]?: ConfigType[];
+  [GenreEnum.SPACE]?: ConfigType[];
+};
+
+export type PackagesGenreType = {
+  [PackagesCategoryEnum.CHARTS]: GenreType;
+  [PackagesCategoryEnum.TEXT]?: GenreType;
+  [PackagesCategoryEnum.MEDIA]?: GenreType;
+  [PackagesCategoryEnum.MATERIAL]?: GenreType;
 };
 
 // 获取组件

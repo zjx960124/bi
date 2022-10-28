@@ -1,7 +1,8 @@
-import { ChartList } from '@/packages/components/Charts/index';
+import { ChartList, ChartGenreList } from '@/packages/components/Charts/index';
 import {
   PackagesCategoryEnum,
   PackagesType,
+  PackagesGenreType,
   ConfigType,
   FetchComFlagType,
 } from '@/packages/index.d';
@@ -16,6 +17,15 @@ export let packagesList: PackagesType = {
   [PackagesCategoryEnum.MEDIA]: [],
   [PackagesCategoryEnum.MATERIAL]: [],
 };
+
+// * 所有图表(分类)
+export let packagesGenreList: PackagesGenreType = {
+  [PackagesCategoryEnum.CHARTS]: ChartGenreList,
+  [PackagesCategoryEnum.TEXT]: {},
+  [PackagesCategoryEnum.MEDIA]: {},
+  [PackagesCategoryEnum.MATERIAL]: {},
+};
+
 /**
  * * 获取目标组件配置信息
  * @param targetData

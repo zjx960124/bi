@@ -1,9 +1,13 @@
+import {
+  GenreEnumName,
+  GenreEnum,
+} from './../../packages/components/Charts/index.d';
 import { ref } from 'vue';
 import {
   PackagesCategoryEnum,
   PackagesCategoryName,
 } from './../../packages/index.d';
-import { PackagesType } from '@/packages/index.d';
+import { PackagesType, PackagesGenreType, GenreType } from '@/packages/index.d';
 // 图表列表
 import { usePackagesStore } from '@/store/packagesStore/packagesStore';
 
@@ -14,8 +18,17 @@ export type MenuOptionsType = {
   list: PackagesType;
 };
 
-const { getPackagesList } = usePackagesStore();
+export type genreMenuOptionsType = {
+  key: string;
+  label: string;
+  list: GenreType;
+  all: GenreType;
+};
+
+const { getPackagesList, getPackagesGenreList } = usePackagesStore();
+
 const menuOptions: MenuOptionsType[] = [];
+const genreMenuOptions: MenuOptionsType[] = [];
 
 const packagesListObj = {
   [PackagesCategoryEnum.CHARTS]: {
@@ -32,6 +45,29 @@ const packagesListObj = {
   },
 };
 
+const packagesGenreListObj = {
+  [PackagesCategoryEnum.CHARTS]: {
+    [GenreEnum.COMPARE]: {
+      label: GenreEnumName.COMPARE,
+    },
+    [GenreEnum.TREND]: {
+      label: GenreEnumName.TREND,
+    },
+    [GenreEnum.TABLE]: {
+      label: GenreEnumName.TABLE,
+    },
+    [GenreEnum.TARGET]: {
+      label: GenreEnumName.TARGET,
+    },
+    [GenreEnum.DISTRIBUTION]: {
+      label: GenreEnumName.DISTRIBUTION,
+    },
+    [GenreEnum.SPACE]: {
+      label: GenreEnumName.SPACE,
+    },
+  },
+};
+
 // 处理列表
 const handlePackagesList = () => {
   for (const val in getPackagesList) {
@@ -42,6 +78,35 @@ const handlePackagesList = () => {
       // @ts-ignore
       list: getPackagesList[val],
     });
+  }
+  for (const val in getPackagesGenreList) {
+    genreMenuOptions.push({
+      key: val,
+      // @ts-ignore
+      label: packagesListObj[val].label,
+      // @ts-ignore
+      // list: getPackagesGenreList[val],
+      list: {},
+      all: [],
+    });
+    // @ts-ignore
+    for (const vals in getPackagesGenreList[val]) {
+      // @ts-ignore
+      genreMenuOptions[genreMenuOptions.length - 1].list[vals] =
+        // @ts-ignore
+        {
+          key: vals,
+          // @ts-ignore
+          label: packagesGenreListObj[val][vals].label,
+          // @ts-ignore
+          list: getPackagesGenreList[val][vals],
+        };
+      // @ts-ignore
+      genreMenuOptions[genreMenuOptions.length - 1]['all'].push(
+        // @ts-ignore
+        ...getPackagesGenreList[val][vals]
+      );
+    }
   }
 };
 handlePackagesList();
@@ -65,4 +130,4 @@ const selectOptions = ref(menuOptions[0]);
 //   beforeSelect = key;
 // };
 
-export { selectOptions, selectValue, menuOptions };
+export { selectOptions, selectValue, menuOptions, genreMenuOptions };

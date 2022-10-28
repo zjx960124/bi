@@ -13,10 +13,12 @@ import { useContextMenu } from "@/views/editor/charts/hooks/useContextMenu.hook"
 import { MenuOptionsItemType } from "@/views/editor/charts/hooks/useContextMenu.hook.d";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useLayout } from "@/utils/hooks/useLayout";
+import { useRouter } from "vue-router";
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
-
+const router = useRouter();
+const currentRoute = router.currentRoute.value.name;
 // 布局处理
 useLayout();
 
@@ -49,10 +51,11 @@ const themeColor = computed(() => {
 </script>
 <template>
   <div class="editor-operation">
-    <editor-toolbar></editor-toolbar>
+    <editor-toolbar v-if="currentRoute === 'editor'"></editor-toolbar>
     <editor-canvas
       id="go-chart-edit-layout"
       class="editor-canvas"
+      :class="{ 'no-padding': currentRoute === 'dashboardEditor' }"
       @mousedown="mousedownHandleUnStop"
       @drop="dragHandle"
       @dragover="dragoverHandle"
@@ -119,6 +122,9 @@ const themeColor = computed(() => {
       margin: 22.5px;
       position: relative;
     }
+  }
+  .no-padding {
+    padding-top: 0;
   }
   .editor-configurations {
     width: 350px;

@@ -30,6 +30,14 @@ const EditorRoute: Array<RouteRecordRaw> = [
       title: 'editor',
     },
   },
+  {
+    path: '/dashboardEditor',
+    name: 'dashboardEditor',
+    component: editor,
+    meta: {
+      title: 'editor',
+    },
+  },
 ];
 
 const router = createRouter({

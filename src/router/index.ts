@@ -15,7 +15,7 @@ const RootRoute: Array<RouteRecordRaw> = [
     redirect: PageEnum.DASHBOARD_MANAGE,
     component: Layout,
     meta: {
-      title: 'Root',
+      title: '数据分析',
     },
     children: [...modules.analysisRoutes],
   },
@@ -28,6 +28,7 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: editor,
     meta: {
       title: 'editor',
+      icon:''
     },
   },
   {
@@ -36,6 +37,7 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: editor,
     meta: {
       title: 'editor',
+      icon:''
     },
   },
 ];
@@ -44,6 +46,7 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [...RootRoute, ...EditorRoute],
 });
+
 
 export function setupRouter(app: App) {
   app.use(router);

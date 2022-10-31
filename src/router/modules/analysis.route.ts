@@ -12,7 +12,7 @@ const analysisRoutes: RouteRecordRaw[] = [
     name: PageEnum.DASHBOARD_MANAGE_NAME,
     component: importRoute['.DASHBOARD_MANAGE'],
     meta: {
-      title: '仪表盘',
+      title: '仪表板',
     },
   },
   {

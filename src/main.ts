@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-
+import 'virtual:svg-icons-register'
 // element-ui
 import ElementPlus from 'element-plus';
 import * as ElementIcons from '@element-plus/icons-vue';
@@ -26,6 +26,11 @@ import registedBreadcrumb from '@/utils/directive/registedBreadcrumb';
 import changeBreadcrumb from '@/utils/directive/changeBreadcrumb';
 
 const app = createApp(App);
+
+//引入element ICON
+for (const [key, component] of Object.entries(ElementIcons)) {
+  app.component(key, component)
+}
 
 app
   .use(createPinia())

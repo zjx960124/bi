@@ -1,13 +1,12 @@
-<script setup lang="ts">
-import { useRouteStore } from "@/store/useRoute/useRoute";
-const routeStore = useRouteStore();
-const handleSelect = (index, indexPath) => {};
-</script>
 <template>
+  <logo />
   <el-menu
     :default-active="routeStore.default_navication"
     class="el-menu-vertical-demo"
     :router="true"
+    background-color="#0E1337"
+    text-color="#8386A1"
+    active-text-color="#fff"
     @select="handleSelect"
   >
     <el-sub-menu index="1">
@@ -15,9 +14,9 @@ const handleSelect = (index, indexPath) => {};
         <span>数据分析</span>
       </template>
       <el-menu-item
-        v-registed="{ name: '仪表盘', path: 'dashboardManage' }"
+        v-registed="{ name: '仪表板', path: 'dashboardManage' }"
         :index="'dashboardManage'"
-        >仪表盘</el-menu-item
+        >仪表板</el-menu-item
       >
       <el-menu-item
         v-registed="{ name: '数据大屏', path: 'screenManage' }"
@@ -37,5 +36,14 @@ const handleSelect = (index, indexPath) => {};
     </el-sub-menu>
   </el-menu>
 </template>
-<style lang='scss' scoped>
+<script setup lang="ts">
+import logo from "@/views/layout/components/logo";
+import { useRouteStore } from "@/store/useRoute/useRoute";
+const routeStore = useRouteStore();
+const handleSelect = (index: any, indexPath: any) => {};
+</script>
+<style lang="scss" scoped>
+::v-deep .el-menu-item.is-active{
+  background: linear-gradient(90deg, rgba(91,101,195,0.8) 0%, rgba(122,133,255,0.3) 100%);
+}
 </style>

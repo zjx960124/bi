@@ -7,11 +7,11 @@ export const useRouteStore = defineStore({
   id: 'route',
   state: () => ({
     currentEditorRoute: '',
-    default_navication: 'dashboardManage',
+    default_navication: '/dashboardManage',
     breadcrumbList: [
       {
-        name: '仪表盘',
-        path: 'dashboardManage',
+        name: '仪表板',
+        path: '/dashboardManage',
       },
     ],
   }),
@@ -26,8 +26,11 @@ export const useRouteStore = defineStore({
   actions: {
     async registerBreadcrumb(data: breadcrumbItem): Promise<void> {
       const current = this.breadcrumbList.findIndex(function (val) {
-        return val.name === data.name;
+        console.log(data,val);
+        
+        return val.path === data.path;
       });
+      
       current < 0 && this.breadcrumbList.push(data);
       current >= 0 &&
         this.breadcrumbList.push(...this.breadcrumbList.splice(current, 1));

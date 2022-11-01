@@ -16,9 +16,33 @@ const RootRoute: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: '数据分析',
+      icon:''
     },
     children: [...modules.analysisRoutes],
   },
+  {
+    path: '/template',
+    name: 'template',
+    component: Layout,
+    redirect: PageEnum.TEMMPLATE_CENTER,
+    meta: {
+      title: '模板中心',
+      icon:'data1'
+    },
+    children: [
+      { path: '/templateCenter', name: 'templateCenter', component: () => import('@/views/template'), meta: { title: '模板中心' } }
+    ]
+  },
+  {
+    path: '/dataConstruction',
+    name: 'dataConstruction',
+    component: Layout,
+    redirect: PageEnum.DATA_SOURCE,
+    meta: {
+      title: '数据构建'
+    },
+    children: [...modules.constructionRoutes]
+  }
 ];
 
 const EditorRoute: Array<RouteRecordRaw> = [
@@ -28,7 +52,7 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: editor,
     meta: {
       title: 'editor',
-      icon:''
+      icon: ''
     },
   },
   {
@@ -37,7 +61,7 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: editor,
     meta: {
       title: 'editor',
-      icon:''
+      icon: ''
     },
   },
 ];
@@ -46,7 +70,6 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [...RootRoute, ...EditorRoute],
 });
-
 
 export function setupRouter(app: App) {
   app.use(router);

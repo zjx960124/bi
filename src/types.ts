@@ -23,6 +23,15 @@ export enum PageEnum {
 
   SCREEN_MANAGE = '/screenManage',
   SCREEN_MANAGE_NAME = 'screenManage',
+
+  TEMMPLATE_CENTER = '/templateCenter',
+  TEMMPLATE_CENTER_NAME = 'templateCenter',
+
+  DATA_SET = '/dataset',
+  DATA_SET_NAME = 'dataset',
+
+  DATA_SOURCE = '/datasource',
+  DATA_SOURCE_NAME = 'datasource',
 }
 
 export interface breadcrumbItem {

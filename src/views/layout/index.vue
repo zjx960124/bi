@@ -5,7 +5,7 @@
     </div>
     <div class="layout-container-right">
       <div class="layout-container-breadcrumb">
-        <breadcrumb></breadcrumb>
+        <navbar />
       </div>
       <div class="layout-container-main">
         <transition name="fade-transform" mode="out-in">
@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import navigation from "./components/navigation";
-import breadcrumb from "./components/breadcrumb";
+import navbar from "./components/navbar/index.vue";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
@@ -35,13 +35,14 @@ const key = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #F3F5FF;
   .layout-container-left {
     width: 260px;
     height: 100%;
     background: #0e1337;
     border: 1px solid #364059;
   }
-  .layout-container-right{
+  .layout-container-right {
     width: calc(100vw - 275px);
     height: 100%;
   }

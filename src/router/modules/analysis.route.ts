@@ -2,7 +2,7 @@ import { PageEnum } from '@/types';
 import { RouteRecordRaw } from 'vue-router';
 
 const importRoute = {
-  '.DASHBOARD_MANAGE': () => import('@/views/analysis/dashboard/dashboard.vue'),
+  '.DASHBOARD_MANAGE': () => import('@/views/analysis/dashboard/index.vue'),
   '.SCREEN_MANAGE': () => import('@/views/analysis/screen/screen.vue'),
 };
 

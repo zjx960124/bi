@@ -9,7 +9,7 @@
       </div>
       <div class="layout-container-main">
         <transition name="fade-transform" mode="out-in">
-          <router-view :key="key" />
+          <router-view :key="path" />
         </transition>
       </div>
     </div>
@@ -18,14 +18,26 @@
 <script setup lang="ts">
 import navigation from "./components/navigation";
 import navbar from "./components/navbar/index.vue";
-import { computed } from "vue";
 import { useRoute } from "vue-router";
-
+import { useRouteStore } from "@/store/useRoute/useRoute";
+import { watch, ref } from "vue";
 const route = useRoute();
-
-const key = computed(() => {
-  return route.path;
-});
+const routeStore = useRouteStore();
+const path = ref("");
+watch(
+  () => route.fullPath,
+  (val) => {
+    if (val) {
+      path.value = val;
+      routeStore.setDefaultRoute(route.path);
+      routeStore.registerBreadcrumb({
+        name: route.meta?.title as string,
+        path: route.path,
+      });
+    }
+  },
+  { immediate: true, deep: true }
+);
 </script>
 <style lang="scss" scoped>
 .layout-container {
@@ -33,9 +45,9 @@ const key = computed(() => {
   height: 100vh;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  background-color: #F3F5FF;
+  background-color: #f3f5ff;
   .layout-container-left {
     width: 260px;
     height: 100%;
@@ -43,8 +55,11 @@ const key = computed(() => {
     border: 1px solid #364059;
   }
   .layout-container-right {
-    width: calc(100vw - 275px);
+    width: calc(100vw - 260px);
     height: 100%;
+    .layout-container-main {
+      margin: auto 15px;
+    }
   }
 }
 </style>

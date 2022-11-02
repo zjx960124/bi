@@ -1,10 +1,12 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import 'virtual:svg-icons-register'
+import 'virtual:svg-icons-register';
 // element-ui
 import ElementPlus from 'element-plus';
 import * as ElementIcons from '@element-plus/icons-vue';
 import 'element-plus/dist/index.css';
+
+import JsLayout from '@/components/JsLayout/index.vue';
 
 //naive
 import { setupNaive } from '@/plugins';
@@ -12,7 +14,7 @@ import { setupNaive } from '@/plugins';
 // style
 import '@/style/index.scss';
 // 引入全局样式
-import '@/styles/pages/index.scss';
+import '@/style/styles/pages/index.scss';
 
 // route
 import router from '@/router/index';
@@ -29,10 +31,11 @@ const app = createApp(App);
 
 //引入element ICON
 for (const [key, component] of Object.entries(ElementIcons)) {
-  app.component(key, component)
+  app.component(key, component);
 }
 
 app
+  .component('JsLayout', JsLayout)
   .use(createPinia())
   .use(router)
   .use(ElementPlus)

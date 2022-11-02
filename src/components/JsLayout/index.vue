@@ -75,9 +75,11 @@ const props = defineProps({
 
   .container-main {
     width: 100%;
+    height: calc(100vh - 150px);
     padding: 15px;
     // background: #ffffff;
     border-radius: 25px;
+    overflow-y: auto;
   }
 }
 </style>

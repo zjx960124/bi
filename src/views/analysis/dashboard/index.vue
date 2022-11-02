@@ -104,12 +104,33 @@ const { searchValue, list } = toRefs(state);
                     height="23"
                     src="/src/assets/analysis/icon-edit.png"
                   />
-                  <img
-                    class="margin-left-11 btn"
-                    width="37"
-                    height="23"
-                    src="/src/assets/analysis/icon-more.png"
-                  />
+                  <el-dropdown>
+                    <span class="el-dropdown-link">
+                      <img
+                        class="margin-left-11 btn"
+                        width="37"
+                        height="23"
+                        src="/src/assets/analysis/icon-more.png"
+                      />
+                    </span>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item icon="View">
+                          预览
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="Delete">
+                          删除
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="Operation">
+                          属性
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="CopyDocument">
+                          克隆
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+
                 </div>
               </div>
             </div>

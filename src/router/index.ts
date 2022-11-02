@@ -21,7 +21,7 @@ const RootRoute: Array<RouteRecordRaw> = [
     children: [...modules.analysisRoutes],
   },
   {
-    path: '/template',
+    path: '/templateCenter',
     name: 'template',
     component: Layout,
     redirect: PageEnum.TEMMPLATE_CENTER,

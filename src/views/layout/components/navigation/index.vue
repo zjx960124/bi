@@ -1,7 +1,7 @@
 <template>
   <logo />
   <el-menu
-    :default-active="routeStore.default_navication"
+    :default-active="defaultActive"
     class="el-menu-vertical-demo"
     :router="true"
     background-color="#0E1337"
@@ -58,22 +58,23 @@ import logo from "@/views/layout/components/logo";
 import SvgIcon from "@/components/svg-icon/index.vue";
 import { useRouteStore } from "@/store/useRoute/useRoute";
 import { useRouter, RouteRecordRaw } from "vue-router";
-import { ref, watch, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
 const routeStore = useRouteStore();
 const router = useRouter();
-
+const defaultActive = ref("");
 const { routes } = router.options;
 const menus = ref<Array<RouteRecordRaw>>();
-watch(
-  () => routes,
-  (val) => {
-    if (val && val.length > 0) {
-      let arr = routes;
-      menus.value = arr.slice(0, arr.length - 2);
-    }
-  },
-  { immediate: true }
-);
+
+watchEffect(() => {
+  if (routes && routes.length > 0) {
+    let arr = routes;
+    menus.value = arr.slice(0, arr.length - 2);
+  }
+
+  if (routeStore) {
+    defaultActive.value = `${routeStore.default_navication}`;
+  }
+});
 
 const getMenuItem = computed(() => {
   return (arr: RouteRecordRaw) => {
@@ -82,6 +83,7 @@ const getMenuItem = computed(() => {
     }
   };
 });
+
 </script>
 <style lang="scss" scoped>
 ::v-deep .el-menu-item.is-active {

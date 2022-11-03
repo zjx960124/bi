@@ -62,41 +62,43 @@ const themeColor = computed(() => {
       @dragenter="dragoverHandle"
     >
       <template #toolbar> </template>
-      <div
-        id="go-chart-edit-content"
-        class="editor-content"
-        @contextmenu="handleContextMenu"
-      >
-        <edit-range>
-          <div
-            v-for="(item, index) in chartEditStore.getComponentList"
-            :key="item.id"
-          >
-            <!-- 单组件 -->
-            <edit-shape-box
-              :data-id="item.id"
-              :index="index"
-              :style="useComponentStyle(item.attr, index)"
-              :item="item"
-              @click="mouseClickHandle($event, item)"
-              @mousedown="mousedownHandle($event, item)"
-              @mouseenter="mouseenterHandle($event, item)"
-              @mouseleave="mouseleaveHandle($event, item)"
-              @contextmenu="handleContextMenu($event, item, optionsHandle)"
+      <div class="editor-content-view">
+        <div
+          id="go-chart-edit-content"
+          class="editor-content"
+          @contextmenu="handleContextMenu"
+        >
+          <edit-range>
+            <div
+              v-for="(item, index) in chartEditStore.getComponentList"
+              :key="item.id"
             >
-              <component
-                class="edit-content-chart"
-                :is="item.chartConfig.chartKey"
-                :chartConfig="item"
-                :themeSetting="themeSetting"
-                :themeColor="themeColor"
-                :style="{
-                  ...useSizeStyle(item.attr),
-                }"
-              ></component>
-            </edit-shape-box>
-          </div>
-        </edit-range>
+              <!-- 单组件 -->
+              <edit-shape-box
+                :data-id="item.id"
+                :index="index"
+                :style="useComponentStyle(item.attr, index)"
+                :item="item"
+                @click="mouseClickHandle($event, item)"
+                @mousedown="mousedownHandle($event, item)"
+                @mouseenter="mouseenterHandle($event, item)"
+                @mouseleave="mouseleaveHandle($event, item)"
+                @contextmenu="handleContextMenu($event, item, optionsHandle)"
+              >
+                <component
+                  class="edit-content-chart"
+                  :is="item.chartConfig.chartKey"
+                  :chartConfig="item"
+                  :themeSetting="themeSetting"
+                  :themeColor="themeColor"
+                  :style="{
+                    ...useSizeStyle(item.attr),
+                  }"
+                ></component>
+              </edit-shape-box>
+            </div>
+          </edit-range>
+        </div>
       </div>
     </editor-canvas>
     <div class="editor-configurations">
@@ -114,13 +116,22 @@ const themeColor = computed(() => {
   .editor-canvas {
     flex: auto;
     width: calc(100% - 469px);
-    height: 100%;
-    padding-top: 55px;
+    height: calc(100% - 55px);
+    margin-top: 55px;
     background-color: #ffffff;
-    .editor-content {
-      background-color: azure;
+    overflow: hidden;
+    box-sizing: border-box;
+    .editor-content-view {
       margin: 22.5px;
-      position: relative;
+      width: calc(100% - 45px);
+      height: calc(100% - 45px);
+      overflow: auto;
+      .editor-content {
+        background-color: azure;
+        /* margin: 22.5px; */
+        position: relative;
+        box-sizing: border-box;
+      }
     }
   }
   .no-padding {

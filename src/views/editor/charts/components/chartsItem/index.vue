@@ -57,6 +57,7 @@ const dblclickHandle = async (item: ConfigType) => {
       class="charts-item"
       v-for="(item, index) in menuOptions"
       :key="index"
+      :id="item.category + index"
       draggable
       @dragstart="dragStartHandle($event, item)"
       @dragend="dragendHandle"
@@ -72,13 +73,13 @@ const dblclickHandle = async (item: ConfigType) => {
 <style lang='scss' scoped>
 .editor-charts-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  padding-top: 50px;
+  padding: 0 40px;
   width: 100%;
+  flex: 1;
   .charts-item {
     width: 120px;
-    margin-bottom: 50px;
     cursor: pointer;
     height: 100px;
     .item-img {
@@ -95,6 +96,9 @@ const dblclickHandle = async (item: ConfigType) => {
       font-size: 12px;
       user-select: none;
     }
+  }
+  .charts-item + .charts-item {
+    margin-left: 20px;
   }
 }
 </style>

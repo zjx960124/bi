@@ -47,4 +47,5 @@ app
   .mount('#app');
 
 setupNaive(app);
+
 window['$vue'] = app;

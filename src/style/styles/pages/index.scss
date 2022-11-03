@@ -1,1 +1,19 @@
 // 页面全局样式
+
+.n-popover__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.popover-menu-btn-view {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  justify-content: space-around;
+}
+
+.n-popover__content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

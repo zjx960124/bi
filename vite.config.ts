@@ -5,7 +5,7 @@ import { viteMockServe } from 'vite-plugin-mock';
 import vueJsx from '@vitejs/plugin-vue-jsx'; // 使用jsx
 import Components from 'unplugin-vue-components/vite'; // 按需自动引入组件
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers'); // 引入UI组件库解析器
-
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 // https://vitejs.dev/config/
 export default defineConfig({
   // 查看 插件 API 获取 Vite 插件的更多细节 https://www.vitejs.net/guide/api-plugin.html
@@ -22,6 +22,12 @@ export default defineConfig({
       // 配置文件生成位置
       dts: 'src/components.d.ts',
     }),
+    createSvgIconsPlugin({
+      // 要缓存的图标文件夹
+      iconDirs: [path.resolve(__dirname, 'src/svg')],
+      // 执行 icon name 的格式
+      symbolId: 'icon-[name]'
+    })
   ],
   base: './',
   resolve: {

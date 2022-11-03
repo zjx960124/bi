@@ -2,7 +2,7 @@ import { PageEnum } from '@/types';
 import { RouteRecordRaw } from 'vue-router';
 
 const importRoute = {
-  '.DASHBOARD_MANAGE': () => import('@/views/analysis/dashboard/dashboard.vue'),
+  '.DASHBOARD_MANAGE': () => import('@/views/analysis/dashboard/index.vue'),
   '.SCREEN_MANAGE': () => import('@/views/analysis/screen/screen.vue'),
 };
 
@@ -12,7 +12,7 @@ const analysisRoutes: RouteRecordRaw[] = [
     name: PageEnum.DASHBOARD_MANAGE_NAME,
     component: importRoute['.DASHBOARD_MANAGE'],
     meta: {
-      title: '仪表盘',
+      title: '仪表板',
     },
   },
   {

@@ -6,3 +6,8 @@
     }
   }
 }
+
+.el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
+    background-color: #ffffff;
+    color:#6D79FF;
+}

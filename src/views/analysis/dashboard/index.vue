@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive, toRefs } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
 const state = reactive({
   searchValue: '',
   list: [
@@ -31,6 +33,42 @@ const state = reactive({
 });
 
 const { searchValue, list } = toRefs(state);
+
+function handleAddFolder() {
+  ElMessageBox.prompt('请输入文件夹名称', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputPattern: /^.+$/,
+    inputErrorMessage: '文件夹名称输入有误'
+  }).then(({ value }) => {
+    ElMessage({
+      type: 'success',
+      message: '创建成功'
+    });
+  });
+}
+
+function handleEditFolderName(data) {
+  ElMessageBox.prompt('请输入文件夹名称', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputPattern: /^.+$/,
+    inputErrorMessage: '文件夹名称输入有误'
+  }).then(({ value }) => {
+    ElMessage({
+      type: 'success',
+      message: '修改成功'
+    });
+  });
+}
+
+function handleView(data) {}
+
+function handleDelete(data) {}
+
+function handleAttribute(data) {}
+
+function handleCopy(data) {}
 </script>
 <template>
   <JsLayout title="仪表盘">
@@ -56,7 +94,10 @@ const { searchValue, list } = toRefs(state);
         />
         <span class="text">新建仪表盘</span>
       </div>
-      <div class="el-button-primary margin-left-22">
+      <div
+        class="el-button-primary margin-left-22"
+        @click="handleAddFolder"
+      >
         <img
           width="20"
           height="14"
@@ -79,10 +120,13 @@ const { searchValue, list } = toRefs(state);
             />
             <span class="name">{{item.name}}</span>
             <img
+              class="btn"
               width="13"
               height="15"
               src="/src/assets/analysis/edit.png"
+              @click="handleEditFolderName(item)"
             />
+
           </div>
           <div class="item-list clearfix">
             <div
@@ -115,16 +159,28 @@ const { searchValue, list } = toRefs(state);
                     </span>
                     <template #dropdown>
                       <el-dropdown-menu>
-                        <el-dropdown-item icon="View">
+                        <el-dropdown-item
+                          icon="View"
+                          @click="handleView(sItem)"
+                        >
                           预览
                         </el-dropdown-item>
-                        <el-dropdown-item icon="Delete">
+                        <el-dropdown-item
+                          icon="Delete"
+                          @click="handleDelete(sItem)"
+                        >
                           删除
                         </el-dropdown-item>
-                        <el-dropdown-item icon="Operation">
+                        <el-dropdown-item
+                          icon="Operation"
+                          @click="handleAttribute(sItem)"
+                        >
                           属性
                         </el-dropdown-item>
-                        <el-dropdown-item icon="CopyDocument">
+                        <el-dropdown-item
+                          icon="CopyDocument"
+                          @click="handleCopy(sItem)"
+                        >
                           克隆
                         </el-dropdown-item>
                       </el-dropdown-menu>
@@ -187,6 +243,9 @@ const { searchValue, list } = toRefs(state);
         font-weight: 400;
         color: #293270;
         line-height: 1;
+      }
+      .btn {
+        cursor: pointer;
       }
     }
     .item-list {

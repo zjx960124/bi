@@ -113,10 +113,10 @@ const themeColor = computed(() => {
   position: relative;
   .editor-canvas {
     flex: auto;
-    width: calc(100% - 350px);
+    width: calc(100% - 469px);
     height: 100%;
     padding-top: 55px;
-    background-color: aquamarine;
+    background-color: #ffffff;
     .editor-content {
       background-color: azure;
       margin: 22.5px;
@@ -127,7 +127,7 @@ const themeColor = computed(() => {
     padding-top: 0;
   }
   .editor-configurations {
-    width: 350px;
+    width: 469px;
     flex-shrink: 0;
     height: 100%;
     background-color: antiquewhite;

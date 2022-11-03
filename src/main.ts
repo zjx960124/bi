@@ -13,6 +13,8 @@ import { setupNaive } from '@/plugins';
 
 // style
 import '@/style/index.scss';
+import '@/style/main.scss';
+
 // 引入全局样式
 import '@/style/styles/pages/index.scss';
 

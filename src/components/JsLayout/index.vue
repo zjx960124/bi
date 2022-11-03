@@ -1,22 +1,19 @@
 <script lang="ts">
 export default {
-  name: 'jsLayout'
+  name: "jsLayout",
 };
 </script>
 
 <template>
   <div class="container">
-    <div
-      v-if="showContainerHeader"
-      class="container-header"
-    >
+    <div v-if="showContainerHeader" class="container-header">
       <div class="container-title">{{ title }}</div>
       <div class="container-operation">
         <slot name="operation"></slot>
       </div>
     </div>
 
-    <div class="container-main">
+    <div class="container-main" :style="{ background: background }">
       <slot name="main"></slot>
     </div>
   </div>
@@ -25,15 +22,19 @@ export default {
 const props = defineProps({
   title: {
     type: String,
-    default: '标题'
+    default: "标题",
   },
   showContainerHeader: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
+  background: {
+    type: String,
+    default: () => "#fff",
+  },
 });
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .container {
   width: 100%;
   .container-header {
@@ -53,7 +54,7 @@ const props = defineProps({
       line-height: 1;
       text-align: left;
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 0;
@@ -76,7 +77,7 @@ const props = defineProps({
     width: 100%;
     height: calc(100vh - 150px);
     padding: 15px;
-    background: #ffffff;
+    // background: #ffffff;
     border-radius: 25px;
     overflow-y: auto;
   }

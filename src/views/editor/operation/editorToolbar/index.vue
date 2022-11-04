@@ -3,6 +3,7 @@ import { reactive, ref, toRefs, watch, watchEffect } from "vue";
 import { loadAsyncComponent } from "@/utils";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { EditCanvasTypeEnum } from "@/store/chartEditStore/chartEditStore.d";
+import { ReorderFour } from "@vicons/ionicons5";
 
 // 获取全部分类组件
 import { genreMenuOptions } from "@/utils/hooks/useAside";
@@ -87,9 +88,7 @@ const y = ref(0);
           >
             {{ item.label }}
             <template #icon>
-              <n-icon>
-                <cash-icon />
-              </n-icon>
+              <n-icon :component="ReorderFour" size="16"></n-icon>
             </template>
           </n-button>
         </template>
@@ -129,15 +128,15 @@ const y = ref(0);
 </template>
 <style lang='scss' scoped>
 .editor-toolbar {
-  width: calc(100% - 469px);
-  height: 67px;
+  /* width: calc(100% - 469px); */
+  height: 50px;
   position: absolute;
   left: 0;
-  top: 0;
+  right: 0;
+  top: 0px;
   background-color: #f3f5ff;
   .editor-toolbar-view {
     background: #ffffff;
-    margin-bottom: 17px;
     border-radius: 15px;
     height: 50px;
     display: flex;

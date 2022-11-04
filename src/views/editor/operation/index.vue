@@ -48,25 +48,50 @@ const themeColor = computed(() => {
   const chartThemeColor = chartEditStore.getEditCanvasConfig.chartThemeColor;
   return chartColors[chartThemeColor];
 });
+
+// 通用配置
+const rangeStyle = computed(() => {
+  // 设置背景色和图片背景
+  const backgroundType = chartEditStore.getEditCanvasConfig.backgroundType;
+  const background = chartEditStore.getEditCanvasConfig.background;
+  const backgroundImage = chartEditStore.getEditCanvasConfig.backgroundImage;
+  const backgroundColor =
+    backgroundType === "background" ? background : backgroundImage;
+
+  const computedBackground =
+    backgroundType === "background"
+      ? { background: backgroundColor }
+      : {
+          background: backgroundImage
+            ? `url(${backgroundImage}) no-repeat center center / cover !important`
+            : "azure",
+        };
+
+  // @ts-ignore
+  return {
+    ...computedBackground,
+  };
+});
 </script>
 <template>
   <div class="editor-operation">
-    <editor-toolbar v-if="currentRoute === 'editor'"></editor-toolbar>
     <editor-canvas
       id="go-chart-edit-layout"
       class="editor-canvas"
       :class="{ 'no-padding': currentRoute === 'dashboardEditor' }"
-      @mousedown="mousedownHandleUnStop"
       @drop="dragHandle"
       @dragover="dragoverHandle"
       @dragenter="dragoverHandle"
     >
+      <editor-toolbar v-if="currentRoute === 'editor'"></editor-toolbar>
       <template #toolbar> </template>
       <div class="editor-content-view">
         <div
           id="go-chart-edit-content"
           class="editor-content"
           @contextmenu="handleContextMenu"
+          @mousedown="mousedownHandleUnStop"
+          :style="{ ...rangeStyle }"
         >
           <edit-range>
             <div
@@ -116,19 +141,26 @@ const themeColor = computed(() => {
   .editor-canvas {
     flex: auto;
     width: calc(100% - 469px);
-    height: calc(100% - 55px);
-    margin-top: 55px;
-    background-color: #ffffff;
+    height: 100%;
+    padding-top: 75px;
     overflow: hidden;
     box-sizing: border-box;
+    position: relative;
     .editor-content-view {
-      margin: 22.5px;
-      width: calc(100% - 45px);
-      height: calc(100% - 45px);
+      padding: 22.5px;
+      /* width: calc(100% - 45px); */
+      width: 100%;
+      /* height: calc(100% - 45px); */
+      height: 100%;
+      box-sizing: border-box;
       overflow: auto;
+      /* background: #fff; */
+      background-image: linear-gradient(#ffffff 14px, transparent 0),
+        linear-gradient(90deg, transparent 14px, #373739 0);
+      background-size: 15px 15px, 15px 15px;
+      background-color: #ffffff;
       .editor-content {
         background-color: azure;
-        /* margin: 22.5px; */
         position: relative;
         box-sizing: border-box;
       }
@@ -138,10 +170,11 @@ const themeColor = computed(() => {
     padding-top: 0;
   }
   .editor-configurations {
-    width: 469px;
+    width: fit-content;
     flex-shrink: 0;
     height: 100%;
-    background-color: antiquewhite;
+    box-sizing: border-box;
+    padding: 0 22px;
   }
 }
 </style>

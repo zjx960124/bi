@@ -5,6 +5,7 @@ import CollapseItem from './CollapseItem.vue';
 
 // 全局配置属性
 import GlobalSetting from './GlobalSetting.vue';
+import CommonSetting from './CommonSetting.vue';
 // 全局配置属性-位置
 import GlobalSettingPosition from './GlobalSettingPosition.vue';
 
@@ -22,6 +23,7 @@ export {
   SettingItemBox,
   SettingItem,
   GlobalSetting,
+  CommonSetting,
   GlobalSettingPosition,
   NameSetting,
   SizeSetting,

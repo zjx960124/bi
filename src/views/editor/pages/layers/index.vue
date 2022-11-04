@@ -19,7 +19,6 @@ const reverseList = computed(() => {
 watch(
   () => reverseList.value,
   (newValue) => {
-    console.log(newValue);
     layerList.value = newValue;
   }
 );

@@ -4,7 +4,7 @@ import { LayersContent } from "./layers";
 </script>
 <template>
   <div class="editor-pages">
-    <n-collapse>
+    <n-collapse :default-expanded-names="['1', '2']">
       <n-collapse-item title="页面" name="1">
         <div>页面</div>
         <template #arrow>

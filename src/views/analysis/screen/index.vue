@@ -151,6 +151,12 @@ function handleDel(row: any) {}
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          class="pagination"
+          background
+          layout="->,prev, pager, next, total, sizes,jumper"
+          :total="1000"
+        />
       </div>
     </template>
   </JsLayout>

@@ -1,5 +1,9 @@
  
  .el-common-tableBox {
+  display: flex;
+  flex-direction: 
+  column;justify-content: space-between;
+  height: 100%;
   .el-table {
       thead {
         color: #6b797f;
@@ -48,7 +52,13 @@
         background-color: transparent;
       }
   }
- }
+  .paginationBox {
+    width: 100%;
+    .el-pagination__total {float: right;
+      margin-left: 16px;
+    }
+  }
+}
 
 
   

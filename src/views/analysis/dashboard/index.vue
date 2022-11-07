@@ -48,7 +48,7 @@ function handleAddFolder() {
   });
 }
 
-function handleEditFolderName(data) {
+function handleEditFolderName(data: any) {
   ElMessageBox.prompt('请输入文件夹名称', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -62,13 +62,13 @@ function handleEditFolderName(data) {
   });
 }
 
-function handleView(data) {}
+function handleView(data: any) {}
 
-function handleDelete(data) {}
+function handleDelete(data: any) {}
 
-function handleAttribute(data) {}
+function handleAttribute(data: any) {}
 
-function handleCopy(data) {}
+function handleCopy(data: any) {}
 </script>
 <template>
   <JsLayout title="仪表盘">
@@ -82,6 +82,7 @@ function handleCopy(data) {}
         <el-input
           class="input"
           v-model="searchValue"
+          clearable
           placeholder="请输入关键字搜索"
         >
         </el-input>
@@ -209,9 +210,12 @@ function handleCopy(data) {}
   background: #ffffff;
   border-radius: 22px;
   .input {
-    :deep(.el-input__inner) {
-      padding: 0 12px;
-      border: none;
+    :deep(.el-input__wrapper) {
+      box-shadow: none;
+      .el-input__inner {
+        padding: 0 12px;
+        border: none;
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import { viteMockServe } from 'vite-plugin-mock';
 import vueJsx from '@vitejs/plugin-vue-jsx'; // 使用jsx
 import Components from 'unplugin-vue-components/vite'; // 按需自动引入组件
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers'); // 引入UI组件库解析器
+import AutoImport from 'unplugin-auto-import/vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,6 +14,13 @@ export default defineConfig({
     vue(),
     viteMockServe({ supportTs: false }),
     vueJsx(),
+    AutoImport({
+      resolvers: [
+        ElementPlusResolver({
+          importStyle: 'sass',
+        }),
+      ],
+    }),
     Components({
       // 指定组件位置，默认是src/components
       dirs: ['src/page/demo'],
@@ -47,6 +55,11 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        pure_funcs: ['console.log'],
+      },
+      output: {
+        // 去掉注释内容
+        comments: true,
       },
     },
   },

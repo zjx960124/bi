@@ -37,7 +37,6 @@ const themeOverrides: GlobalThemeOverrides = {
   },
 };
 </script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -45,5 +44,8 @@ const themeOverrides: GlobalThemeOverrides = {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+:root {
+  --el-color-primary: #6d79ff !important;
 }
 </style>

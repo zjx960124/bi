@@ -29,7 +29,7 @@
     flex-shrink: 0;
     padding: 0 17px 0 30px;
     box-sizing: border-box;
-    ::v-deep .return-btn {
+    :deep .return-btn {
       width: 263px;
       height: 43px;
       justify-content: flex-start;

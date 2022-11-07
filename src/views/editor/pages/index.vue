@@ -1,12 +1,23 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { AddCircleOutline, CaretUp } from "@vicons/ionicons5";
 import { LayersContent } from "./layers";
+import Project from "@/store/pageEditStore/pageEditStore";
+
+const pageList = computed(() => {
+  const current = Project.pageList.list;
+  return current;
+});
+
+console.log("page", pageList.value);
 </script>
 <template>
   <div class="editor-pages">
     <n-collapse :default-expanded-names="['1', '2']" display-directive="show">
       <n-collapse-item title="页面" name="1">
-        <div>页面</div>
+        <template v-for="(item, index) in pageList" :key="index">
+          <div>{{ `页面${index + 1}` }}</div>
+        </template>
         <template #arrow>
           <n-icon>
             <caret-up />
@@ -46,7 +57,7 @@ import { LayersContent } from "./layers";
       width: 100%;
       background: #ffffff;
       border-radius: 15px;
-      ::v-deep .n-collapse-item__header {
+      :deep .n-collapse-item__header {
         color: #293270;
         font-family: "PingFang-SC";
         font-weight: bold;
@@ -63,7 +74,7 @@ import { LayersContent } from "./layers";
         }
       }
     }
-    ::v-deep .n-collapse-item.n-collapse-item--active {
+    :deep .n-collapse-item.n-collapse-item--active {
       .n-collapse-item__header.n-collapse-item__header--active {
         .n-collapse-item-arrow {
           transform: rotate(180deg);

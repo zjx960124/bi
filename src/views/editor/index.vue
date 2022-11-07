@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import headerPlugin from "./headerPlugin";
 import { loadAsyncComponent } from "@/utils";
+import Project from "@/store/pageEditStore/pageEditStore";
 import { useContextMenu } from "./charts/hooks/useContextMenu.hook";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
@@ -69,6 +70,9 @@ const clickHistoryHandle = (key: string) => {
       break;
   }
 };
+
+// 加入页面
+Project.setPage(chartEditStore);
 </script>
 <template>
   <div class="editor">
@@ -82,7 +86,9 @@ const clickHistoryHandle = (key: string) => {
         </n-button>
       </template>
       <template #center>
-        <div class="screen-name">未命名可视化大屏</div>
+        <div class="screen-name" contenteditable="true">
+          {{ Project.pageList.name }}
+        </div>
         <div class="size">
           <span>画板尺寸</span>
           <n-space vertical>

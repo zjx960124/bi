@@ -94,7 +94,7 @@ const handleChange = (e: Event) => {
     width: 100%;
     background: #ffffff;
     border-radius: 15px;
-    ::v-deep .n-collapse-item__header {
+    :deep .n-collapse-item__header {
       color: #293270;
       font-family: "PingFang-SC";
       font-weight: bold;
@@ -110,11 +110,11 @@ const handleChange = (e: Event) => {
         }
       }
     }
-    ::v-deep .n-collapse-item__content-inner {
+    :deep .n-collapse-item__content-inner {
       padding: 0 25px 18px 25px;
     }
   }
-  ::v-deep .n-collapse-item.n-collapse-item--active {
+  :deep .n-collapse-item.n-collapse-item--active {
     .n-collapse-item__header.n-collapse-item__header--active {
       .n-collapse-item-arrow {
         transform: rotate(180deg);

@@ -33,6 +33,10 @@ const sizeOptions = reactive([
     label: "1920*1080（默认）",
     value: 0,
   },
+  {
+    label: "1600*900",
+    value: 1,
+  },
 ]);
 
 // 前进后退按钮

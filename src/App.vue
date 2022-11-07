@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme-overrides="overridesTheme">
+  <n-config-provider :theme-overrides="themeOverrides">
     <router-view></router-view>
   </n-config-provider>
 </template>
@@ -15,7 +15,25 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Slider: {
     fillColor: "#6D79FF",
-    railColor: "#6D79FF",
+    fillColorHover: "#6D79FF",
+    railColor: "#F3F5FF",
+    railColorHover: "#F3F5FF",
+    handleSize: "11px",
+    dotWidth: "0px",
+    dotHeight: "0px",
+  },
+  Select: {
+    peers: {
+      InternalSelection: {
+        textColor: "#BBBCBB",
+        border: "#DCDDE0",
+        borderHover: "#6D79FF",
+      },
+      InternalSelectMenu: {
+        optionTextColor: "#BBBCBB",
+        optionTextColorActive: "#6D79FF",
+      },
+    },
   },
 };
 </script>

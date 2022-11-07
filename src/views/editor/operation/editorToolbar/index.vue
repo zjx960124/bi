@@ -3,7 +3,7 @@ import { reactive, ref, toRefs, watch, watchEffect } from "vue";
 import { loadAsyncComponent } from "@/utils";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { EditCanvasTypeEnum } from "@/store/chartEditStore/chartEditStore.d";
-import { ReorderFour } from "@vicons/ionicons5";
+import { ReorderFour, AddCircle, RemoveCircle } from "@vicons/ionicons5";
 
 // 获取全部分类组件
 import { genreMenuOptions } from "@/utils/hooks/useAside";
@@ -12,17 +12,17 @@ import cloneDeep from "lodash/cloneDeep";
 const chartEditStore = useChartEditStore();
 const { lockScale, scale } = toRefs(chartEditStore.getEditCanvas);
 
-const { dropdownItem } = import("./dropdownItem/index.ts");
 const chartsItem = loadAsyncComponent(
   () => import("../../charts/components/chartsItem/index.vue")
 );
 
 // 拖动
-const sliderValue = ref(100);
+const sliderValue = ref<number>(100);
 // 监听 scale 变化
 watchEffect(() => {
   const value = (scale.value * 100).toFixed(0);
   sliderValue.value = parseInt(value);
+  console.log(value);
 });
 // 拖动处理
 const sliderHandle = (v: number) => {
@@ -31,6 +31,17 @@ const sliderHandle = (v: number) => {
 const sliderMaks = reactive({
   100: "",
 });
+
+// 加减Scale
+const handleReduceScale = () => {
+  console.log(sliderValue.value);
+
+  chartEditStore.setScale((sliderValue.value - 10) / 100);
+};
+
+const handleIncreaseScale = () => {
+  chartEditStore.setScale((sliderValue.value + 10) / 100);
+};
 
 // 弹出框
 const currentMenuOptions = ref([]);
@@ -67,63 +78,70 @@ const y = ref(0);
   <div class="editor-toolbar">
     <div class="editor-toolbar-view" id="editor-toolbar">
       <div class="magnify">
+        <n-icon
+          :component="RemoveCircle"
+          color="#6D79FF"
+          size="20"
+          @click="handleReduceScale"
+        ></n-icon>
         <n-slider
           class="scale-slider"
           v-model:value="sliderValue"
           :default-value="50"
-          :min="10"
+          :min="1"
           :max="200"
-          :step="1"
+          :step="10"
           :marks="sliderMaks"
           @update:value="sliderHandle"
         ></n-slider>
+        <n-icon
+          :component="AddCircle"
+          color="#6D79FF"
+          size="20"
+          @click="handleIncreaseScale"
+        ></n-icon>
+        <span class="slider-value">{{ sliderValue }}%</span>
       </div>
       <div class="component">
         <template v-for="(item, index) in genreMenuOptions" :key="index">
-          <n-button
-            quaternary
-            type="primary"
-            color="#8386A1"
-            @click="handleClick(item, index)"
+          <n-popover
+            placement="bottom"
+            trigger="click"
+            @update:show="handleUpdateShow"
           >
-            {{ item.label }}
-            <template #icon>
-              <n-icon :component="ReorderFour" size="16"></n-icon>
+            <template #trigger>
+              <n-button
+                quaternary
+                type="primary"
+                color="#8386A1"
+                @click="handleClick(item, index)"
+              >
+                {{ item.label }}
+                <template #icon>
+                  <n-icon :component="ReorderFour" size="16"></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
+            <div class="popover-menu-btn-view">
+              <template
+                v-for="(items, indexs) in currentMenuOptions.list"
+                :key="indexs"
+              >
+                <div class="menu-btn">
+                  <el-button type="text" @click="intoView(items.key)">{{
+                    items.label
+                  }}</el-button>
+                </div>
+              </template>
+            </div>
+            <charts-item
+              class="popover-charts-view"
+              :menuOptions="currentMenuOptions.all"
+            ></charts-item>
+          </n-popover>
         </template>
       </div>
     </div>
-    <n-popover
-      :show="showPopover"
-      :show-arrow="false"
-      width="1142"
-      style="
-        height: 208px;
-        transfrom: translateX(0%), transitionY(0%);
-        box-sizing: border-box;
-      "
-      :x="x"
-      :y="y"
-      trigger="click"
-    >
-      <div class="popover-menu-btn-view">
-        <template
-          v-for="(items, indexs) in currentMenuOptions.list"
-          :key="indexs"
-        >
-          <div class="menu-btn">
-            <el-button type="text" @click="intoView(items.key)">{{
-              items.label
-            }}</el-button>
-          </div>
-        </template>
-      </div>
-      <charts-item
-        class="popover-charts-view"
-        :menuOptions="currentMenuOptions.all"
-      ></charts-item>
-    </n-popover>
   </div>
 </template>
 <style lang='scss' scoped>
@@ -145,9 +163,16 @@ const y = ref(0);
     .magnify {
       display: flex;
       align-items: center;
+      padding-left: 29px;
       .scale-slider {
         width: 260px;
-        margin: auto;
+        margin: 0 15px;
+      }
+      .slider-value {
+        margin-left: 11px;
+        font-family: "PingFang-SC-Regular";
+        color: #6b797f;
+        font-size: 12px;
       }
     }
     .component {

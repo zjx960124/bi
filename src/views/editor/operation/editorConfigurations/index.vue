@@ -45,7 +45,7 @@ const selectTarget = computed(() => {
     height: 100%;
   }
   .component-configuration {
-    width: 430px;
+    width: fit-content;
     height: 100%;
   }
 }

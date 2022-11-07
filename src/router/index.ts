@@ -16,7 +16,7 @@ const RootRoute: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: '数据分析',
-      icon:''
+      icon: '',
     },
     children: [...modules.analysisRoutes],
   },
@@ -27,11 +27,16 @@ const RootRoute: Array<RouteRecordRaw> = [
     redirect: PageEnum.TEMMPLATE_CENTER,
     meta: {
       title: '模板中心',
-      icon:'data1'
+      icon: 'data1',
     },
     children: [
-      { path: '/templateCenter', name: 'templateCenter', component: () => import('@/views/template'), meta: { title: '模板中心' } }
-    ]
+      {
+        path: '/templateCenter',
+        name: 'templateCenter',
+        component: () => import('@/views/template'),
+        meta: { title: '模板中心' },
+      },
+    ],
   },
   {
     path: '/dataConstruction',
@@ -39,10 +44,10 @@ const RootRoute: Array<RouteRecordRaw> = [
     component: Layout,
     redirect: PageEnum.DATA_SOURCE,
     meta: {
-      title: '数据构建'
+      title: '数据构建',
     },
-    children: [...modules.constructionRoutes]
-  }
+    children: [...modules.constructionRoutes],
+  },
 ];
 
 const EditorRoute: Array<RouteRecordRaw> = [
@@ -52,7 +57,7 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: editor,
     meta: {
       title: 'editor',
-      icon: ''
+      icon: '',
     },
   },
   {
@@ -61,7 +66,7 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: editor,
     meta: {
       title: 'editor',
-      icon: ''
+      icon: '',
     },
   },
 ];

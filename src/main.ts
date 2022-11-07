@@ -19,6 +19,9 @@ import '@/style/index.scss';
 // 引入全局样式
 import '@/style/styles/pages/index.scss';
 
+// 引入字体
+import '@/assets/font/font.css';
+
 // route
 import router from '@/router/index';
 
@@ -50,4 +53,5 @@ app
   .mount('#app');
 
 setupNaive(app);
+
 window['$vue'] = app;

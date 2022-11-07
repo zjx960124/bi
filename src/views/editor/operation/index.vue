@@ -48,55 +48,82 @@ const themeColor = computed(() => {
   const chartThemeColor = chartEditStore.getEditCanvasConfig.chartThemeColor;
   return chartColors[chartThemeColor];
 });
+
+// 通用配置
+const rangeStyle = computed(() => {
+  // 设置背景色和图片背景
+  const backgroundType = chartEditStore.getEditCanvasConfig.backgroundType;
+  const background = chartEditStore.getEditCanvasConfig.background;
+  const backgroundImage = chartEditStore.getEditCanvasConfig.backgroundImage;
+  const backgroundColor =
+    backgroundType === "background" ? background : backgroundImage;
+
+  const computedBackground =
+    backgroundType === "background"
+      ? { background: backgroundColor }
+      : {
+          background: backgroundImage
+            ? `url(${backgroundImage}) no-repeat center center / cover !important`
+            : "azure",
+        };
+
+  // @ts-ignore
+  return {
+    ...computedBackground,
+  };
+});
 </script>
 <template>
   <div class="editor-operation">
-    <editor-toolbar v-if="currentRoute === 'editor'"></editor-toolbar>
     <editor-canvas
       id="go-chart-edit-layout"
       class="editor-canvas"
       :class="{ 'no-padding': currentRoute === 'dashboardEditor' }"
-      @mousedown="mousedownHandleUnStop"
       @drop="dragHandle"
       @dragover="dragoverHandle"
       @dragenter="dragoverHandle"
     >
+      <editor-toolbar v-if="currentRoute === 'editor'"></editor-toolbar>
       <template #toolbar> </template>
-      <div
-        id="go-chart-edit-content"
-        class="editor-content"
-        @contextmenu="handleContextMenu"
-      >
-        <edit-range>
-          <div
-            v-for="(item, index) in chartEditStore.getComponentList"
-            :key="item.id"
-          >
-            <!-- 单组件 -->
-            <edit-shape-box
-              :data-id="item.id"
-              :index="index"
-              :style="useComponentStyle(item.attr, index)"
-              :item="item"
-              @click="mouseClickHandle($event, item)"
-              @mousedown="mousedownHandle($event, item)"
-              @mouseenter="mouseenterHandle($event, item)"
-              @mouseleave="mouseleaveHandle($event, item)"
-              @contextmenu="handleContextMenu($event, item, optionsHandle)"
+      <div class="editor-content-view">
+        <div
+          id="go-chart-edit-content"
+          class="editor-content"
+          @contextmenu="handleContextMenu"
+          @mousedown="mousedownHandleUnStop"
+          :style="{ ...rangeStyle }"
+        >
+          <edit-range>
+            <div
+              v-for="(item, index) in chartEditStore.getComponentList"
+              :key="item.id"
             >
-              <component
-                class="edit-content-chart"
-                :is="item.chartConfig.chartKey"
-                :chartConfig="item"
-                :themeSetting="themeSetting"
-                :themeColor="themeColor"
-                :style="{
-                  ...useSizeStyle(item.attr),
-                }"
-              ></component>
-            </edit-shape-box>
-          </div>
-        </edit-range>
+              <!-- 单组件 -->
+              <edit-shape-box
+                :data-id="item.id"
+                :index="index"
+                :style="useComponentStyle(item.attr, index)"
+                :item="item"
+                @click="mouseClickHandle($event, item)"
+                @mousedown="mousedownHandle($event, item)"
+                @mouseenter="mouseenterHandle($event, item)"
+                @mouseleave="mouseleaveHandle($event, item)"
+                @contextmenu="handleContextMenu($event, item, optionsHandle)"
+              >
+                <component
+                  class="edit-content-chart"
+                  :is="item.chartConfig.chartKey"
+                  :chartConfig="item"
+                  :themeSetting="themeSetting"
+                  :themeColor="themeColor"
+                  :style="{
+                    ...useSizeStyle(item.attr),
+                  }"
+                ></component>
+              </edit-shape-box>
+            </div>
+          </edit-range>
+        </div>
       </div>
     </editor-canvas>
     <div class="editor-configurations">
@@ -113,24 +140,41 @@ const themeColor = computed(() => {
   position: relative;
   .editor-canvas {
     flex: auto;
-    width: calc(100% - 350px);
+    width: calc(100% - 469px);
     height: 100%;
-    padding-top: 55px;
-    background-color: aquamarine;
-    .editor-content {
-      background-color: azure;
-      margin: 22.5px;
-      position: relative;
+    padding-top: 75px;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+    .editor-content-view {
+      padding: 22.5px;
+      /* width: calc(100% - 45px); */
+      width: 100%;
+      /* height: calc(100% - 45px); */
+      height: 100%;
+      box-sizing: border-box;
+      overflow: auto;
+      /* background: #fff; */
+      background-image: linear-gradient(#ffffff 14px, transparent 0),
+        linear-gradient(90deg, transparent 14px, #373739 0);
+      background-size: 15px 15px, 15px 15px;
+      background-color: #ffffff;
+      .editor-content {
+        background-color: azure;
+        position: relative;
+        box-sizing: border-box;
+      }
     }
   }
   .no-padding {
     padding-top: 0;
   }
   .editor-configurations {
-    width: 350px;
+    width: fit-content;
     flex-shrink: 0;
     height: 100%;
-    background-color: antiquewhite;
+    box-sizing: border-box;
+    padding: 0 22px;
   }
 }
 </style>

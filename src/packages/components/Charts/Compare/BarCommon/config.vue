@@ -1,7 +1,8 @@
 <template>
   <!-- Echarts 全局设置 -->
-  <global-setting :optionData="optionData"></global-setting>
-  <CollapseItem
+  <!-- <global-setting :optionData="optionData"></global-setting> -->
+  <common-setting :optionData="optionData"></common-setting>
+  <!-- <CollapseItem
     v-for="(item, index) in seriesList"
     :key="index"
     :name="`柱状图-${index + 1}`"
@@ -37,13 +38,14 @@
         ></n-input-number>
       </SettingItem>
     </SettingItemBox>
-  </CollapseItem>
+  </CollapseItem> -->
 </template>
 
 <script setup lang="ts">
 import { PropType, computed } from "vue";
 import {
   GlobalSetting,
+  CommonSetting,
   CollapseItem,
   SettingItemBox,
   SettingItem,

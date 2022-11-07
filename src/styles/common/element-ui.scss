@@ -1,4 +1,13 @@
-.el-form {
+:root {
+  // 这里可以设置你自定义的颜色变量
+  --el-table-header-text-color: #6B797F;
+  --el-table-tr-bg-color:#F5F6F9;
+}
+
+
+
+
+ .el-form {
   .el-form-item {
     .el-form-item__content {
       display: flex;
@@ -11,3 +20,6 @@
     background-color: #ffffff;
     color:#6D79FF;
 }
+
+
+  

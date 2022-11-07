@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts"></script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -11,5 +10,8 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+:root {
+  --el-color-primary: #6d79ff !important;
 }
 </style>

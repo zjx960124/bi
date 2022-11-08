@@ -7,7 +7,7 @@ body {
 }
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 5px;
 }
 /* 滚动槽 */
 ::-webkit-scrollbar-track {
@@ -17,6 +17,5 @@ body {
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background: #a3a3a3;
+  background: #96a0fe;
 }
-

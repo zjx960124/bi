@@ -28,9 +28,7 @@ watch(
 
 watch(
   () => chartEditStore.getComponentList,
-  (newValue) => {
-    console.log(newValue);
-  }
+  (newValue) => {}
 );
 
 // 移动结束处理

@@ -2,22 +2,20 @@
 import { computed } from "vue";
 import { AddCircleOutline, CaretUp } from "@vicons/ionicons5";
 import { LayersContent } from "./layers";
+import { Page } from "./page";
 import Project from "@/store/pageEditStore/pageEditStore";
+import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
+import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
 
-const pageList = computed(() => {
-  const current = Project.pageList.list;
-  return current;
-});
-
-console.log("page", pageList.value);
+const increasePage = () => {
+  Project.value.increasePage();
+};
 </script>
 <template>
   <div class="editor-pages">
     <n-collapse :default-expanded-names="['1', '2']" display-directive="show">
       <n-collapse-item title="页面" name="1">
-        <template v-for="(item, index) in pageList" :key="index">
-          <div>{{ `页面${index + 1}` }}</div>
-        </template>
+        <page></page>
         <template #arrow>
           <n-icon>
             <caret-up />
@@ -25,7 +23,7 @@ console.log("page", pageList.value);
         </template>
         <template #header-extra>
           <n-icon style="margin-right: 58px">
-            <add-circle-outline />
+            <add-circle-outline @click.stop="increasePage" />
           </n-icon>
         </template>
       </n-collapse-item>
@@ -71,6 +69,14 @@ console.log("page", pageList.value);
             right: 22px;
             top: 16px;
           }
+        }
+      }
+      :deep .n-collapse-item__content-wrapper {
+        height: calc(100% - 50px);
+        overflow: hidden;
+        .n-collapse-item__content-inner {
+          padding: 0 10px 20px 10px;
+          height: 100%;
         }
       }
     }

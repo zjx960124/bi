@@ -104,11 +104,7 @@ const y = ref(0);
       </div>
       <div class="component">
         <template v-for="(item, index) in genreMenuOptions" :key="index">
-          <n-popover
-            placement="bottom"
-            trigger="click"
-            @update:show="handleUpdateShow"
-          >
+          <n-popover placement="bottom" trigger="click">
             <template #trigger>
               <n-button
                 quaternary

@@ -7,7 +7,7 @@ import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
 import { useRouter } from "vue-router";
 import { ChevronBack, ArrowUndo, ArrowRedo } from "@vicons/ionicons5";
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, markRaw } from "vue";
 import { icon } from "@/plugins";
 
 const charts = loadAsyncComponent(() => import("./charts/index.vue"));
@@ -70,9 +70,6 @@ const clickHistoryHandle = (key: string) => {
       break;
   }
 };
-
-// 加入页面
-Project.setPage(chartEditStore);
 </script>
 <template>
   <div class="editor">
@@ -87,7 +84,7 @@ Project.setPage(chartEditStore);
       </template>
       <template #center>
         <div class="screen-name" contenteditable="true">
-          {{ Project.pageList.name }}
+          {{ Project.projectName }}
         </div>
         <div class="size">
           <span>画板尺寸</span>

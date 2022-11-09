@@ -124,9 +124,9 @@ const y = ref(0);
                 :key="indexs"
               >
                 <div class="menu-btn">
-                  <el-button type="text" @click="intoView(items.key)">{{
+                  <n-button type="text" @click="intoView(items.key)">{{
                     items.label
-                  }}</el-button>
+                  }}</n-button>
                 </div>
               </template>
             </div>
@@ -142,7 +142,6 @@ const y = ref(0);
 </template>
 <style lang='scss' scoped>
 .editor-toolbar {
-  /* width: calc(100% - 469px); */
   height: 50px;
   position: absolute;
   left: 0;
@@ -160,6 +159,7 @@ const y = ref(0);
       display: flex;
       align-items: center;
       padding-left: 29px;
+      cursor: pointer;
       .scale-slider {
         width: 260px;
         margin: 0 15px;

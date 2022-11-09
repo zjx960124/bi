@@ -113,7 +113,7 @@ export const useChartEditStore = defineStore({
       skewY: 0,
       // 默认背景色
       backgroundType: 'background',
-      background: undefined,
+      background: "#000000",
       backgroundImage: undefined,
       // 是否使用纯颜色
       selectColor: true,

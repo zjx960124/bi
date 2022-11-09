@@ -4,6 +4,7 @@ import { RouteRecordRaw } from 'vue-router';
 const importRoute = {
   '.DATA_SOURCE': () => import('@/views/construction/datasource/index.vue'),
   '.DATA_SET': () => import('@/views/construction/dataset/index.vue'),
+  '.PREVIEW': () => import('@/views/preview/index.vue'),
 };
 
 const constructionRoutes: RouteRecordRaw[] = [
@@ -21,6 +22,14 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.DATA_SET'],
     meta: {
       title: '数据集',
+    },
+  },
+  {
+    path: PageEnum.PREVIEW,
+    name: PageEnum.PREVIEW_NAME,
+    component: importRoute['.PREVIEW'],
+    meta: {
+      title: '预览页',
     },
   },
 ];

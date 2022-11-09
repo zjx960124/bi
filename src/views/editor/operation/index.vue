@@ -64,7 +64,7 @@ const rangeStyle = computed(() => {
       : {
           background: backgroundImage
             ? `url(${backgroundImage}) no-repeat center center / cover !important`
-            : "azure",
+            : background,
         };
 
   // @ts-ignore
@@ -160,7 +160,6 @@ const rangeStyle = computed(() => {
       background-size: 15px 15px, 15px 15px;
       background-color: #ffffff;
       .editor-content {
-        background-color: azure;
         position: relative;
         box-sizing: border-box;
       }

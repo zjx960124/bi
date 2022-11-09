@@ -6,7 +6,12 @@ import { useContextMenu } from "./charts/hooks/useContextMenu.hook";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
 import { useRouter } from "vue-router";
-import { ChevronBack, ArrowUndo, ArrowRedo } from "@vicons/ionicons5";
+import {
+  ChevronBack,
+  ArrowUndo,
+  ArrowRedo,
+  ImagesOutline,
+} from "@vicons/ionicons5";
 import { reactive, ref, computed, markRaw } from "vue";
 import { icon } from "@/plugins";
 
@@ -70,6 +75,10 @@ const clickHistoryHandle = (key: string) => {
       break;
   }
 };
+
+const previewHandle = () => {
+  // window.open();
+};
 </script>
 <template>
   <div class="editor">
@@ -90,6 +99,7 @@ const clickHistoryHandle = (key: string) => {
           <span>画板尺寸</span>
           <n-space vertical>
             <n-select
+              style="width: 160px"
               v-model:value="sizeValue"
               size="small"
               :options="sizeOptions"
@@ -110,6 +120,14 @@ const clickHistoryHandle = (key: string) => {
             size="24"
             style="margin-right: 29px"
           ></n-icon>
+        </n-button>
+        <n-button round @click="previewHandle" class="preview-btn">
+          <template #icon>
+            <n-icon>
+              <ImagesOutline />
+            </n-icon>
+          </template>
+          预览
         </n-button>
       </template>
     </header-plugin>
@@ -155,6 +173,11 @@ const clickHistoryHandle = (key: string) => {
       font-family: "PingFang SC";
       margin-right: 9px;
     }
+  }
+  .preview-btn {
+    width: 89px;
+    height: 43px;
+    padding: 0;
   }
   main {
     overflow: hidden;

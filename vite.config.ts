@@ -37,7 +37,7 @@ export default defineConfig({
       symbolId: 'icon-[name]',
     }),
   ],
-  base: './',
+  base: '/hybi',
   resolve: {
     // resolve.alias: 更轻松地为import或require某些模块创建别名
     alias: {

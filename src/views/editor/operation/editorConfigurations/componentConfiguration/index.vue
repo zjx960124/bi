@@ -91,6 +91,7 @@ const hiddenConfiguration = () => {
       padding: 0 10px;
     }
     .configuration-view {
+      width: 260px;
       height: calc(100% - 60px);
       background: #ffffff;
       border-radius: 15px;

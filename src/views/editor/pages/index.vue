@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { AddCircleOutline, CaretUp } from "@vicons/ionicons5";
 import { LayersContent } from "./layers";
+import { Page } from "./page";
+import Project from "@/store/pageEditStore/pageEditStore";
+import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
+import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
+
+const increasePage = () => {
+  Project.value.increasePage();
+};
 </script>
 <template>
   <div class="editor-pages">
-    <n-collapse>
+    <n-collapse :default-expanded-names="['1', '2']" display-directive="show">
       <n-collapse-item title="页面" name="1">
-        <div>页面</div>
+        <page></page>
         <template #arrow>
           <n-icon>
             <caret-up />
@@ -14,7 +23,7 @@ import { LayersContent } from "./layers";
         </template>
         <template #header-extra>
           <n-icon style="margin-right: 58px">
-            <add-circle-outline />
+            <add-circle-outline @click.stop="increasePage" />
           </n-icon>
         </template>
       </n-collapse-item>
@@ -46,7 +55,7 @@ import { LayersContent } from "./layers";
       width: 100%;
       background: #ffffff;
       border-radius: 15px;
-      ::v-deep .n-collapse-item__header {
+      :deep .n-collapse-item__header {
         color: #293270;
         font-family: "PingFang-SC";
         font-weight: bold;
@@ -62,8 +71,16 @@ import { LayersContent } from "./layers";
           }
         }
       }
+      :deep .n-collapse-item__content-wrapper {
+        height: calc(100% - 50px);
+        overflow: hidden;
+        .n-collapse-item__content-inner {
+          padding: 0 10px 20px 10px;
+          height: 100%;
+        }
+      }
     }
-    ::v-deep .n-collapse-item.n-collapse-item--active {
+    :deep .n-collapse-item.n-collapse-item--active {
       .n-collapse-item__header.n-collapse-item__header--active {
         .n-collapse-item-arrow {
           transform: rotate(180deg);

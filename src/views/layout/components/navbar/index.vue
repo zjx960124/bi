@@ -1,10 +1,10 @@
 <template>
-  <div class="narbar-container">
+  <div class="navbar-container">
     <breadcrumb />
     <el-dropdown>
       <span class="el-dropdown-link">
-        <el-avatar icon="UserFilled" class="narbar-container-avatar" />
-        <span class="text-blue">22222222222</span>
+        <el-avatar icon="UserFilled" class="navbar-container-avatar" />
+        <span class="text-blue">bee</span>
         <el-icon class="el-icon--right" v-if="false">
           <arrow-down />
         </el-icon>
@@ -22,7 +22,7 @@
 import breadcrumb from "../breadcrumb";
 </script>
 <style lang="scss" scoped>
-.narbar-container {
+.navbar-container {
   width: 100%;
   height: 70px;
   display: flex;
@@ -31,7 +31,7 @@ import breadcrumb from "../breadcrumb";
   padding: 0 40px;
   box-sizing: border-box;
 
-  .narbar-container-avatar {
+  .navbar-container-avatar {
     width: 29px;
     height: 29px;
     display: flex;
@@ -39,9 +39,15 @@ import breadcrumb from "../breadcrumb";
     justify-content: center;
     margin-right: 8px;
   }
+  .el-dropdown-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
 }
 
-::v-deep .el-dropdown .el-dropdown-selfdefine {
+:deep .el-dropdown .el-dropdown-selfdefine {
   display: flex;
   align-items: center;
 }

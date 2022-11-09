@@ -32,6 +32,9 @@ export enum PageEnum {
 
   DATA_SOURCE = '/datasource',
   DATA_SOURCE_NAME = 'datasource',
+
+  PREVIEW = '/preview',
+  PREVIEW_NAME = 'preview',
 }
 
 export interface breadcrumbItem {

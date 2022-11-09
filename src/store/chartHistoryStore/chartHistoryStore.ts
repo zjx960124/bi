@@ -224,5 +224,17 @@ export const useChartHistoryStore = defineStore({
         HistoryTargetTypeEnum.CHART
       );
     },
+    // 清除记录
+    cleanStack() {
+      this.forwardStack = [];
+      this.backStack = [];
+    },
+    setStack(
+      backStack: Array<HistoryItemType>,
+      forwardStack: Array<HistoryItemType>
+    ) {
+      this.backStack = backStack;
+      this.forwardStack = forwardStack;
+    },
   },
 });

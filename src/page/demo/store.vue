@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouteStore } from "@/store/useRoute/useRoute";
 const mainStore = useRouteStore();
-const updateName = () => {
+const updateName = (): void => {
   mainStore.$patch({
     name: "测试成功",
   });

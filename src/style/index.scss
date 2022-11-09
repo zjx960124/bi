@@ -14,7 +14,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: PingFang SC,Lantinghei SC,Microsoft YaHei,HanHei SC,Helvetica Neue,Open Sans,Arial,Hiragino Sans GB,微软雅黑,STHeiti,WenQuanYi Micro Hei,SimSun,sans-serif,HYWenHei-GEW !important;
+  font-family: PingFang SC, Lantinghei SC, Microsoft YaHei, HanHei SC, Helvetica Neue, Open Sans, Arial,
+    Hiragino Sans GB, 微软雅黑, STHeiti, WenQuanYi Micro Hei, SimSun, sans-serif, HYWenHei-GEW !important;
 }
 
 *,
@@ -37,7 +38,7 @@ a:hover {
 }
 
 a {
-    transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 div:focus {
@@ -49,7 +50,7 @@ div:focus {
     visibility: hidden;
     display: block;
     font-size: 0;
-    content: ' ';
+    content: " ";
     clear: both;
     height: 0;
   }
@@ -65,16 +66,17 @@ div:focus {
   padding: 0 16px;
   background: #ffffff;
   border-radius: 22px;
-  border: 1px solid #DCDDE0;
+  border: 1px solid #dcdde0;
   cursor: pointer;
-  &:hover,&:active {
+  &:hover,
+  &:active {
     opacity: 0.8;
   }
   .text {
-    margin-left:8px;
+    margin-left: 8px;
     font-size: 14px;
     font-weight: normal;
-    color: #BBBCBB;
+    color: #bbbcbb;
   }
 }
 
@@ -86,17 +88,20 @@ div:focus {
   height: 44px;
   line-height: 44px;
   padding: 0 16px;
-  background: #6D79FF;
-  border-radius: 22px; 
-  border: 1px solid #6D79FF;
+  background: #6d79ff;
+  border-radius: 22px;
+  border: 1px solid #6d79ff;
   cursor: pointer;
-  &:hover,&:active {
+  &:hover,
+  &:active {
     opacity: 0.8;
   }
   .text {
-    margin-left:8px;
+    margin-left: 8px;
     font-size: 14px;
     font-weight: normal;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 }
+
+

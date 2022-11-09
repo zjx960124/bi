@@ -92,6 +92,7 @@ export enum EditCanvasConfigEnum {
   HEIGHT = 'height',
   CHART_THEME_COLOR = 'chartThemeColor',
   CHART_THEME_SETTING = 'chartThemeSetting',
+  BACKGROUNDTYPE = 'backgroundType',
   BACKGROUND = 'background',
   BACKGROUND_IMAGE = 'backgroundImage',
   SELECT_COLOR = 'selectColor',
@@ -130,6 +131,7 @@ export interface EditCanvasConfigType {
   // 大屏高度
   [EditCanvasConfigEnum.HEIGHT]: number;
   // 背景色
+  [EditCanvasConfigEnum.BACKGROUNDTYPE]?: string;
   [EditCanvasConfigEnum.BACKGROUND]?: string;
   [EditCanvasConfigEnum.BACKGROUND_IMAGE]?: string | null;
   // 图表主题颜色

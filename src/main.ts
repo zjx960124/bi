@@ -1,22 +1,26 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import 'virtual:svg-icons-register';
+
 // element-ui
 import ElementPlus from 'element-plus';
+import zhCn from 'element-plus/es/locale/lang/zh-cn';
+import 'element-plus/theme-chalk/index.css';
 import * as ElementIcons from '@element-plus/icons-vue';
-import 'element-plus/dist/index.css';
 
 import JsLayout from '@/components/JsLayout/index.vue';
 
 //naive
 import { setupNaive } from '@/plugins';
 
-// style
-import '@/style/index.scss';
-import '@/style/main.scss';
-
 // 引入全局样式
 import '@/style/styles/pages/index.scss';
+
+// style
+import '@/style/index.scss';
+
+// 引入字体
+import '@/assets/font/font.css';
 
 // route
 import router from '@/router/index';
@@ -40,11 +44,14 @@ app
   .component('JsLayout', JsLayout)
   .use(createPinia())
   .use(router)
-  .use(ElementPlus)
+  .use(ElementPlus, {
+    locale: zhCn,
+  })
   .use(directPlugin)
   .use(registedBreadcrumb)
   .use(changeBreadcrumb)
   .mount('#app');
 
 setupNaive(app);
+
 window['$vue'] = app;

@@ -1,92 +1,89 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive, toRefs } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ref, onMounted, reactive, toRefs } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const state = reactive({
-  searchValue: '',
+  searchValue: "",
   list: [
     {
       id: 0,
-      name: '文件夹名称',
+      name: "文件夹名称",
       data: [
-        { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/bar.png' },
-        { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/line.png' }
-      ]
+        { id: 0, name: "可视化名称0", imgUrl: "/src/assets/img/bar.png" },
+        { id: 1, name: "可视化名称1", imgUrl: "/src/assets/img/line.png" },
+      ],
     },
     {
       id: 1,
-      name: '文件夹名称1',
+      name: "文件夹名称1",
       data: [
-        { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
-        { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
-      ]
+        { id: 0, name: "可视化名称0", imgUrl: "/src/assets/img/line.png" },
+        { id: 1, name: "可视化名称1", imgUrl: "/src/assets/img/bar.png" },
+      ],
     },
     {
       id: 2,
-      name: '文件夹名称2',
+      name: "文件夹名称2",
       data: [
-        { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
-        { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
-      ]
-    }
-  ]
+        { id: 0, name: "可视化名称0", imgUrl: "/src/assets/img/line.png" },
+        { id: 1, name: "可视化名称1", imgUrl: "/src/assets/img/bar.png" },
+      ],
+    },
+  ],
 });
 
 const { searchValue, list } = toRefs(state);
 
 function handleAddFolder() {
-  ElMessageBox.prompt('请输入文件夹名称', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.prompt("请输入文件夹名称", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
     inputPattern: /^.+$/,
-    inputErrorMessage: '文件夹名称输入有误'
+    inputErrorMessage: "文件夹名称输入有误",
   }).then(({ value }) => {
     ElMessage({
-      type: 'success',
-      message: '创建成功'
+      type: "success",
+      message: "创建成功",
     });
   });
 }
 
-function handleEditFolderName(data) {
-  ElMessageBox.prompt('请输入文件夹名称', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+function handleEditFolderName(data: any) {
+  ElMessageBox.prompt("请输入文件夹名称", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
     inputPattern: /^.+$/,
-    inputErrorMessage: '文件夹名称输入有误'
+    inputErrorMessage: "文件夹名称输入有误",
   }).then(({ value }) => {
     ElMessage({
-      type: 'success',
-      message: '修改成功'
+      type: "success",
+      message: "修改成功",
     });
   });
 }
 
-function handleView(data) {}
+function handleView(data: any) {}
 
-function handleDelete(data) {}
+function handleDelete(data: any) {}
 
-function handleAttribute(data) {}
+function handleAttribute(data: any) {}
 
-function handleCopy(data) {}
+function handleCopy(data: any) {}
 </script>
 <template>
   <JsLayout title="仪表盘">
     <template #operation>
       <div class="searchBox">
-        <img
-          width="22"
-          height="21"
-          src="/src/assets/analysis/search.png"
-        />
+        <img width="22" height="21" src="/src/assets/analysis/search.png" />
         <el-input
           class="input"
           v-model="searchValue"
+          clearable
           placeholder="请输入关键字搜索"
         >
         </el-input>
       </div>
-      <div class="el-button-normal  margin-left-22">
+      <div class="el-button-normal margin-left-22">
         <img
           width="18"
           height="18"
@@ -94,10 +91,7 @@ function handleCopy(data) {}
         />
         <span class="text">新建仪表盘</span>
       </div>
-      <div
-        class="el-button-primary margin-left-22"
-        @click="handleAddFolder"
-      >
+      <div class="el-button-primary margin-left-22" @click="handleAddFolder">
         <img
           width="20"
           height="14"
@@ -107,18 +101,14 @@ function handleCopy(data) {}
     </template>
     <template #main>
       <div class="list clearfix">
-        <div
-          v-for="item in list"
-          :key="item.id"
-          class="item"
-        >
+        <div v-for="item in list" :key="item.id" class="item">
           <div class="item-header">
             <img
               width="9"
               height="18"
               src="/src/assets/analysis/folderSign.png"
             />
-            <span class="name">{{item.name}}</span>
+            <span class="name">{{ item.name }}</span>
             <img
               class="btn"
               width="13"
@@ -126,23 +116,15 @@ function handleCopy(data) {}
               src="/src/assets/analysis/edit.png"
               @click="handleEditFolderName(item)"
             />
-
           </div>
           <div class="item-list clearfix">
-            <div
-              v-for="sItem in item.data"
-              :key="sItem.id"
-              class="sItem"
-            >
-              <img
-                width="378"
-                height="213"
-                :src="sItem.imgUrl"
-              />
+            <div v-for="sItem in item.data" :key="sItem.id" class="sItem">
+              <img width="378" height="213" :src="sItem.imgUrl" />
               <div class="sItem-bottom">
-                <span class="name">{{sItem.name}}</span>
+                <span class="name">{{ sItem.name }}</span>
 
-                <div class="btns"> <img
+                <div class="btns">
+                  <img
                     class="btn"
                     width="37"
                     height="23"
@@ -186,7 +168,6 @@ function handleCopy(data) {}
                       </el-dropdown-menu>
                     </template>
                   </el-dropdown>
-
                 </div>
               </div>
             </div>
@@ -209,9 +190,12 @@ function handleCopy(data) {}
   background: #ffffff;
   border-radius: 22px;
   .input {
-    :deep(.el-input__inner) {
-      padding: 0 12px;
-      border: none;
+    :deep(.el-input__wrapper) {
+      box-shadow: none;
+      .el-input__inner {
+        padding: 0 12px;
+        border: none;
+      }
     }
   }
 }

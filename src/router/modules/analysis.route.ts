@@ -3,7 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 
 const importRoute = {
   '.DASHBOARD_MANAGE': () => import('@/views/analysis/dashboard/index.vue'),
-  '.SCREEN_MANAGE': () => import('@/views/analysis/screen/screen.vue'),
+  '.SCREEN_MANAGE': () => import('@/views/analysis/screen/index.vue'),
 };
 
 const analysisRoutes: RouteRecordRaw[] = [

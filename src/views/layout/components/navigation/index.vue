@@ -83,10 +83,9 @@ const getMenuItem = computed(() => {
     }
   };
 });
-
 </script>
 <style lang="scss" scoped>
-::v-deep .el-menu-item.is-active {
+:deep .el-menu-item.is-active {
   background: linear-gradient(
     90deg,
     rgba(91, 101, 195, 0.8) 0%,

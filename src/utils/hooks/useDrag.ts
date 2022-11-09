@@ -221,7 +221,6 @@ export const useMouseHandle = () => {
         );
         chartEditStore.setTargetSelectChart(exList);
       } else {
-        console.log(item.id);
         chartEditStore.setTargetSelectChart(item.id, true);
       }
     }
@@ -251,8 +250,6 @@ export const useMouseHandle = () => {
       selectId.includes(item.id)
     )
       return;
-
-    console.log(1111);
     // 选中当前目标组件
     chartEditStore.setTargetSelectChart(item.id);
 

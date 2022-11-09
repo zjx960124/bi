@@ -101,7 +101,7 @@ const previewHandle = () => {
             <n-select
               style="width: 160px"
               v-model:value="sizeValue"
-              size="small"
+              size="medium"
               :options="sizeOptions"
             />
           </n-space>

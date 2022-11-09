@@ -16,6 +16,17 @@ const editCanvas = chartEditStore.getEditCanvas;
 const fontFamily = ref<string>("");
 const fontFamilyOptions = ref<any[]>([]);
 const uploadFileListRef = ref();
+const pageAnimation = ref<string>("left");
+const pageAnimationOptions = ref<any[]>([
+  {
+    label: "从左到右推入",
+    value: "left",
+  },
+  {
+    label: "从右到左推入",
+    value: "right",
+  },
+]);
 
 const handleChange = (e: Event) => {
   canvasConfig.backgroundType = (e.target as HTMLInputElement).value;
@@ -78,7 +89,11 @@ const customRequest = (options: UploadCustomRequestOptions) => {
       </n-collapse-item>
       <n-collapse-item title="全局样式" name="2">
         <div>
-          <n-select v-model:value="fontFamily" :options="fontFamilyOptions" />
+          <n-select
+            v-model:value="fontFamily"
+            size="small"
+            :options="fontFamilyOptions"
+          />
         </div>
         <div>
           <div class="common-title">背景样式</div>
@@ -147,6 +162,27 @@ const customRequest = (options: UploadCustomRequestOptions) => {
             <chevron-up />
           </n-icon>
         </template>
+        <div class="common-item">
+          <n-checkbox>
+            <div>开启页面轮播</div>
+          </n-checkbox>
+        </div>
+        <div class="common-item">
+          <div>轮播间隔</div>
+          <n-input class="common-input" round>
+            <template #suffix> <span color="#BBBCBB">s</span></template>
+          </n-input>
+        </div>
+        <div class="common-item">
+          <div>过渡类型</div>
+          <n-select
+            class="common-select"
+            v-model:value="pageAnimation"
+            round
+            size="small"
+            :options="pageAnimationOptions"
+          />
+        </div>
       </n-collapse-item>
     </n-collapse>
   </div>
@@ -200,6 +236,17 @@ const customRequest = (options: UploadCustomRequestOptions) => {
     .common-item {
       display: flex;
       align-items: center;
+      color: #6b797f;
+      font-family: "PingFang-SC-Regular";
+      font-size: 12px;
+      .common-input {
+        width: 160px;
+        margin-left: 10px;
+      }
+      .common-select {
+        width: 160px;
+        margin-left: 10px;
+      }
     }
     .common-item + .common-item {
       margin-top: 7px;

@@ -113,7 +113,7 @@ export const useChartEditStore = defineStore({
       skewY: 0,
       // 默认背景色
       backgroundType: 'background',
-      background: "#000000",
+      background: '#000000',
       backgroundImage: undefined,
       // 是否使用纯颜色
       selectColor: true,
@@ -208,7 +208,6 @@ export const useChartEditStore = defineStore({
       // 无 id 清空
       if (!selectId) {
         this.targetChart.selectId = [];
-        console.log('点击空白');
         setTimeout(() => {
           this.computedScale();
         }, 200);
@@ -230,7 +229,6 @@ export const useChartEditStore = defineStore({
         // 字符串
         if (isString(selectId)) {
           this.targetChart.selectId = [selectId];
-          console.log('点击组件');
           setTimeout(() => {
             this.computedScale();
           }, 200);
@@ -905,7 +903,6 @@ export const useChartEditStore = defineStore({
     // * 计算缩放
     computedScale() {
       if (this.getEditCanvas.editLayoutDom) {
-        console.log('动态缩放');
         // 现有展示区域
         const width =
           this.getEditCanvas.editLayoutDom.clientWidth -

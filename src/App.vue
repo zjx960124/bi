@@ -12,6 +12,8 @@ const themeOverrides: GlobalThemeOverrides = {
     textColor: "#BBBCBB",
     textColorHover: "#6D79FF",
     textColorFocus: "#6D79FF",
+    textColorText: "#6B797F",
+    textColorTextHover: "#6D79FF",
     border: "1px solid #BBBCBB",
     borderHover: "1px solid #6D79FF",
     borderFocus: "1px solid #6D79FF",
@@ -28,21 +30,24 @@ const themeOverrides: GlobalThemeOverrides = {
   },
   Radio: {
     color: "#FFFFFF",
-    dotColorActive: "#84DFFC",
-    boxShadowFocus: "inset 0 0 0 1px #84DFFC",
-    boxShadowActive: "inset 0 0 0 1px #84DFFC",
-    boxShadowHover: "inset 0 0 0 1px #84DFFC",
+    dotColorActive: "#95A0FE",
+    boxShadowFocus: "inset 0 0 0 1px #95A0FE",
+    boxShadowActive: "inset 0 0 0 1px #95A0FE",
+    boxShadowHover: "inset 0 0 0 1px #95A0FE",
   },
   Checkbox: {
     colorChecked: "#FFFFFF",
-    border: "1px solid #84DFFC",
-    borderChecked: "1px solid #84DFFC",
-    borderFocus: "1px solid #84DFFC",
-    checkMarkColor: "#84DFFC",
+    border: "1px solid #95A0FE",
+    borderChecked: "1px solid #95A0FE",
+    borderFocus: "1px solid #95A0FE",
+    checkMarkColor: "#95A0FE",
+    boxShadowFocus: "",
   },
   Select: {
     peers: {
       InternalSelection: {
+        fontSizeSmall: "12px",
+        heightSmall: "21px",
         textColor: "#BBBCBB",
         arrowColor: "#6D79FF",
         borderHover: "#6D79FF",
@@ -50,6 +55,7 @@ const themeOverrides: GlobalThemeOverrides = {
         borderActive: "#6D79FF",
         boxShadowActive: "#6D79FF",
         boxShadowFocus: "#6D79FF",
+        borderRadius: "calc(var(--n-height) / 2)",
       },
       InternalSelectMenu: {
         color: "#ffffff",
@@ -59,6 +65,13 @@ const themeOverrides: GlobalThemeOverrides = {
         optionTextColorActive: "#6D79FF",
       },
     },
+  },
+  Input: {
+    fontSizeMedium: "12px",
+    heightMedium: "21px",
+    borderHover: "1px solid #95A0FE",
+    borderFocus: "1px solid #95A0FE",
+    boxShadowFocus: "inset 0 0 0 1px #95A0FE",
   },
 };
 </script>
@@ -74,3 +87,4 @@ const themeOverrides: GlobalThemeOverrides = {
   --el-color-primary: #6d79ff !important;
 }
 </style>
+

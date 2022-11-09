@@ -198,6 +198,8 @@ const customRequest = (options: UploadCustomRequestOptions) => {
   font-size: 14px;
   margin-bottom: 17px;
 }
+
+//重写折叠面板
 .n-collapse {
   height: 100%;
   display: flex;
@@ -208,8 +210,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
     border-radius: 15px;
     :deep .n-collapse-item__header {
       color: #293270;
-      font-family: "PingFang-SC";
-      font-weight: bold;
+      font-family: "PingFang-SC-Bold";
       font-size: 14px;
       height: 50px;
       position: relative;
@@ -227,7 +228,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
     }
     .common-title {
       color: #6b797f;
-      font-family: "PingFang-SC-Regular";
+      font-family: "PingFang-SC-Medium";
       font-size: 12px;
       text-align: left;
       margin: 18px 0 12px 0;
@@ -237,7 +238,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
       display: flex;
       align-items: center;
       color: #6b797f;
-      font-family: "PingFang-SC-Regular";
+      font-family: "PingFang-SC-Medium";
       font-size: 12px;
       .common-input {
         width: 160px;

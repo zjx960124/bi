@@ -79,6 +79,10 @@ const clickHistoryHandle = (key: string) => {
 const previewHandle = () => {
   // window.open();
 };
+
+const changeProjectName = (e) => {
+  Project.value.setName(e.target.innerHTML);
+};
 </script>
 <template>
   <div class="editor">
@@ -92,9 +96,16 @@ const previewHandle = () => {
         </n-button>
       </template>
       <template #center>
-        <div class="screen-name" contenteditable="true">
+        <div
+          class="screen-name"
+          contenteditable="true"
+          baseData="1555"
+          id="base"
+          @blur="changeProjectName"
+        >
           {{ Project.projectName }}
         </div>
+
         <div class="size">
           <span>画板尺寸</span>
           <n-space vertical>

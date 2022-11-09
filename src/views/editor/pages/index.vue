@@ -57,8 +57,7 @@ const increasePage = () => {
       border-radius: 15px;
       :deep .n-collapse-item__header {
         color: #293270;
-        font-family: "PingFang-SC";
-        font-weight: bold;
+        font-family: "PingFang-SC-Bold";
         font-size: 14px;
         height: 50px;
         position: relative;
@@ -89,6 +88,9 @@ const increasePage = () => {
     }
     .n-collapse-item:first-child {
       max-height: 30%;
+    }
+    .n-collapse-item:last-child {
+      max-height: 70%;
     }
     .n-collapse-item--active {
       flex: 1;

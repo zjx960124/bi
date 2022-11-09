@@ -29,6 +29,7 @@ const themeOverrides: GlobalThemeOverrides = {
     dotHeight: "0px",
   },
   Radio: {
+    fontSizeMedium: "12px",
     color: "#FFFFFF",
     dotColorActive: "#95A0FE",
     boxShadowFocus: "inset 0 0 0 1px #95A0FE",
@@ -36,6 +37,9 @@ const themeOverrides: GlobalThemeOverrides = {
     boxShadowHover: "inset 0 0 0 1px #95A0FE",
   },
   Checkbox: {
+    sizeMedium: "14px",
+    fontSizeMedium: "12px",
+    textColor: "#6B797F",
     colorChecked: "#FFFFFF",
     border: "1px solid #95A0FE",
     borderChecked: "1px solid #95A0FE",

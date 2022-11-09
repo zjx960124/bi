@@ -26,11 +26,6 @@ watch(
   }
 );
 
-watch(
-  () => chartEditStore.getComponentList,
-  (newValue) => {}
-);
-
 // 移动结束处理
 const onMoveCallback = (val: any) => {
   const { oldIndex, newIndex } = val.moved;
@@ -103,8 +98,13 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
 };
 </script>
 <template>
-  <div>
-    <draggable item-key="id" v-model="layerList" @change="onMoveCallback">
+  <div style="height: 100%">
+    <draggable
+      item-key="id"
+      v-model="layerList"
+      ghostClass="ghost"
+      @change="onMoveCallback"
+    >
       <template #item="{ element }">
         <div class="go-content-layer-box">
           <div
@@ -159,3 +159,4 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
   margin-top: 11px;
 }
 </style>
+

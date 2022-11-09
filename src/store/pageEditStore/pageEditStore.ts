@@ -41,7 +41,7 @@ function createBasePage() {
         skewY: 0,
         // 默认背景色
         backgroundType: 'background',
-        background: undefined,
+        background: '#000000',
         backgroundImage: undefined,
         // 是否使用纯颜色
         selectColor: true,
@@ -113,11 +113,13 @@ class pageEditClass {
     this.pageList.push(createBasePage());
     this.currentPage = createBasePage();
     this.currentIndex = this.pageList.length - 1;
+    console.log(this.pageList);
   }
 
   public checkPage(index: number) {
     if (index === this.currentIndex) return false;
     this.currentPage = this.pageList[index];
+    console.log(this.currentPage);
     chartEditStore.cleanStorageInfo();
     chartEditStore.setStorageInfo(this.currentPage.component);
     chartHistoryStore.setStack(
@@ -125,6 +127,24 @@ class pageEditClass {
       this.currentPage.forwardStack
     );
     this.currentIndex = index;
+  }
+
+  public deletePage(index: number) {
+    if (index === 0 && this.pageList.length === 1) {
+      this.resetPage(index);
+      return;
+    }
+    if (index === this.currentIndex) {
+      this.pageList.splice(index, 1);
+      this.checkPage(index - 1);
+      return;
+    }
+  }
+
+  public resetPage(index: number) {
+    this.pageList.splice(index, 1, createBasePage());
+    chartEditStore.cleanStorageInfo();
+    chartHistoryStore.cleanStack();
   }
 }
 

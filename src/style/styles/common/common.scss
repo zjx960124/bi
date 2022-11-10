@@ -1,0 +1,65 @@
+ 
+ .el-common-tableBox {
+    display: flex;
+    flex-direction: 
+    column;justify-content: space-between;
+    height: 100%;
+
+  .el-table {
+      thead {
+        color: #6b797f;
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+
+      tr {
+        font-size: 14px;
+        font-weight: 400;
+        color: #293270;
+        border-radius: 15px;
+        overflow: hidden;
+      }
+
+      .el-table__body .cell {
+        padding: 15px 12px;
+        background-color: #f5f6f9;
+      }
+
+      .el-table__cell:first-child {
+        .cell {
+          border-radius: 15px 0 0 15px;
+        }
+      }
+
+      .el-table__cell:last-child {
+        .cell {
+          border-radius: 0 15px 15px 0;
+        }
+      }
+
+      .el-table__inner-wrapper::before {
+        height: 0;
+      }
+
+      td.el-table__cell,
+      th.el-table__cell.is-leaf {
+        border-bottom: none;
+      }
+  }
+  .el-table--enable-row-hover {
+      .el-table__body tr:hover > td.el-table__cell {
+        opacity: 0.8;
+        background-color: transparent;
+      }
+  }  
+  .paginationBox {
+    width: 100%;
+    .el-pagination__total {float: right;
+      margin-left: 16px;
+    }
+  }
+ }
+
+
+  

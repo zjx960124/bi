@@ -8,9 +8,14 @@
         <navbar />
       </div>
       <div class="layout-container-main">
-        <transition name="fade-transform" mode="out-in">
+        <!-- <transition name="fade-transform" mode="out-in">
           <router-view :key="path" />
-        </transition>
+        </transition> -->
+        <router-view v-slot="{ Component }">
+          <transition name="fade-transform" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </div>
     </div>
   </div>

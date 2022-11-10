@@ -35,9 +35,16 @@ const state = reactive({
 
 const { searchValue, tableData } = toRefs(state);
 
-function handleAddScreen() {}
+const handleAddScreen = () => {};
 
-function handleDel(row: any) {}
+const handleDel = (row: any) => {};
+
+const handleSizeChange = (val: number) => {
+  console.log(`${val} items per page`);
+};
+const handleCurrentChange = (val: number) => {
+  console.log(`current page: ${val}`);
+};
 </script>
 <template>
   <JsLayout title="数据大屏">
@@ -156,6 +163,8 @@ function handleDel(row: any) {}
           background
           layout="->,prev, pager, next, total, sizes,jumper"
           :total="1000"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
         />
       </div>
     </template>

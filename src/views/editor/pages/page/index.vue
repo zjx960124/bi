@@ -3,6 +3,7 @@ import { computed, ref, watch, toRef } from "vue";
 import Project from "@/store/pageEditStore/pageEditStore";
 import { DocumentTextSharp } from "@vicons/ionicons5";
 import { Delete } from "@vicons/carbon";
+import Draggable from "vuedraggable";
 
 const checkPage = (index: number) => {
   Project.value.checkPage(index);
@@ -14,27 +15,28 @@ const deletePage = (index: number) => {
 </script>
 <template>
   <div class="page-view">
-    <template v-for="(item, index) in Project.pageList" :key="index">
-      <div
-        contenteditable="true"
-        :class="{ active: Project.currentIndex === index }"
-        @click="checkPage(index)"
-        class="page-item"
-      >
-        <n-icon
-          class="page-icon"
-          size="14"
-          :component="DocumentTextSharp"
-        ></n-icon>
-        {{ item.name }}
-        <n-icon
-          class="page-delete"
-          size="14"
-          :component="Delete"
-          @click.stop="deletePage(index)"
-        ></n-icon>
-      </div>
-    </template>
+    <draggable item-key="id" v-model="Project.pageList" ghostClass="ghosts">
+      <template #item="{ element, index }">
+        <div
+          :class="{ active: Project.currentIndex === index }"
+          @click="checkPage(index)"
+          class="page-item"
+        >
+          <n-icon
+            class="page-icon"
+            size="14"
+            :component="DocumentTextSharp"
+          ></n-icon>
+          {{ element.name }}
+          <n-icon
+            class="page-delete"
+            size="14"
+            :component="Delete"
+            @click.stop="deletePage(index)"
+          ></n-icon>
+        </div>
+      </template>
+    </draggable>
   </div>
 </template>
 <style lang='scss' scoped>

@@ -48,8 +48,10 @@ const visualMap = computed(() => {
   return props.optionData.visualMap;
 });
 
-const fontWeightFlag = ref<boolean>(false);
-const fontFamilyFlag = ref<boolean>(false);
+const legendFontWeightFlag = ref({ type: false });
+const legendFontFamilyFlag = ref({ type: false });
+const xAxisFontWeightFlag = ref({ type: false });
+const xAxisFontFamilyFlag = ref({ type: false });
 
 const legendPosition = (position: string) => {
   props.optionData.legend = merge(
@@ -58,10 +60,10 @@ const legendPosition = (position: string) => {
     LegendConfiguration[position]
   );
 };
-
 const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
   target[key] = form;
-  depend.value = !depend.value;
+  console.log(depend);
+  depend.type = !depend.type;
 };
 </script>
 <template>
@@ -115,14 +117,15 @@ const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
         </n-button>
       </div>
       <div class="common-item">
-        <div class="common-sub-title">文字</div>
-        <!-- <el-input-number
+        <div class="common-sub-title">文本</div>
+        <el-input-number
           v-model="legend.textStyle.fontSize"
+          class="common-number-input"
           :min="1"
           :max="44"
           controls-position="right"
           size="small"
-        /> -->
+        />
         <n-color-picker
           class="common-color-picker"
           style="display: inline-block"
@@ -142,23 +145,23 @@ const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
             switchCommon(
               legend.textStyle,
               'fontWeight',
-              fontWeightFlag ? 'normal' : 'bold',
-              fontWeightFlag
+              legendFontWeightFlag.type ? 'normal' : 'bold',
+              legendFontWeightFlag
             )
           "
-          :class="{ commonActive: fontWeightFlag }"
+          :class="{ commonActive: legendFontWeightFlag.type }"
         >
           B
         </div>
         <div
           class="commmon-switch-self"
-          :class="{ active: fontFamilyFlag }"
+          :class="{ active: legendFontFamilyFlag.type }"
           @click="
             switchCommon(
               legend.textStyle,
               'fontFamily',
-              fontFamilyFlag ? 'sans-serif' : 'Courier New',
-              fontFamilyFlag
+              legendFontFamilyFlag.type ? 'sans-serif' : 'Courier New',
+              legendFontFamilyFlag
             )
           "
         >
@@ -172,6 +175,71 @@ const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
       </template>
     </n-collapse-item>
     <n-collapse-item title="X轴" name="3">
+      <div class="common-item">
+        <n-radio v-model:checked="xAxis.show">显示X轴</n-radio>
+      </div>
+      <div class="common-item">
+        <div class="common-sub-title">轴标题(单位)</div>
+        <n-input
+          class="common-input"
+          placeholder="标题名称(单位)"
+          round
+          v-model:value="xAxis.name"
+        >
+        </n-input>
+      </div>
+      <div class="common-item">
+        <div class="common-sub-title">文本</div>
+        <el-input-number
+          v-model="xAxis.nameTextStyle.fontSize"
+          class="common-number-input"
+          :min="1"
+          :max="44"
+          controls-position="right"
+          size="small"
+        />
+        <n-color-picker
+          class="common-color-picker"
+          style="display: inline-block"
+          v-model:value="xAxis.nameTextStyle.color"
+        >
+          <template #label>
+            <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
+          </template>
+        </n-color-picker>
+      </div>
+      <div class="common-item">
+        <div class="common-sub-title"></div>
+        <div class="common-space"></div>
+        <div
+          class="commmon-switch-self"
+          @click="
+            switchCommon(
+              xAxis.nameTextStyle,
+              'fontWeight',
+              xAxisFontWeightFlag.type ? 'normal' : 'bold',
+              xAxisFontWeightFlag
+            )
+          "
+          :class="{ commonActive: xAxisFontWeightFlag.type }"
+        >
+          B
+        </div>
+        <div
+          class="commmon-switch-self"
+          :class="{ active: xAxisFontFamilyFlag.type }"
+          @click="
+            switchCommon(
+              xAxis.nameTextStyle,
+              'fontFamily',
+              xAxisFontFamilyFlag.type ? 'sans-serif' : 'Courier New',
+              xAxisFontFamilyFlag
+            )
+          "
+        >
+          I
+        </div>
+      </div>
       <template #arrow>
         <n-icon size="16" color="#869299">
           <chevron-up />
@@ -234,6 +302,11 @@ const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
       }
       .common-sub-title {
         min-width: 25px;
+        flex-shrink: 0;
+      }
+      .common-number-input {
+        width: 75px;
+        margin-left: 9px;
       }
       .common-space {
         width: 10px;

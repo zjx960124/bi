@@ -39,3 +39,5 @@ export const LegendConfiguration: LegendConfigurationType = {
     except: ['bottom', 'left'],
   },
 };
+
+export const XAxisConfiguration = {};

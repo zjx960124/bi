@@ -12,10 +12,23 @@ const checkPage = (index: number) => {
 const deletePage = (index: number) => {
   Project.value.deletePage(index);
 };
+
+// 移动结束处理
+const onMoveCallback = (val: any) => {
+  const { oldIndex, newIndex } = val.moved;
+  console.log(oldIndex, newIndex);
+  Project.value.setCurrentIndex(newIndex);
+  console.log(Project.value.getPageList());
+};
 </script>
 <template>
   <div class="page-view">
-    <draggable item-key="id" v-model="Project.pageList" ghostClass="ghosts">
+    <draggable
+      item-key="id"
+      v-model="Project.pageList"
+      ghostClass="ghosts"
+      @change="onMoveCallback"
+    >
       <template #item="{ element, index }">
         <div
           :class="{ active: Project.currentIndex === index }"

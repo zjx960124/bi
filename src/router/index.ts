@@ -7,6 +7,7 @@ import modules from '@/router/modules';
 
 const Layout = import('@/views/layout/index.vue');
 const editor = import('@/views/editor');
+const dashboardEditor = import('@/views/analysis/dashboard/editor');
 
 const RootRoute: Array<RouteRecordRaw> = [
   {
@@ -63,9 +64,9 @@ const EditorRoute: Array<RouteRecordRaw> = [
   {
     path: '/dashboardEditor',
     name: 'dashboardEditor',
-    component: editor,
+    component: dashboardEditor,
     meta: {
-      title: 'editor',
+      title: 'dashboardEditor',
       icon: '',
     },
   },

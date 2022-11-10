@@ -13,6 +13,7 @@ const analysisRoutes: RouteRecordRaw[] = [
     component: importRoute['.DASHBOARD_MANAGE'],
     meta: {
       title: '仪表板',
+      isShow:true
     },
   },
   {
@@ -21,6 +22,7 @@ const analysisRoutes: RouteRecordRaw[] = [
     component: importRoute['.SCREEN_MANAGE'],
     meta: {
       title: '数据大屏',
+      isShow:true
     },
   },
 ];

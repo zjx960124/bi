@@ -5,6 +5,7 @@ const importRoute = {
   '.DATA_SOURCE': () => import('@/views/construction/datasource/index.vue'),
   '.DATA_SET': () => import('@/views/construction/dataset/index.vue'),
   '.PREVIEW': () => import('@/views/preview/index.vue'),
+  '.DATA_SOURCE_LIST': () => import('@/views/construction/datasource/list.vue'),
 };
 
 const constructionRoutes: RouteRecordRaw[] = [
@@ -14,6 +15,7 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.DATA_SOURCE'],
     meta: {
       title: '数据源',
+      isShow:true
     },
   },
   {
@@ -22,6 +24,7 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.DATA_SET'],
     meta: {
       title: '数据集',
+      isShow:true
     },
   },
   {
@@ -30,6 +33,16 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.PREVIEW'],
     meta: {
       title: '预览页',
+      isShow:true
+    },
+  },
+  {
+    path: PageEnum.DATA_SOURCE_LIST,
+    name: PageEnum.DATA_SOURCE_LIST_NAME,
+    component: importRoute['.DATA_SOURCE_LIST'],
+    meta: {
+      title: '数据源列表页',
+      isShow:false
     },
   },
 ];

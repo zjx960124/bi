@@ -33,6 +33,9 @@ export enum PageEnum {
   DATA_SOURCE = '/datasource',
   DATA_SOURCE_NAME = 'datasource',
 
+  DATA_SOURCE_LIST = '/datasource/list',
+  DATA_SOURCE_LIST_NAME = 'datasource-list',
+
   PREVIEW = '/preview',
   PREVIEW_NAME = 'preview',
 }

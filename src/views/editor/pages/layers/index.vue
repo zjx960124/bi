@@ -51,8 +51,8 @@ const onMoveCallback = (val: any) => {
 };
 // 点击事件
 const mousedownHandle = (e: MouseEvent, item: CreateComponentType) => {
-  e.stopPropagation();
-  e.preventDefault();
+  // e.stopPropagation();
+  // e.preventDefault();
   onClickOutSide();
   // 若此时按下了 CTRL, 表示多选
   const id = item.id;
@@ -99,10 +99,10 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
 </script>
 <template>
   <div style="height: 100%">
-    <draggable
+    <Draggable
       item-key="id"
       v-model="layerList"
-      ghostClass="ghost"
+      ghostClass="ghostb"
       @change="onMoveCallback"
     >
       <template #item="{ element }">
@@ -130,7 +130,7 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
           </div>
         </div>
       </template>
-    </draggable>
+    </Draggable>
   </div>
 </template>
 <style lang='scss' scoped>

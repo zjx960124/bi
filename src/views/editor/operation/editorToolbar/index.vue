@@ -159,9 +159,10 @@ const y = ref(0);
       display: flex;
       align-items: center;
       padding-left: 29px;
+      width: 25%;
       cursor: pointer;
       .scale-slider {
-        width: 260px;
+        width: 100%;
         margin: 0 15px;
       }
       .slider-value {
@@ -173,6 +174,10 @@ const y = ref(0);
     }
     .component {
       margin-right: 113px;
+      :deep .popover-menu-btn-view {
+        background: #f6f7f9;
+        border-radius: 11px;
+      }
     }
   }
   .popover-view {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive, toRefs } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ref, onMounted, reactive, toRefs } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import router from '@/router';
 
 const state = reactive({
   searchValue: "",
@@ -62,6 +63,10 @@ function handleEditFolderName(data: any) {
   });
 }
 
+const handleAddDashboard = () => {
+  router.push('/dashboardEditor');
+};
+
 function handleView(data: any) {}
 
 function handleDelete(data: any) {}
@@ -83,7 +88,10 @@ function handleCopy(data: any) {}
         >
         </el-input>
       </div>
-      <div class="el-button-normal margin-left-22">
+      <div
+        class="el-button-normal margin-left-22"
+        @click="handleAddDashboard"
+      >
         <img
           width="18"
           height="18"
@@ -128,6 +136,7 @@ function handleCopy(data: any) {}
                     class="btn"
                     width="37"
                     height="23"
+                    title="编辑"
                     src="/src/assets/analysis/icon-edit.png"
                   />
                   <el-dropdown>
@@ -136,6 +145,7 @@ function handleCopy(data: any) {}
                         class="margin-left-11 btn"
                         width="37"
                         height="23"
+                        title="更多"
                         src="/src/assets/analysis/icon-more.png"
                       />
                     </span>

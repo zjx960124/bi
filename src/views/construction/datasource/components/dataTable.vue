@@ -59,7 +59,7 @@
             >
               分享
             </el-button>
-            <el-popconfirm title="确认删除?" @confirm="handleDel(scope.row)">
+            <el-popconfirm title="确认删除?">
               <template #reference>
                 <el-button
                   class="el-button-delete"
@@ -86,8 +86,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
-const tableData = reactive([])
+import { reactive } from "vue";
+const tableData = reactive([]);
 </script>
 <style scoped lang="scss">
 .datatable-container-box {

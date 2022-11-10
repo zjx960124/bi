@@ -5,8 +5,9 @@ import { constantRouterMap } from './router.config';
 import { createRouterGuards } from './router-guards';
 import modules from '@/router/modules';
 
-const Layout = () => import('@/views/layout/index.vue');
-const editor = () => import('@/views/editor');
+const Layout = import('@/views/layout/index.vue');
+const editor = import('@/views/editor');
+const dashboardEditor = import('@/views/analysis/dashboard/editor');
 interface metaType extends RouteMeta {
   isShow?: boolean
 }
@@ -68,9 +69,9 @@ const EditorRoute: Array<RouteRecordRaw> = [
   {
     path: '/dashboardEditor',
     name: 'dashboardEditor',
-    component: editor,
+    component: dashboardEditor,
     meta: {
-      title: 'editor',
+      title: 'dashboardEditor',
       icon: '',
     },
   },

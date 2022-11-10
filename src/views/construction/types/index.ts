@@ -14,8 +14,14 @@ interface dataTypes {
   title?: string;
 }
 
+interface drawerTypes {
+  type?: string
+  drawer?: boolean
+}
+
 
 export {
   sizeForm,
-  dataTypes
+  dataTypes,
+  drawerTypes
 }

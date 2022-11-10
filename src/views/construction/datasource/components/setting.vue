@@ -1,6 +1,8 @@
 <template>
   <div class="datasource-set">
-    <div class="datasource-set-title">添加MySQL数据源</div>
+    <div class="datasource-set-title" v-if="$attrs.isShowTitle">
+      添加MySQL数据源
+    </div>
     <div class="datasource-set-content">
       <el-form
         ref="form"

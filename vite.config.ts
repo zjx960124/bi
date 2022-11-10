@@ -37,7 +37,7 @@ export default defineConfig({
       symbolId: 'icon-[name]',
     }),
   ],
-  base: './',
+  base: '/hybi',
   resolve: {
     // resolve.alias: 更轻松地为import或require某些模块创建别名
     alias: {
@@ -80,7 +80,7 @@ export default defineConfig({
       '/gapi': {
         target: 'http://localhost:8001/', //对mock进行代理，为了区别非mock的代理
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/gapi/, ''),
+        rewrite: (path) => path.replace(/^\/gapi/, ''),
       },
     },
   },
@@ -91,7 +91,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "src/styles/common/style.scss";`,
+        additionalData: `@import "src/style/styles/common/style.scss";`,
       },
     },
   },

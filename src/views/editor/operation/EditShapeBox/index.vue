@@ -79,23 +79,20 @@ const select = computed(() => {
   .shape-point {
     z-index: 1;
     position: absolute;
-    width: 7px;
-    height: 7px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
     border: 3px solid v-bind("themeColor");
-    border-radius: 5px;
     background-color: #fff;
     transform: translate(-40%, -30%);
     &.t {
-      width: 30px;
       transform: translate(-50%, -50%);
     }
     &.b {
-      width: 30px;
       transform: translate(-50%, -30%);
     }
     &.l,
     &.r {
-      height: 30px;
     }
     &.r {
       transform: translate(-20%, -50%);
@@ -127,11 +124,11 @@ const select = computed(() => {
       top: 2px;
       left: 2px;
       &.active {
-        background-color: v-bind("themeColor");
+        background-color: #ffffff;
       }
     }
     .shape-modal-change {
-      border: 2px solid rgba(0, 0, 0, 0);
+      border: 2px dashed rgba(0, 0, 0, 0);
       &.selectActive,
       &.hoverActive {
         border-color: v-bind("themeColor");
@@ -141,7 +138,7 @@ const select = computed(() => {
         border-style: dotted;
       }
       &.selectActive {
-        border-style: solid;
+        border-style: dashed;
       }
     }
   }

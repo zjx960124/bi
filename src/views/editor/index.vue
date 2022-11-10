@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import headerPlugin from "./headerPlugin";
 import { loadAsyncComponent } from "@/utils";
+import Project from "@/store/pageEditStore/pageEditStore";
 import { useContextMenu } from "./charts/hooks/useContextMenu.hook";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
 import { useRouter } from "vue-router";
-import { ChevronBack, ArrowUndo, ArrowRedo } from "@vicons/ionicons5";
-import { reactive, ref, computed } from "vue";
+import {
+  ChevronBack,
+  ArrowUndo,
+  ArrowRedo,
+  ImagesOutline,
+} from "@vicons/ionicons5";
+import { reactive, ref, computed, markRaw } from "vue";
 import { icon } from "@/plugins";
 
 const charts = loadAsyncComponent(() => import("./charts/index.vue"));
@@ -32,6 +38,10 @@ const sizeOptions = reactive([
   {
     label: "1920*1080（默认）",
     value: 0,
+  },
+  {
+    label: "1600*900",
+    value: 1,
   },
 ]);
 
@@ -65,6 +75,14 @@ const clickHistoryHandle = (key: string) => {
       break;
   }
 };
+
+const previewHandle = () => {
+  // window.open();
+};
+
+const changeProjectName = (e) => {
+  Project.value.setName(e.target.innerHTML);
+};
 </script>
 <template>
   <div class="editor">
@@ -78,13 +96,23 @@ const clickHistoryHandle = (key: string) => {
         </n-button>
       </template>
       <template #center>
-        <div class="screen-name">未命名可视化大屏</div>
+        <div
+          class="screen-name"
+          contenteditable="true"
+          baseData="1555"
+          id="base"
+          @blur="changeProjectName"
+        >
+          {{ Project.projectName }}
+        </div>
+
         <div class="size">
           <span>画板尺寸</span>
           <n-space vertical>
             <n-select
+              style="width: 160px"
               v-model:value="sizeValue"
-              size="small"
+              size="medium"
               :options="sizeOptions"
             />
           </n-space>
@@ -103,6 +131,14 @@ const clickHistoryHandle = (key: string) => {
             size="24"
             style="margin-right: 29px"
           ></n-icon>
+        </n-button>
+        <n-button round @click="previewHandle" class="preview-btn">
+          <template #icon>
+            <n-icon>
+              <ImagesOutline />
+            </n-icon>
+          </template>
+          预览
         </n-button>
       </template>
     </header-plugin>
@@ -148,6 +184,11 @@ const clickHistoryHandle = (key: string) => {
       font-family: "PingFang SC";
       margin-right: 9px;
     }
+  }
+  .preview-btn {
+    width: 89px;
+    height: 43px;
+    padding: 0;
   }
   main {
     overflow: hidden;

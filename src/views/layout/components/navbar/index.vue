@@ -3,15 +3,9 @@
     <breadcrumb />
     <el-dropdown>
       <span class="el-dropdown-link">
-        <el-avatar
-          icon="UserFilled"
-          class="navbar-container-avatar"
-        />
+        <el-avatar icon="UserFilled" class="navbar-container-avatar" />
         <span class="text-blue">bee</span>
-        <el-icon
-          class="el-icon--right"
-          v-if="false"
-        >
+        <el-icon class="el-icon--right" v-if="false">
           <arrow-down />
         </el-icon>
       </span>
@@ -25,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import breadcrumb from '../breadcrumb';
+import breadcrumb from "../breadcrumb";
 </script>
 <style lang="scss" scoped>
 .navbar-container {
@@ -53,7 +47,7 @@ import breadcrumb from '../breadcrumb';
   }
 }
 
-::v-deep .el-dropdown .el-dropdown-selfdefine {
+:deep .el-dropdown .el-dropdown-selfdefine {
   display: flex;
   align-items: center;
 }

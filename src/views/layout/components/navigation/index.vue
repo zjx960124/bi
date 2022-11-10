@@ -11,6 +11,7 @@
     <template v-for="menu in menus">
       <template v-if="menu.children && menu.children.length <= 1">
         <el-menu-item
+          v-if="menu.meta?.isShow"
           :index="menu.path"
           v-registed="{ name: `${menu.meta?.title}`, path: `${menu.path}` }"
           ><svg-icon
@@ -23,7 +24,7 @@
         >
       </template>
       <template v-else>
-        <el-sub-menu :index="menu.path">
+        <el-sub-menu :index="menu.path" v-if="menu.meta?.isShow">
           <template #title>
             <span
               ><svg-icon
@@ -36,18 +37,20 @@
             >
           </template>
 
-          <el-menu-item
-            v-for="it in menu.children"
-            v-registed="{ name: `${it.meta?.title}`, path: `${it.path}` }"
-            :index="`${it.path}`"
-            ><svg-icon
-              v-show="it.meta?.icon"
-              class-name="icon"
-              :icon="`${it.meta?.icon}`"
-              class="mr10"
-            ></svg-icon
-            >{{ it.meta?.title }}</el-menu-item
-          >
+          <template v-for="it in menu.children">
+            <el-menu-item
+              v-if="it.meta?.isShow"
+              v-registed="{ name: `${it.meta?.title}`, path: `${it.path}` }"
+              :index="`${it.path}`"
+              ><svg-icon
+                v-show="it.meta?.icon"
+                class-name="icon"
+                :icon="`${it.meta?.icon}`"
+                class="mr10"
+              ></svg-icon
+              >{{ it.meta?.title }}</el-menu-item
+            >
+          </template>
         </el-sub-menu>
       </template>
     </template>
@@ -72,7 +75,7 @@ watchEffect(() => {
   }
 
   if (routeStore) {
-    defaultActive.value = `${routeStore.default_navication}`;
+    defaultActive.value = `/${routeStore.default_navication.split("/")[1]}`;
   }
 });
 
@@ -83,10 +86,9 @@ const getMenuItem = computed(() => {
     }
   };
 });
-
 </script>
 <style lang="scss" scoped>
-::v-deep .el-menu-item.is-active {
+:deep .el-menu-item.is-active {
   background: linear-gradient(
     90deg,
     rgba(91, 101, 195, 0.8) 0%,

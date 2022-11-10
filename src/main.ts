@@ -13,11 +13,11 @@ import JsLayout from '@/components/JsLayout/index.vue';
 //naive
 import { setupNaive } from '@/plugins';
 
-// style
-import '@/style/index.scss';
-
 // 引入全局样式
 import '@/style/styles/pages/index.scss';
+
+// style
+import '@/style/index.scss';
 
 // 引入字体
 import '@/assets/font/font.css';

@@ -26,13 +26,13 @@
     width: 100%;
     background: #ffffff;
     border-radius: 15px;
-    ::v-deep .n-collapse-item__header {
+    :deep .n-collapse-item__header {
       color: #293270;
-      font-family: "PingFang-SC";
-      font-weight: bold;
+      font-family: "PingFang-SC-Bold";
       font-size: 14px;
       height: 50px;
       position: relative;
+      margin: 0;
       padding: 0 0 0 27px;
       .n-collapse-item__header-main {
         .n-collapse-item-arrow {
@@ -42,15 +42,96 @@
         }
       }
     }
-    ::v-deep .n-collapse-item__content-inner {
+    :deep .n-collapse-item__content-inner {
       padding: 0 25px 18px 25px;
     }
   }
-  ::v-deep .n-collapse-item.n-collapse-item--active {
+  :deep .n-collapse-item.n-collapse-item--active {
     .n-collapse-item__header.n-collapse-item__header--active {
       .n-collapse-item-arrow {
         transform: rotate(180deg);
       }
     }
   }
+}
+
+//重写radio
+
+.n-radio .n-radio__dot::before {
+  background: transparent;
+  border-radius: 0;
+  left: 4px;
+  top: 4px;
+  height: calc(100% - 10px);
+  width: calc(100% - 8px);
+  border: 2px solid var(--n-dot-color-active);
+  border-top: none;
+  border-right: none;
+  -webkit-transform: rotate(-50deg);
+  -ms-transform: rotate(-50deg);
+  transform: rotate(-50deg) scale(1) !important;
+}
+.n-radio .n-radio__label {
+  color: #6b797f;
+  font-family: "PingFang-SC-MEDIUM";
+}
+
+// 重写颜色选择
+.n-color-picker {
+  width: 56px;
+  height: 21px;
+  border-radius: 11px;
+  position: relative;
+  .n-color-picker-trigger {
+    border-radius: 11px;
+  }
+  .n-color-picker-trigger::before {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 6px;
+    height: 4px;
+    border: 1px solid #6b797f;
+    border-top: none;
+    border-right: none;
+    -webkit-transform: rotate(-50deg);
+    -ms-transform: rotate(-50deg);
+    transform: rotate(-50deg) scale(1) !important;
+  }
+  .n-color-picker-trigger .n-color-picker-trigger__fill {
+    top: 4px;
+    bottom: 4px;
+    left: 5px;
+    right: 23px;
+    div {
+      border-radius: 7px;
+    }
+    .n-color-picker-trigger__value {
+      position: absolute;
+      right: -18px;
+      top: -3px;
+      color: #6b797f !important;
+    }
+  }
+}
+
+// 重写图片上传
+.n-upload {
+  width: inherit;
+  .n-upload-dragger {
+    padding: 0;
+    width: 40px;
+    height: 25px;
+    border: none;
+  }
+}
+
+// 重写Input
+.n-input {
+  text-align: left;
+}
+
+// 重写select
+.n-select {
+  text-align: left;
 }

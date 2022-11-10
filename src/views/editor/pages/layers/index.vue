@@ -124,7 +124,7 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
                 :component="EllipsisHorizontal"
                 size="14"
                 class="ellipsis-icon"
-                @click="clickContextMenu($event, element)"
+                @click.stop="clickContextMenu($event, element)"
               ></n-icon>
             </div>
           </div>

@@ -95,6 +95,10 @@ class pageEditClass {
 
   public setStack() {}
 
+  public setCurrentIndex(index: number) {
+    this.currentIndex = index;
+  }
+
   public getPageList() {
     return this.pageList;
   }

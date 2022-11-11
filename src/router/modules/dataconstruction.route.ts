@@ -45,6 +45,15 @@ const constructionRoutes: RouteRecordRaw[] = [
       isShow:false
     },
   },
+  {
+    path: '/dataset/create',
+    name: 'dataset_create',
+    component: ()=>import('@/views/construction/dataset/addExcel.vue'),
+    meta: {
+      title: '新建数据集',
+      isShow:false
+    },
+  },
 ];
 
 export default constructionRoutes;

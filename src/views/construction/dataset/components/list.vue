@@ -32,9 +32,9 @@ import { dataTypes } from "@/views/construction/types/index";
 const imgUrl = ref(noData);
 
 const dataList = ref<Array<dataTypes>>([
-  { type: "sql", title: "MySQL" },
-  { type: "file", title: "本地文件（.csv  .xlsx  .xls）" },
-  { type: "api", title: "API数据" },
+  { type: "excel", title: "Excel" },
+  { type: "sql", title: "SQL数据集" },
+  { type: "database", title: "数据库数据集" },
 ]);
 
 const emit = defineEmits(["openSetting"]);

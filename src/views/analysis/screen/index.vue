@@ -1,41 +1,50 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive, toRefs } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { borderRadius } from '@/settings/designSetting';
+import { ref, onMounted, reactive, toRefs } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { borderRadius } from "@/settings/designSetting";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const state = reactive({
-  searchValue: '',
+  searchValue: "",
   tableData: [
     {
       id: 0,
-      name: '数据集名称',
-      creator: '用户名',
-      createTime: '2020-00-00 00:00:00',
-      lastEditor: '用户名',
-      lastEditTime: '2020-00-00 00:00:00'
+      name: "数据集名称",
+      creator: "用户名",
+      createTime: "2020-00-00 00:00:00",
+      lastEditor: "用户名",
+      lastEditTime: "2020-00-00 00:00:00",
     },
     {
       id: 1,
-      name: '数据集名称',
-      creator: '用户名',
-      createTime: '2020-00-00 00:00:00',
-      lastEditor: '用户名',
-      lastEditTime: '2020-00-00 00:00:00'
+      name: "数据集名称",
+      creator: "用户名",
+      createTime: "2020-00-00 00:00:00",
+      lastEditor: "用户名",
+      lastEditTime: "2020-00-00 00:00:00",
     },
     {
       id: 2,
-      name: '数据集名称',
-      creator: '用户名',
-      createTime: '2020-00-00 00:00:00',
-      lastEditor: '用户名',
-      lastEditTime: '2020-00-00 00:00:00'
-    }
-  ]
+      name: "数据集名称",
+      creator: "用户名",
+      createTime: "2020-00-00 00:00:00",
+      lastEditor: "用户名",
+      lastEditTime: "2020-00-00 00:00:00",
+    },
+  ],
 });
 
 const { searchValue, tableData } = toRefs(state);
 
-const handleAddScreen = () => {};
+const handleAddScreen = () => {
+  const { href } = router.resolve({
+    path: "/editor",
+    query: {},
+  });
+  window.open(href, "_blank");
+};
 
 const handleDel = (row: any) => {};
 
@@ -50,11 +59,7 @@ const handleCurrentChange = (val: number) => {
   <JsLayout title="数据大屏">
     <template #operation>
       <div class="searchBox">
-        <img
-          width="22"
-          height="21"
-          src="/src/assets/analysis/search.png"
-        />
+        <img width="22" height="21" src="/src/assets/analysis/search.png" />
         <el-input
           class="input"
           v-model="searchValue"
@@ -63,10 +68,7 @@ const handleCurrentChange = (val: number) => {
         >
         </el-input>
       </div>
-      <div
-        class="el-button-primary margin-left-22"
-        @click="handleAddScreen"
-      >
+      <div class="el-button-primary margin-left-22" @click="handleAddScreen">
         <img
           width="20"
           height="14"
@@ -114,11 +116,7 @@ const handleCurrentChange = (val: number) => {
             min-width="180"
             align="center"
           />
-          <el-table-column
-            label="操作"
-            min-width="240"
-            align="center"
-          >
+          <el-table-column label="操作" min-width="240" align="center">
             <template #default="scope">
               <el-button
                 class="el-button-edit"
@@ -138,10 +136,7 @@ const handleCurrentChange = (val: number) => {
               >
                 分享
               </el-button>
-              <el-popconfirm
-                title="确认删除?"
-                @confirm="handleDel(scope.row)"
-              >
+              <el-popconfirm title="确认删除?" @confirm="handleDel(scope.row)">
                 <template #reference>
                   <el-button
                     class="el-button-delete"
@@ -154,7 +149,6 @@ const handleCurrentChange = (val: number) => {
                   </el-button>
                 </template>
               </el-popconfirm>
-
             </template>
           </el-table-column>
         </el-table>

@@ -18,11 +18,12 @@ import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { BarChart } from "echarts/charts";
 import config, { includes, seriesItem } from "./config";
-import { mergeTheme } from "@/packages/hook/chart";
+import { mergeTheme, expendSeries } from "@/packages/hook/chart";
 // import { useChartDataFetch } from "@/utils/hooks/useChartDataFetch";
 import { CreateComponentType } from "@/packages/index.d";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { isPreview } from "@/utils";
+import cloneDeep from "lodash/cloneDeep";
 import {
   DatasetComponent,
   GridComponent,
@@ -57,8 +58,12 @@ use([
 const replaceMergeArr = ref<string[]>();
 
 const option = computed(() => {
-  return mergeTheme(props.chartConfig.option, props.themeSetting, includes);
+  console.log(props.chartConfig.option);
+  let resultOption = expendSeries(cloneDeep(props.chartConfig.option));
+  return mergeTheme(resultOption, props.themeSetting, includes);
 });
+
+console.log(option);
 
 // dataset 无法变更条数的补丁
 watch(

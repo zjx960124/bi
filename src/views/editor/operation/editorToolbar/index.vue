@@ -22,7 +22,6 @@ const sliderValue = ref<number>(100);
 watchEffect(() => {
   const value = (scale.value * 100).toFixed(0);
   sliderValue.value = parseInt(value);
-  console.log(value);
 });
 // 拖动处理
 const sliderHandle = (v: number) => {
@@ -34,8 +33,6 @@ const sliderMaks = reactive({
 
 // 加减Scale
 const handleReduceScale = () => {
-  console.log(sliderValue.value);
-
   chartEditStore.setScale((sliderValue.value - 10) / 100);
 };
 
@@ -52,7 +49,6 @@ const handleClick = (item, index) => {
   x.value = domRect.x;
   y.value = domRect.height + domRect.y;
   currentMenuOptions.value = item;
-  console.log(currentMenuOptions.value);
   if (index === currenIndex.value) {
     showPopover.value = !showPopover.value;
   } else {

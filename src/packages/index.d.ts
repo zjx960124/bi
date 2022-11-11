@@ -130,3 +130,5 @@ export type PickCreateComponentType<T extends keyof CreateComponentType> = Pick<
   CreateComponentType,
   T
 >[T];
+
+export type ChartConfigType = GlobalThemeJsonType;

@@ -12,15 +12,20 @@
     </div>
     <div class="content">
       <el-scrollbar style="height: 100%; width: 100%">
-        <div class="item" v-for="i in 22" :class="{ active: i === 0 }">
+        <div
+          class="item"
+          v-for="(it, idx) in datas"
+          :class="{ active: current == idx }"
+          @click="getDataSource(it, idx)"
+        >
           <svg-icon
             class-name="icon"
             :icon="`datasource`"
             class="mr10"
           ></svg-icon>
           <div class="item-info">
-            <div class="title">SQL数据源名称{{ i }}</div>
-            <div class="desc">创建者:用户名</div>
+            <div class="title">{{ it.title }}</div>
+            <div class="desc">创建者:{{ it.creater }}</div>
           </div>
           <div class="item-btn">
             <img src="@/assets/data/edit.png" />
@@ -34,8 +39,22 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { datasourceType } from "@/views/construction/types/index";
 import svgIcon from "@/components/svg-icon/index.vue";
 const searchValue = ref("");
+const current = ref<number>(0);
+const datas = ref<Array<datasourceType>>([
+  { title: "SQL数据源名称", type: "sql", creater: "用户名222" },
+  { title: "文件数据源名称", type: "file", creater: "用户名333" },
+  { title: "API数据源名称", type: "api", creater: "用户名111" },
+]);
+
+const emit = defineEmits(["getDatasourceType"]);
+
+const getDataSource = (val: datasourceType, index: number) => {
+  current.value = index;
+  emit("getDatasourceType", val);
+};
 </script>
 <style scoped lang="scss">
 .datalist-container-box {

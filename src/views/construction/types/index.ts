@@ -19,9 +19,16 @@ interface drawerTypes {
   drawer?: boolean
 }
 
+interface datasourceType {
+  title?: string
+  type?: string
+  creater?: string
+}
+
 
 export {
   sizeForm,
   dataTypes,
-  drawerTypes
+  drawerTypes,
+  datasourceType
 }

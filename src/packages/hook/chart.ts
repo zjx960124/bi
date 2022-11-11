@@ -4,6 +4,7 @@ import pick from 'lodash/pick';
 import { globalThemeJson } from '@/settings/chartThemes/index';
 import { getUUID } from '@/utils';
 import { chartInitConfig } from '@/settings/designSetting';
+import { ChartConfigType } from './../index.d';
 
 /**
  * * 合并 color 和全局配置项
@@ -18,6 +19,13 @@ export const mergeTheme = <T, U>(
   includes: string[]
 ) => {
   return (option = merge({}, pick(themeSetting, includes), option));
+};
+
+export const expendSeries = (option: ChartConfigType) => {
+  option.series = new Array(option.dataset.dimensions.length - 1).fill(
+    option.series
+  );
+  return option;
 };
 
 /**

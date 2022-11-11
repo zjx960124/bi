@@ -40,6 +40,8 @@ const dblclickHandle = async (item: ConfigType) => {
     componentInstall(item.conKey, fetchConfigComponent(item));
     // 创建新图表组件
     let newComponent: CreateComponentType = await createComponent(item);
+    console.log(newComponent);
+
     // 添加
     chartEditStore.addComponentList(newComponent, false, true);
     // 选中

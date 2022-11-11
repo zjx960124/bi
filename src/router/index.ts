@@ -1,15 +1,20 @@
 import { PageEnum } from '@/types';
 import type { App } from 'vue';
-import { createRouter, createWebHashHistory, RouteMeta, RouteRecordRaw } from 'vue-router';
+import {
+  createRouter,
+  createWebHashHistory,
+  RouteMeta,
+  RouteRecordRaw,
+} from 'vue-router';
 import { constantRouterMap } from './router.config';
 import { createRouterGuards } from './router-guards';
 import modules from '@/router/modules';
 
-const Layout = import('@/views/layout/index.vue');
-const editor = import('@/views/editor');
-const dashboardEditor = import('@/views/analysis/dashboard/editor');
+const Layout = () => import('@/views/layout/index.vue');
+const editor = () => import('@/views/editor');
+const dashboardEditor = () => import('@/views/analysis/dashboard/editor');
 interface metaType extends RouteMeta {
-  isShow?: boolean
+  isShow?: boolean;
 }
 const RootRoute: Array<RouteRecordRaw> = [
   {
@@ -20,8 +25,8 @@ const RootRoute: Array<RouteRecordRaw> = [
     meta: {
       title: '数据分析',
       icon: '',
-      isShow:true
-    } ,
+      isShow: true,
+    },
     children: [...modules.analysisRoutes],
   },
   {
@@ -32,14 +37,14 @@ const RootRoute: Array<RouteRecordRaw> = [
     meta: {
       title: '模板中心',
       icon: 'data1',
-      isShow:true
+      isShow: true,
     } as metaType,
     children: [
       {
         path: '/templateCenter',
         name: 'templateCenter',
         component: () => import('@/views/template'),
-        meta: { title: '模板中心', },
+        meta: { title: '模板中心' },
       },
     ],
   },
@@ -50,7 +55,7 @@ const RootRoute: Array<RouteRecordRaw> = [
     redirect: PageEnum.DATA_SOURCE,
     meta: {
       title: '数据构建',
-      isShow:true
+      isShow: true,
     },
     children: [...modules.constructionRoutes],
   },

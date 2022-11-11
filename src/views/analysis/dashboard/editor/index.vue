@@ -7,7 +7,7 @@ import SimulatorEditor from './components/simulator-editor/index.vue';
 </script>
 
 <template>
-  <el-container>
+  <el-container class="dashboard-editor">
     <el-aside
       class="aside"
       width="103px"
@@ -22,15 +22,24 @@ import SimulatorEditor from './components/simulator-editor/index.vue';
       </el-header>
       <!-- 主要区域组件-->
       <el-main>
-        <componentsList />
+        <div class="main">
+          <componentsList />
+          <simulatorEditor class="mlr20" />
+        </div>
       </el-main>
     </el-container>
   </el-container>
 </template>
  
 <style lang="scss" scoped>
-.dashboardEdit {
+.dashboard-editor {
   width: 100%;
   height: 100%;
+  background-color: #f3f5ff;
+  .main {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 100px);
+  }
 }
 </style>

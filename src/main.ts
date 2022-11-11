@@ -33,6 +33,8 @@ import directPlugin from '@/utils/directive/lazyPlugin';
 import registedBreadcrumb from '@/utils/directive/registedBreadcrumb';
 import changeBreadcrumb from '@/utils/directive/changeBreadcrumb';
 
+import SvgIcon from '@/components/svg-icon/index.vue';
+
 const app = createApp(App);
 
 //引入element ICON
@@ -42,6 +44,7 @@ for (const [key, component] of Object.entries(ElementIcons)) {
 
 app
   .component('JsLayout', JsLayout)
+  .component('SvgIcon', SvgIcon)
   .use(createPinia())
   .use(router)
   .use(ElementPlus, {

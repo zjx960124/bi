@@ -37,7 +37,7 @@
         align="center"
         fit
         :highlight-current-row="false"
-        :border="true"
+        :border="false"
         style="width: 100%"
       >
         <el-table-column

@@ -46,6 +46,14 @@ export const option = {
       fontSize: 12,
       fontWeight: 'normal',
     },
+    axisLine: {
+      show: true,
+      lineStyle: {
+        color: '#6D79FF',
+        type: 'solid',
+        width: 1,
+      },
+    },
   },
   yAxis: {
     show: true,

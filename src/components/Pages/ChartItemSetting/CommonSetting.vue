@@ -40,7 +40,6 @@ const yAxis = computed(() => {
 });
 
 const legend = computed(() => {
-  console.log(props.optionData.legend);
   return props.optionData.legend;
 });
 
@@ -52,6 +51,16 @@ const legendFontWeightFlag = ref({ type: false });
 const legendFontFamilyFlag = ref({ type: false });
 const xAxisFontWeightFlag = ref({ type: false });
 const xAxisFontFamilyFlag = ref({ type: false });
+const lineTypeOptions = ref([
+  {
+    label: "·········",
+    value: "dashed",
+  },
+  {
+    label: "——",
+    value: "solid",
+  },
+]);
 
 const legendPosition = (position: string) => {
   props.optionData.legend = merge(
@@ -240,6 +249,35 @@ const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
           I
         </div>
       </div>
+      <div class="common-item">
+        <div class="common-sub-title">轴线</div>
+        <n-select
+          class="common-small-select"
+          :options="lineTypeOptions"
+          size="small"
+          v-model:value="xAxis.axisLine.lineStyle.type"
+        />
+        <el-input-number
+          v-model="xAxis.axisLine.lineStyle.width"
+          class="common-number-input"
+          :min="1"
+          :max="44"
+          controls-position="right"
+          size="small"
+        />
+      </div>
+      <div class="common-item">
+        <div class="common-sub-title"></div>
+        <n-color-picker
+          class="common-color-picker"
+          style="display: inline-block"
+          v-model:value="xAxis.axisLine.lineStyle.color"
+        >
+          <template #label>
+            <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
+          </template>
+        </n-color-picker>
+      </div>
       <template #arrow>
         <n-icon size="16" color="#869299">
           <chevron-up />
@@ -291,6 +329,10 @@ const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
       }
       .common-select {
         width: 160px;
+        margin-left: 10px;
+      }
+      .common-small-select {
+        width: 76px;
         margin-left: 10px;
       }
       .common-number {

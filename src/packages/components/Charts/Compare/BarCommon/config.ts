@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import {
   echartOptionProfixHandle,
   PublicConfigClass,
@@ -7,14 +8,21 @@ import { CreateComponentType } from '@/packages/index.d';
 import cloneDeep from 'lodash/cloneDeep';
 import dataJson from './data.json';
 
-export const includes = ['legend', 'xAxis', 'yAxis'];
+export const includes = ['legend', 'xAxis', 'yAxis', 'series'];
 
 export const seriesItem = {
   type: 'bar',
-  barWidth: null,
+  barWidth: 20,
   itemStyle: {
     color: null,
     borderRadius: 0,
+  },
+  label: {
+    show: false,
+    position: 'top',
+    fontSize: 12,
+    color: '#333333',
+    fontStyle: 'normal',
   },
 };
 
@@ -34,6 +42,7 @@ export const option = {
       color: '#333333',
       fontSize: 12,
       fontWeight: 'normal',
+      fontStyle: 'normal',
     },
   },
   xAxis: {
@@ -45,6 +54,7 @@ export const option = {
       color: '#333333',
       fontSize: 12,
       fontWeight: 'normal',
+      fontStyle: 'normal',
     },
     axisLine: {
       show: true,
@@ -60,7 +70,7 @@ export const option = {
     type: 'value',
   },
   dataset: { ...dataJson },
-  series: [seriesItem, seriesItem],
+  series: seriesItem,
 };
 
 export default class Config

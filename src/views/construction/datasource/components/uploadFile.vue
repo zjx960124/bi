@@ -1,6 +1,6 @@
 <template>
   <div class="datasource-set">
-    <div class="datasource-set-title">上传文件</div>
+    <div class="datasource-set-title" v-if="$attrs.isShowTitle">上传文件</div>
     <div class="datasource-set-content">
       <el-form
         ref="form"

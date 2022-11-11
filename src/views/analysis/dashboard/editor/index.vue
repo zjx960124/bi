@@ -1,6 +1,9 @@
 <script setup lang='ts'>
 import { ref, reactive } from 'vue';
 import LeftAside from './components/left-aside/index.vue';
+import ComponentsList from './components/components-list/index.vue';
+import Header from './components/header/index.vue';
+import SimulatorEditor from './components/simulator-editor/index.vue';
 </script>
 
 <template>
@@ -14,9 +17,13 @@ import LeftAside from './components/left-aside/index.vue';
     </el-aside>
     <el-container>
       <!-- 顶部组件-->
-      <el-header></el-header>
-       <!-- 主要区域组件-->
-      <el-main></el-main>
+      <el-header height="66px">
+        <Header />
+      </el-header>
+      <!-- 主要区域组件-->
+      <el-main>
+        <componentsList />
+      </el-main>
     </el-container>
   </el-container>
 </template>

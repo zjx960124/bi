@@ -30,16 +30,13 @@ export const useRouteStore = defineStore({
         this.breadcrumbList.push(...this.breadcrumbList.splice(current, 1));
       this.changeDefaultNavication();
     },
-    async changeBreadcrumb(index: number): Promise<void> {
-      this.breadcrumbList.push(...this.breadcrumbList.splice(index, 1));
-      this.changeDefaultNavication();
-    },
+    async changeBreadcrumb(index: number): Promise<void> {},
     async changeDefaultNavication(): Promise<void> {
       this.default_navication =
         this.breadcrumbList[this.breadcrumbList.length - 1]['path'];
     },
     async setDefaultRoute(val: string): Promise<void> {
-      this.default_navication = val
+      this.default_navication = val;
     },
   },
 });

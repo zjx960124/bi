@@ -17,6 +17,9 @@ const themeOverrides: GlobalThemeOverrides = {
     border: "1px solid #BBBCBB",
     borderHover: "1px solid #6D79FF",
     borderFocus: "1px solid #6D79FF",
+    rippleColor: "#6D79FF",
+    borderPressed: "#6D79FF",
+    textColorPressed: "#6D79FF",
   },
   Icon: {},
   Slider: {

@@ -15,27 +15,69 @@
         <img width="18" height="18" src="~@/assets/data/addData.png" />
         <span class="text">新建数据源</span>
       </div>
+      <el-dropdown class="margin-left-22" v-if="datasource?.type == 'file'">
+        <el-button type="primary">
+          <img
+            width="18"
+            height="18"
+            src="~@/assets/data/editexcel.png"
+          />编辑EXCEL
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click.native="openRelpaceDialog"
+              >替换数据</el-dropdown-item
+            >
+            <el-dropdown-item @click.native="openAddDialog"
+              >增加数据</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </template>
     <template #main>
       <div class="datalist-container">
-        <div class="left"><data-list /></div>
-        <div class="right"><data-table :drawData="drawData" /></div>
+        <div class="left">
+          <data-list @getDatasourceType="getDatasourceType" />
+        </div>
+        <div class="right">
+          <data-table :drawData="drawData" :datasource="datasource" />
+        </div>
       </div>
     </template>
   </JsLayout>
+  <addDialog ref="addDialogs" />
+  <replaceDialog ref="replaceDialogs" />
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
 import dataList from "./components/dataList.vue";
 import dataTable from "./components/dataTable.vue";
-import { drawerTypes } from "../types/index";
+import addDialog from "./components/addDialog.vue";
+import replaceDialog from "./components/replaceDialog.vue";
+import { drawerTypes, datasourceType } from "../types/index";
 const searchValue = ref("");
 
 //新建数据源
 const drawData = ref<drawerTypes>({});
 const openDraw = () => {
   drawData.value = { drawer: true, type: "add" };
+};
+
+//获取数据源类型
+const datasource = ref<datasourceType>();
+const getDatasourceType = (val: datasourceType) => {
+  datasource.value = val;
+};
+const addDialogs = ref();
+const openAddDialog = () => {
+  addDialogs.value.initData();
+};
+
+const replaceDialogs = ref();
+const openRelpaceDialog = () => {
+  replaceDialogs.value.initData();
 };
 </script>
 <style scoped lang="scss">
@@ -72,6 +114,19 @@ const openDraw = () => {
         padding: 0 12px;
         border: none;
       }
+    }
+  }
+}
+
+.el-dropdown {
+  height: 44px;
+
+  :deep(.el-button) {
+    height: 100%;
+    border-radius: 22px;
+    padding: 0 16px;
+    & img {
+      margin-right: 8px;
     }
   }
 }

@@ -41,7 +41,7 @@ const constructionRoutes: RouteRecordRaw[] = [
     name: PageEnum.DATA_SOURCE_LIST_NAME,
     component: importRoute['.DATA_SOURCE_LIST'],
     meta: {
-      title: '数据源列表页',
+      title: '数据源',
       isShow:false
     },
   },

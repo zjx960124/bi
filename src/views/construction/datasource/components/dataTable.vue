@@ -2,11 +2,12 @@
   <div class="datatable-container-box">
     <div class="tableBox el-common-tableBox">
       <el-table
+        v-if="datasource?.type === 'sql'"
         :data="tableData"
         align="center"
         fit
         :highlight-current-row="false"
-        :border="true"
+        :border="false"
         style="width: 100%"
       >
         <el-table-column
@@ -22,10 +23,78 @@
               link
               type="primary"
               size="small"
-              icon="EditPen"
+              icon="InfoFilled"
               @click="openDetail(row)"
             >
               详情
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-table
+        v-if="datasource?.type === 'file'"
+        :data="tableData"
+        align="center"
+        fit
+        :highlight-current-row="false"
+        :border="true"
+        style="width: 100%"
+      >
+        <el-table-column
+          prop="name"
+          label="名称"
+          min-width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="name"
+          label="最近同步时间"
+          min-width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="name"
+          label="状态"
+          min-width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="name"
+          label="大小"
+          min-width="120"
+          align="center"
+        />
+        <el-table-column label="操作" width="300" align="center">
+          <template #default="{ row }">
+            <el-button
+              class="el-button-edit"
+              link
+              type="primary"
+              size="small"
+              icon="InfoFilled"
+              @click="openDetail(row)"
+            >
+              详情
+            </el-button>
+            <el-button
+              class="el-button-edit"
+              link
+              type="primary"
+              size="small"
+              icon="Download"
+              @click="openDetail(row)"
+            >
+              下载
+            </el-button>
+            <el-button
+              class="el-button-edit"
+              link
+              type="danger"
+              size="small"
+              icon="Delete"
+              @click="openDetail(row)"
+            >
+              删除
             </el-button>
           </template>
         </el-table-column>
@@ -107,7 +176,11 @@
 import { ref, computed, watchEffect } from "vue";
 import setting from "./setting.vue";
 import uploadfile from "./uploadFile.vue";
-import { dataTypes, drawerTypes } from "@/views/construction/types/index";
+import {
+  dataTypes,
+  drawerTypes,
+  datasourceType,
+} from "@/views/construction/types/index";
 const tableData = ref([{ name: "2222" }]);
 const drawData = ref([{ fieldName: "2222" }]);
 const direction = ref("rtl");
@@ -116,6 +189,8 @@ let drawInfo = ref<drawerTypes>({
   type: "add",
   drawer: false,
 });
+
+let datasource = ref<datasourceType>();
 
 //新建数据源
 const dataList = ref<Array<dataTypes>>([
@@ -129,11 +204,22 @@ const props = defineProps({
   drawData: {
     type: Object,
   },
+  datasource: {
+    type: Object,
+    default: () => {
+      return {
+        type: "sql",
+      };
+    },
+  },
 });
 
 watchEffect(() => {
   if (props.drawData) {
     drawInfo.value = props.drawData;
+  }
+  if (props.datasource) {
+    datasource.value = props.datasource;
   }
 });
 

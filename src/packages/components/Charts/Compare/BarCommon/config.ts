@@ -29,10 +29,23 @@ export const option = {
   },
   legend: {
     show: true,
+    top: '5%',
+    textStyle: {
+      color: '#333333',
+      fontSize: 12,
+      fontWeight: 'normal',
+    },
   },
   xAxis: {
     show: true,
     type: 'category',
+    nameLocation: 'center',
+    nameGap: 30,
+    nameTextStyle: {
+      color: '#333333',
+      fontSize: 12,
+      fontWeight: 'normal',
+    },
   },
   yAxis: {
     show: true,

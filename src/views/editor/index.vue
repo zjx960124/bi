@@ -106,7 +106,7 @@ const changeProjectName = (e) => {
           {{ Project.projectName }}
         </div>
 
-        <div class="size">
+        <!-- <div class="size">
           <span>画板尺寸</span>
           <n-space vertical>
             <n-select
@@ -116,7 +116,7 @@ const changeProjectName = (e) => {
               :options="sizeOptions"
             />
           </n-space>
-        </div>
+        </div> -->
       </template>
       <template #ri-left>
         <n-button
@@ -173,6 +173,18 @@ const changeProjectName = (e) => {
     font-weight: bold;
     color: #293270;
     margin-left: 44px;
+    position: relative;
+  }
+  .screen-name::before {
+    content: "";
+    position: absolute;
+    left: -13px;
+    top: 50%;
+    margin-top: -8px;
+    width: 2px;
+    height: 16px;
+    border-radius: 1px;
+    background: linear-gradient(180deg, #0059e8 0%, #37e2c1 100%);
   }
   .size {
     display: flex;

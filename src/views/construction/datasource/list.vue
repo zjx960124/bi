@@ -11,7 +11,7 @@
         >
         </el-input>
       </div>
-      <div class="el-button-primary margin-left-22">
+      <div class="el-button-primary margin-left-22" @click="openDraw">
         <img width="18" height="18" src="~@/assets/data/addData.png" />
         <span class="text">新建数据源</span>
       </div>
@@ -19,7 +19,7 @@
     <template #main>
       <div class="datalist-container">
         <div class="left"><data-list /></div>
-        <div class="right"><data-table /></div>
+        <div class="right"><data-table :drawData="drawData" /></div>
       </div>
     </template>
   </JsLayout>
@@ -29,7 +29,14 @@
 import { ref } from "vue";
 import dataList from "./components/dataList.vue";
 import dataTable from "./components/dataTable.vue";
+import { drawerTypes } from "../types/index";
 const searchValue = ref("");
+
+//新建数据源
+const drawData = ref<drawerTypes>({});
+const openDraw = () => {
+  drawData.value = { drawer: true, type: "add" };
+};
 </script>
 <style scoped lang="scss">
 .datalist-container {
@@ -37,15 +44,14 @@ const searchValue = ref("");
   height: calc(100vh - 180px);
   display: flex;
   justify-content: space-between;
-  &>.left{
+  & > .left {
     width: 284px;
     margin-right: 14px;
   }
 
-  &>.right{
+  & > .right {
     width: calc(100% - 300px);
   }
-
 }
 
 .searchBox {

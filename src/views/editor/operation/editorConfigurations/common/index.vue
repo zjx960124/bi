@@ -8,6 +8,7 @@ import { backgroundImageSize } from "@/settings/designSetting";
 import { FileTypeEnum } from "@/enums/fileTypeEnum";
 import { UploadCustomRequestOptions } from "naive-ui";
 import { fileToUrl, loadAsyncComponent } from "@/utils";
+import Project from "@/store/pageEditStore/pageEditStore";
 
 const chartEditStore = useChartEditStore();
 const canvasConfig = chartEditStore.getEditCanvasConfig;
@@ -16,16 +17,10 @@ const editCanvas = chartEditStore.getEditCanvas;
 const fontFamily = ref<string>("");
 const fontFamilyOptions = ref<any[]>([]);
 const uploadFileListRef = ref();
-const pageAnimation = ref<string>("left");
+const pageAnimation = ref<string>("fadeInLeft");
 const pageAnimationOptions = ref<any[]>([
-  {
-    label: "从左到右推入",
-    value: "left",
-  },
-  {
-    label: "从右到左推入",
-    value: "right",
-  },
+  { label: "向右进入", value: "fadeInLeft" },
+  { label: "向左进入", value: "fadeInRight" },
 ]);
 
 const handleChange = (e: Event) => {
@@ -177,7 +172,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
           <div>过渡类型</div>
           <n-select
             class="common-select"
-            v-model:value="pageAnimation"
+            v-model:value="Project.pageAnimation"
             round
             size="small"
             :options="pageAnimationOptions"

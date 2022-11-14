@@ -1,4 +1,5 @@
 import { PickCreateComponentType } from '@/packages/index.d';
+import { EditCanvasConfigType } from '@/store/chartEditStore/chartEditStore.d';
 
 type AttrType = PickCreateComponentType<'attr'>;
 
@@ -63,3 +64,48 @@ export const usePointStyle = (
 
   return style;
 };
+
+export const usePageStyle = (editCanvasConfig: EditCanvasConfigType) => {
+  const backgroundType = editCanvasConfig.backgroundType;
+  const background = editCanvasConfig.background;
+  const backgroundImage = editCanvasConfig.backgroundImage;
+  const backgroundColor =
+    backgroundType === 'background' ? background : backgroundImage;
+
+  const computedBackground =
+    backgroundType === 'background'
+      ? { background: backgroundColor }
+      : {
+          background: backgroundImage
+            ? `url(${backgroundImage}) no-repeat center center / cover !important`
+            : background,
+        };
+
+  // @ts-ignore
+  return {
+    position: 'relative' as const,
+    width: editCanvasConfig.width
+      ? `${editCanvasConfig.width || 100}px`
+      : '100%',
+    height: editCanvasConfig.height ? `${editCanvasConfig.height}px` : '100%',
+    ...computedBackground,
+  };
+};
+
+// 设置位置
+export const getComponentAttrStyle = (attr: AttrType, index: number) => {
+  const componentStyle = {
+    zIndex: index + 1,
+    left: `${attr.x}px`,
+    top: `${attr.y}px`
+  }
+  return componentStyle
+}
+
+// 设置大小
+export const getSizeStyle = (attr: AttrType, scale?: number) => {
+  return ({
+    width: `${scale ? scale * attr.w : attr.w}px`,
+    height: `${scale ? scale * attr.h : attr.h}px`
+  })
+}

@@ -13,6 +13,8 @@ import modules from '@/router/modules';
 const Layout = () => import('@/views/layout/index.vue');
 const editor = () => import('@/views/editor');
 const dashboardEditor = () => import('@/views/analysis/dashboard/editor');
+const preview = () => import('@/views/preview/index.vue');
+
 interface metaType extends RouteMeta {
   isShow?: boolean;
 }
@@ -77,6 +79,15 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: dashboardEditor,
     meta: {
       title: 'dashboardEditor',
+      icon: '',
+    },
+  },
+  {
+    path: '/preview',
+    name: 'preview',
+    component: preview,
+    meta: {
+      titile: '预览',
       icon: '',
     },
   },

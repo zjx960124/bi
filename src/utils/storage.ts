@@ -1,25 +1,4 @@
 /**
- * 封装操作localstorage本地存储的方法
- */
-export const storage = {
-  set(key: string, value: any) {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  },
-
-  get(key: string) {
-    const value = window.localStorage.getItem(key);
-    if (value && value !== 'undefined' && value !== 'null')
-      return JSON.parse(value);
-    else return '{}';
-  },
-
-  // 删除数据
-  remove(key: string) {
-    window.localStorage.removeItem(key);
-  },
-};
-
-/**
  * 封装操作sessionStorage本地存储的方法
  */
 export const sessionStorage = {
@@ -68,4 +47,13 @@ export const getLocalStorage = (k: string) => {
   } catch (err) {
     return item;
   }
+};
+
+// 根据路由 id 获取存储数据的信息
+export const getSessionStorageInfo = () => {
+  const urlHash = document.location.hash;
+  const toPathArray = urlHash.split('/');
+  const id = toPathArray && toPathArray[toPathArray.length - 1];
+  const list = id.split('id=');
+  return getLocalStorage(list[list.length - 1]);
 };

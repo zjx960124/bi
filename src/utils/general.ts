@@ -124,3 +124,12 @@ export const fileToUrl = (file: File): string => {
   const ImageUrl = Url.createObjectURL(file);
   return ImageUrl;
 };
+
+
+// * 动画
+export const animationsClass = (animations: string[]) => {
+  if (animations.length) {
+    return `animate__animated  animate__${animations[0]}`
+  }
+  return ''
+}

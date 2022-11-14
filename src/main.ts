@@ -13,6 +13,9 @@ import JsLayout from '@/components/JsLayout/index.vue';
 //naive
 import { setupNaive } from '@/plugins';
 
+// 引入动画
+// import 'animate.css/animate.min.css';
+
 // 引入全局样式
 import '@/style/styles/pages/index.scss';
 

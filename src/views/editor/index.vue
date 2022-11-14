@@ -2,6 +2,7 @@
 import headerPlugin from "./headerPlugin";
 import { loadAsyncComponent } from "@/utils";
 import Project from "@/store/pageEditStore/pageEditStore";
+import { setLocalStorage, getLocalStorage } from "@/utils";
 import { useContextMenu } from "./charts/hooks/useContextMenu.hook";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
@@ -77,7 +78,16 @@ const clickHistoryHandle = (key: string) => {
 };
 
 const previewHandle = () => {
-  // window.open();
+  const projectInfo = Project.value.getProjectInfo();
+  const sessionStorageInfo = getLocalStorage(projectInfo.id) || {};
+  setLocalStorage(projectInfo.id, projectInfo);
+  const { href } = router.resolve({
+    path: "/preview",
+    query: {
+      id: projectInfo.id,
+    },
+  });
+  window.open(href, "_blank");
 };
 
 const changeProjectName = (e) => {

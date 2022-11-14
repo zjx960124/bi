@@ -6,6 +6,7 @@ import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStor
 import { ref } from 'vue';
 import { defaultTheme, globalThemeJson } from '@/settings/chartThemes/index';
 import { previewScaleType } from '@/settings/designSetting';
+import { getUUID } from '@/utils';
 
 const chartHistoryStore = useChartHistoryStore();
 const chartEditStore = useChartEditStore();
@@ -72,8 +73,12 @@ class pageEditClass {
   public currentPage!: PageItem;
   public basePage!: PageItem;
   public currentIndex: number;
+  public id: string;
+  public pageAnimation!: string | null;
   constructor() {
+    this.id = getUUID();
     this.projectName = '未命名大屏项目';
+    this.pageAnimation = null;
     this.pageList = [];
     this.basePage = createBasePage();
     this.currentPage = createBasePage();
@@ -91,6 +96,18 @@ class pageEditClass {
 
   public setComponent(item: any) {
     this.currentPage.component = item;
+  }
+
+  public getProjectInfo() {
+    let component = chartEditStore.getStorageInfo;
+    this.currentPage.component = component;
+    this.pageList[this.currentIndex] = cloneDeep(this.currentPage);
+    return {
+      id: this.id,
+      name: this.projectName,
+      pageAnimation: this.pageAnimation,
+      list: this.pageList,
+    };
   }
 
   public setStack() {}
@@ -117,13 +134,11 @@ class pageEditClass {
     this.pageList.push(createBasePage());
     this.currentPage = createBasePage();
     this.currentIndex = this.pageList.length - 1;
-    console.log(this.pageList);
   }
 
   public checkPage(index: number) {
     if (index === this.currentIndex) return false;
     this.currentPage = this.pageList[index];
-    console.log(this.currentPage);
     chartEditStore.cleanStorageInfo();
     chartEditStore.setStorageInfo(this.currentPage.component);
     chartHistoryStore.setStack(

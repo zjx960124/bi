@@ -4,7 +4,7 @@ export default {
 };
 </script>
 <template>
-  <div class='container'></div>
+  <div class='simulator-editor'></div>
 </template>
  
 <script setup lang='ts'>
@@ -12,4 +12,10 @@ import { ref, reactive } from 'vue';
 </script>
  
 <style lang="scss" scoped>
+.simulator-editor {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 25px;
+}
 </style>

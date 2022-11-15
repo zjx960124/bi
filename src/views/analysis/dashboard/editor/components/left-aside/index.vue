@@ -94,12 +94,7 @@ const activeName = ref();
     span {
       margin-left: 8px;
     }
-
-    .el-sub-menu__icon-arrow {
-      right: 10px;
-    }
   }
-
   .el-sub-menu .el-menu-item {
     min-width: 100%;
     padding: 0 15px;
@@ -117,5 +112,8 @@ const activeName = ref();
     );
     border-left: 3px solid #7a85ff;
   }
+}
+.el-sub-menu__icon-arrow {
+  right: 10px;
 }
 </style>

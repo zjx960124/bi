@@ -1,10 +1,10 @@
 <script lang='ts'>
 export default {
-  name: 'ComponentsList'
+  name: 'ComponentsPanel'
 };
 </script>
 <template>
-  <div class='components-list'>
+  <div class='components-panel'>
     <div
       v-for="item in list"
       :key="item.id"
@@ -40,7 +40,8 @@ const { list } = toRefs(state);
 </script>
  
 <style lang="scss" scoped>
-.components-list {
+.components-panel {
+  margin: 0 10px;
   width: 180px;
   padding: 20px 15px;
   background: #ffffff;

@@ -13,7 +13,8 @@ import { ref, reactive } from 'vue';
  
 <style lang="scss" scoped>
 .simulator-editor {
-  width: 100%;
+  flex: 1;
+  margin: 0 10px;
   height: 100%;
   background: #ffffff;
   border-radius: 25px;

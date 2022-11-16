@@ -25,7 +25,7 @@
     width: 0;
   }
   .left {
-    flex: 309;
+    width: 309px;
     flex-shrink: 0;
     padding: 0 17px 0 30px;
     box-sizing: border-box;

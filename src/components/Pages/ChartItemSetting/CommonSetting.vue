@@ -148,6 +148,7 @@ const changeBarDirection = (val: string | number | boolean): void => {
         <el-input-number
           v-model="series.label.fontSize"
           class="common-number-input"
+          :disabled="!series.label.show"
           :min="1"
           :max="44"
           controls-position="right"
@@ -157,6 +158,7 @@ const changeBarDirection = (val: string | number | boolean): void => {
           class="common-color-picker"
           style="display: inline-block"
           v-model:value="series.label.color"
+          :disabled="!series.label.show"
         >
           <template #label>
             <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>

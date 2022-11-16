@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick } from "vue";
+import { ref, nextTick, computed } from "vue";
 import { AddCircleOutline, ChevronUp } from "@vicons/ionicons5";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { EditCanvasConfigEnum } from "@/store/chartEditStore/chartEditStore.d";
@@ -11,7 +11,6 @@ import { fileToUrl, loadAsyncComponent } from "@/utils";
 import Project from "@/store/pageEditStore/pageEditStore";
 
 const chartEditStore = useChartEditStore();
-const canvasConfig = chartEditStore.getEditCanvasConfig;
 const editCanvas = chartEditStore.getEditCanvas;
 
 const fontFamily = ref<string>("");
@@ -26,6 +25,10 @@ const pageAnimationOptions = ref<any[]>([
 const handleChange = (e: Event) => {
   canvasConfig.backgroundType = (e.target as HTMLInputElement).value;
 };
+
+const canvasConfig = computed(() => {
+  return chartEditStore.getEditCanvasConfig;
+});
 
 // 上传图片前置处理
 //@ts-ignore
@@ -158,21 +161,27 @@ const customRequest = (options: UploadCustomRequestOptions) => {
           </n-icon>
         </template>
         <div class="common-item">
-          <n-checkbox>
+          <n-checkbox v-model:checked="Project.pageConfig.onShuffing">
             <div>开启页面轮播</div>
           </n-checkbox>
         </div>
         <div class="common-item">
           <div>轮播间隔</div>
-          <n-input class="common-input" round>
+          <n-input-number
+            class="common-input"
+            round
+            v-model:value="Project.pageConfig.shuffingInterval"
+            :disabled="!Project.pageConfig.onShuffing"
+          >
             <template #suffix> <span color="#BBBCBB">s</span></template>
-          </n-input>
+          </n-input-number>
         </div>
         <div class="common-item">
           <div>过渡类型</div>
           <n-select
             class="common-select"
-            v-model:value="Project.pageAnimation"
+            v-model:value="Project.pageConfig.shuffingAnimation"
+            :disabled="!Project.pageConfig.onShuffing"
             round
             size="small"
             :options="pageAnimationOptions"

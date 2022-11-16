@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import {
   getLocalStorage,
   getSessionStorageInfo,
@@ -8,8 +8,6 @@ import {
 import { PreviewPage } from "./previewPage";
 const projectInfo = getSessionStorageInfo();
 const currentPageIndex = ref(0);
-
-console.log(projectInfo);
 
 const indexModules = import.meta.globEager(
   "@/packages/components/**/index.vue"
@@ -23,14 +21,26 @@ for (const key in indexModules) {
   );
 }
 
-setInterval(() => {
-  console.log(currentPageIndex.value);
-  if (currentPageIndex.value === projectInfo.list.length - 1) {
-    currentPageIndex.value = 0;
-  } else {
-    currentPageIndex.value = currentPageIndex.value + 1;
+watch(
+  () => projectInfo.pageConfig.onShuffing,
+  (val) => {
+    console.log(val);
   }
-}, 5000);
+);
+
+const onPageShuffing = (projectInfo) => {
+  if (projectInfo.pageConfig.onShuffing) {
+    setInterval(() => {
+      if (currentPageIndex.value === projectInfo.list.length - 1) {
+        currentPageIndex.value = 0;
+      } else {
+        currentPageIndex.value = currentPageIndex.value + 1;
+      }
+    }, projectInfo.pageConfig.shuffingInterval * 1000);
+  }
+};
+
+onPageShuffing(projectInfo);
 </script>
 <template>
   <template v-for="(item, index) in projectInfo.list" :key="index">
@@ -39,7 +49,7 @@ setInterval(() => {
         v-show="index === currentPageIndex"
         :componentInfo="item"
         :is="PreviewPage"
-        :class="animationsClass([projectInfo.pageAnimation])"
+        :class="animationsClass(projectInfo.pageConfig)"
       ></component>
     </keep-alive>
   </template>

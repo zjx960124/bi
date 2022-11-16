@@ -103,7 +103,7 @@ const { activeItem, activeItem1 } = toRefs(state);
   height: 100%;
   .section {
     width: 100%;
-    padding: 15px 20px;
+    padding: 15px;
     background: #ffffff;
     border-radius: 15px;
     overflow: hidden;

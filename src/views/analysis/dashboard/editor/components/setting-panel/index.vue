@@ -18,7 +18,10 @@ export default {
             content='字段'
             placement='left-start'
           >
-            <div class="icon-text">
+            <div
+              :class="`icon-text ${currentTab === 0? 'active':''}`"
+              @click="handleTab(0)"
+            >
               <svg-icon icon="field"></svg-icon>
             </div>
 
@@ -28,26 +31,43 @@ export default {
             content='样式'
             placement='right-start'
           >
-            <div class="icon-style">
+            <div
+              :class="`icon-style ${currentTab === 1? 'active':''}`"
+              @click="handleTab(1)"
+            >
               <svg-icon icon="style"></svg-icon>
             </div>
           </el-tooltip>
         </div>
       </div>
-      <el-collapse
-        class="mt20"
-        v-model="activeItem"
-      >
-        <el-collapse-item name="1">
-          <template #title>
-            <span class="collapse-title">标题与卡片</span>
-          </template>
-        </el-collapse-item>
-      </el-collapse>
+      <template v-if="currentTab === 0">
+        <el-collapse
+          class="mt20"
+          v-model="activeItem"
+        >
+          <el-collapse-item name="1">
+            <template #title>
+              <span class="collapse-title">标题与卡片</span>
+            </template>
+          </el-collapse-item>
+        </el-collapse>
+      </template>
+      <template v-else>
+        <div class="field-header">
+          维度
+        </div>
+
+        <div class="field-header">
+          度量
+        </div>
+      </template>
     </div>
 
     <!-- 图标样式 -->
-    <div class="section mt20">
+    <div
+      v-if="currentTab === 0"
+      class="section mt20"
+    >
       <div class="header flex">
         <img
           class="left"
@@ -83,10 +103,15 @@ import { ref, reactive, toRefs } from 'vue';
 
 const state = reactive({
   activeItem: '1',
-  activeItem1: '1'
+  activeItem1: '1',
+  currentTab: 0
 });
 
-const { activeItem, activeItem1 } = toRefs(state);
+const { activeItem, activeItem1, currentTab } = toRefs(state);
+
+const handleTab = (tab: number) => {
+  state.currentTab = tab;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -109,6 +134,7 @@ const { activeItem, activeItem1 } = toRefs(state);
       .left {
         width: 6px;
         height: 11px;
+        cursor: pointer;
       }
       .right {
         display: flex;
@@ -129,6 +155,7 @@ const { activeItem, activeItem1 } = toRefs(state);
           height: 25px;
           font-size: 20px;
           color: #bbbcbb;
+          transition: ease-in-out 0.3s;
           cursor: pointer;
           &:hover {
             color: #6d79ff;
@@ -148,9 +175,10 @@ const { activeItem, activeItem1 } = toRefs(state);
             color: #6d79ff;
           }
         }
-        // img {
-        //   cursor: pointer;
-        // }
+
+        .active {
+          color: #6d79ff !important;
+        }
 
         .spe {
           width: 1px;
@@ -181,6 +209,25 @@ const { activeItem, activeItem1 } = toRefs(state);
       font-size: 14px;
       font-weight: bold;
       color: #293270;
+    }
+    .field-header {
+      position: relative;
+      margin-top: 26px;
+      width: 100%;
+      padding-left: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #293270;
+      line-height: 1;
+      text-align: left;
+      &::before {
+        content: '*';
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: #ff4242;
+        font-size: 20px;
+      }
     }
   }
 

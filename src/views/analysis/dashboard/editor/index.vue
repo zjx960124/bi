@@ -1,13 +1,16 @@
 <script setup lang='ts'>
 import { ref, reactive } from 'vue';
 import LeftAside from './components/left-aside/index.vue';
-import ComponentsList from './components/components-list/index.vue';
+import ComponentsPanel from './components/components-panel/index.vue';
 import Header from './components/header/index.vue';
 import SimulatorEditor from './components/simulator-editor/index.vue';
+import SettingPanel from './components/setting-panel/index.vue';
+import DataPanel from './components/data-panel/index.vue';
+import ThemePanel from './components/theme-panel/index.vue';
 </script>
 
 <template>
-  <el-container>
+  <el-container class="dashboard-editor">
     <el-aside
       class="aside"
       width="103px"
@@ -21,16 +24,28 @@ import SimulatorEditor from './components/simulator-editor/index.vue';
         <Header />
       </el-header>
       <!-- 主要区域组件-->
-      <el-main>
-        <componentsList />
+      <el-main class="pt0 pl10 pr10">
+        <div class="main">
+          <components-panel />
+          <simulator-editor />
+          <setting-panel />
+          <data-panel />
+          <theme-panel />
+        </div>
       </el-main>
     </el-container>
   </el-container>
 </template>
  
 <style lang="scss" scoped>
-.dashboardEdit {
+.dashboard-editor {
   width: 100%;
   height: 100%;
+  background-color: #f3f5ff;
+  .main {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 80px);
+  }
 }
 </style>

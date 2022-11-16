@@ -18,26 +18,19 @@ export default {
             content='字段'
             placement='left-start'
           >
-            <img
-              class="icon-text"
-              src="/src/assets/analysis/icon-text.png"
-              style="width:15px;height:15px"
-              width="15px"
-              height="15px"
-            />
+            <div class="icon-text">
+              <svg-icon icon="field"></svg-icon>
+            </div>
+
           </el-tooltip>
           <div class="spe"></div>
           <el-tooltip
             content='样式'
             placement='right-start'
           >
-            <img
-              class="icon-style"
-              src="/src/assets/analysis/icon-style.png"
-              style="width:19px;height:15px"
-              width="19px"
-              height="15px"
-            />
+            <div class="icon-style">
+              <svg-icon icon="style"></svg-icon>
+            </div>
           </el-tooltip>
         </div>
       </div>
@@ -124,12 +117,40 @@ const { activeItem, activeItem1 } = toRefs(state);
         align-items: center;
         width: 66px;
         height: 25px;
-        padding: 0 9px;
+        padding: 0;
         border: 1px solid #bbbcbb;
         border-radius: 8px;
-        img {
+        .icon-text {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          width: 33px;
+          height: 25px;
+          font-size: 20px;
+          color: #bbbcbb;
           cursor: pointer;
+          &:hover {
+            color: #6d79ff;
+          }
         }
+        .icon-style {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          width: 33px;
+          height: 25px;
+          font-size: 20px;
+          color: #bbbcbb;
+          cursor: pointer;
+          &:hover {
+            color: #6d79ff;
+          }
+        }
+        // img {
+        //   cursor: pointer;
+        // }
 
         .spe {
           width: 1px;

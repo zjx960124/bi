@@ -10,10 +10,15 @@ export default {
       :key="item.id"
       class="item"
     >
-      <img
+      <!-- <img
         class="item-img"
         :src="item.imageUrl"
-      />
+      /> -->
+      <el-image
+        class="item-img"
+        :src="item.imageUrl"
+        fit="contain"
+      > </el-image>
       <div class="item-name">{{item.name}}</div>
     </div>
   </div>
@@ -52,10 +57,15 @@ const { list } = toRefs(state);
     margin-bottom: 24px;
     width: 100%;
     padding: 0;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
     .item-img {
       width: 100%;
       height: 88px;
-      background-color: #c2c7cc;
+      background-color: #e0e3e5;
+      border-radius: 2px;
     }
 
     .item-name {

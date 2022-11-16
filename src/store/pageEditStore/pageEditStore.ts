@@ -59,12 +59,18 @@ function createBasePage() {
   };
 }
 
-type PageItem = {
+export type PageItem = {
   id: string;
   name: string;
   component: ChartEditStoreType | {};
   backStack: HistoryItemType[];
   forwardStack: HistoryItemType[];
+};
+
+export type PageConfig = {
+  onShuffing: boolean;
+  shuffingInterval: number;
+  shuffingAnimation: string;
 };
 
 class pageEditClass {
@@ -75,10 +81,15 @@ class pageEditClass {
   public currentIndex: number;
   public id: string;
   public pageAnimation!: string | null;
+  public pageConfig!: PageConfig;
   constructor() {
     this.id = getUUID();
     this.projectName = '未命名大屏项目';
-    this.pageAnimation = null;
+    this.pageConfig = {
+      onShuffing: true,
+      shuffingInterval: 5,
+      shuffingAnimation: 'fadeInRight',
+    };
     this.pageList = [];
     this.basePage = createBasePage();
     this.currentPage = createBasePage();
@@ -86,7 +97,7 @@ class pageEditClass {
     this.currentIndex = 0;
   }
 
-  public setName(name: string): void {
+  public setProjectName(name: string): void {
     this.projectName = name;
   }
 
@@ -94,7 +105,7 @@ class pageEditClass {
     return this.projectName;
   }
 
-  public setComponent(item: any) {
+  public setComponent(item: ChartEditStoreType) {
     this.currentPage.component = item;
   }
 
@@ -105,7 +116,7 @@ class pageEditClass {
     return {
       id: this.id,
       name: this.projectName,
-      pageAnimation: this.pageAnimation,
+      pageConfig: this.pageConfig,
       list: this.pageList,
     };
   }

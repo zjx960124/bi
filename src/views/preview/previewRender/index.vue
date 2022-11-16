@@ -13,13 +13,14 @@ const props = defineProps({
 
 // 主题色
 const themeSetting = computed(() => {
-  const chartThemeSetting = props.componentList.chartThemeSetting;
+  const chartThemeSetting =
+    props.componentList.editCanvasConfig.chartThemeSetting;
   return chartThemeSetting;
 });
 
 // 配置项
 const themeColor = computed(() => {
-  const chartThemeColor = props.componentList.chartThemeColor;
+  const chartThemeColor = props.componentList.editCanvasConfig.chartThemeColor;
   return chartColors[chartThemeColor];
 });
 </script>

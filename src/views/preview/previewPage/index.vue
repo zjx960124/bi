@@ -20,9 +20,13 @@ const { entityRef, previewRef } = useScale(props.componentInfo.component);
 </script>
 <template>
   <div class="preview-view">
-    <div ref="previewRef" :style="previewRefStyle" class="scale-view">
+    <div ref="previewRef" class="scale-view">
       <!-- 渲染层 -->
-      <preview-render :componentList="componentInfo.component"></preview-render>
+      <div :style="previewRefStyle">
+        <preview-render
+          :componentList="componentInfo.component"
+        ></preview-render>
+      </div>
     </div>
   </div>
 </template>
@@ -30,10 +34,15 @@ const { entityRef, previewRef } = useScale(props.componentInfo.component);
 .preview-view {
   width: 100vw;
   height: 100vh;
+  display: flex;
+  z-index: 0;
+  overflow: hidden;
   position: relative;
+  align-items: center;
+  justify-content: center;
 
   .scale-view {
-    transform-origin: center top;
+    transform-origin: center center;
   }
 }
 </style>

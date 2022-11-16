@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { loadAsyncComponent } from "@/utils";
 import { chartColors } from "@/settings/chartThemes/index";
 import {
@@ -8,6 +8,7 @@ import {
   mousedownHandleUnStop,
   useMouseHandle,
 } from "@/utils/hooks/useDrag";
+import { useAddKeyboard } from "@/utils/hooks/useKeyboard";
 import { useComponentStyle, useSizeStyle } from "@/utils/hooks/useStyle";
 import { useContextMenu } from "@/views/editor/charts/hooks/useContextMenu.hook";
 import { MenuOptionsItemType } from "@/views/editor/charts/hooks/useContextMenu.hook.d";
@@ -21,6 +22,10 @@ const router = useRouter();
 const currentRoute = router.currentRoute.value.name;
 // 布局处理
 useLayout();
+//监听键盘
+onMounted(() => {
+  useAddKeyboard();
+});
 
 // 点击事件
 const {

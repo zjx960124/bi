@@ -2,6 +2,7 @@ import {
   RequestHttpIntervalEnum,
   RequestParamsObjType,
 } from '@/enums/httpEnum';
+import { PageConfig } from '@/store/pageEditStore/pageEditStore';
 import cloneDeep from 'lodash/cloneDeep';
 import { isNumber, isObject } from './is';
 import { h } from 'vue';
@@ -125,11 +126,10 @@ export const fileToUrl = (file: File): string => {
   return ImageUrl;
 };
 
-
 // * 动画
-export const animationsClass = (animations: string[]) => {
-  if (animations.length) {
-    return `animate__animated  animate__${animations[0]}`
+export const animationsClass = (pageConfig: PageConfig) => {
+  if (pageConfig.onShuffing) {
+    return `animate__animated  animate__${pageConfig.shuffingAnimation}`;
   }
-  return ''
-}
+  return '';
+};

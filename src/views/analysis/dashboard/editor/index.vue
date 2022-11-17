@@ -30,7 +30,7 @@ import ThemePanel from './components/theme-panel/index.vue';
           <simulator-editor />
           <setting-panel />
           <data-panel />
-          <theme-panel />
+          <!-- <theme-panel /> -->
         </div>
       </el-main>
     </el-container>

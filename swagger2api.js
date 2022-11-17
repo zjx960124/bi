@@ -7,7 +7,7 @@
 const Swagger2serviceTool = require('js-swagger2service-tool');
 const { resolve } = require('path');
 
-const swaggerUrl = 'http://192.168.1.192:8001/rest/report/v2/api-docs'; // Swagger Api数据地址
+const swaggerUrl = 'http://192.168.1.101:10001/rest/bi/v2/api-docs'; // Swagger Api数据地址
 const outputDir = resolve(__dirname, 'server');
 
 const swagger2serviceTool = new Swagger2serviceTool({ url: swaggerUrl });

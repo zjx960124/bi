@@ -15,11 +15,13 @@ import { MenuOptionsItemType } from "@/views/editor/charts/hooks/useContextMenu.
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useLayout } from "@/utils/hooks/useLayout";
 import { useRouter } from "vue-router";
+import { useTargetData } from "@/utils/hooks/useTargetData";
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
 const router = useRouter();
 const currentRoute = router.currentRoute.value.name;
+
 // 布局处理
 useLayout();
 //监听键盘
@@ -120,7 +122,7 @@ const rangeStyle = computed(() => {
                   :is="item.chartConfig.chartKey"
                   :chartConfig="item"
                   :themeSetting="themeSetting"
-                  :themeColor="themeColor"
+                  :themeColor="item.themeColor"
                   :style="{
                     ...useSizeStyle(item.attr),
                   }"

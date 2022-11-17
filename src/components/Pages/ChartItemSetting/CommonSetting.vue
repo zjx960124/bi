@@ -14,18 +14,30 @@ import merge from "lodash/merge";
 import pick from "lodash/pick";
 import omit from "lodash/omit";
 import { menuItemGroupProps } from "element-plus";
+import {
+  chartColorsList,
+  ChartColorsNameType,
+} from "@/settings/chartThemes/index";
+import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
+import { isObject } from "@/utils";
+const chartEditStore = useChartEditStore();
+
+const selectTheme = (theme: ChartColorsNameType) => {
+  props.themeColor.color = theme;
+};
 
 const props = defineProps({
   optionData: {
     type: Object as PropType<GlobalThemeJsonType>,
     required: true,
   },
-  inChart: {
-    type: Boolean,
-    required: false,
-    default: false,
+  themeColor: {
+    type: Object,
+    required: true,
   },
 });
+
+console.log(props);
 
 const title = computed(() => {
   return props.optionData.title;
@@ -47,18 +59,11 @@ const visualMap = computed(() => {
   return props.optionData.visualMap;
 });
 
-const series = computed(() => {
-  return props.optionData.series;
-});
-
-console.log(series.value);
-
 const legendFontWeightFlag = ref({ type: false });
 const legendFontStyleFlag = ref({ type: false });
 const xAxisFontWeightFlag = ref({ type: false });
 const xAxisFontStyleFlag = ref({ type: false });
-const seriesItemFontWeightFlag = ref({ type: false });
-const seriesItemFontStyleFlag = ref({ type: false });
+
 const lineTypeOptions = ref([
   {
     label: "·········",
@@ -98,8 +103,20 @@ const changeBarDirection = (val: string | number | boolean): void => {
   <n-collapse :default-expanded-names="['1', '2', '3']">
     <n-collapse-item title="绘色区域" name="1">
       <div class="common-item">
-        <div class="common-sub-title">柱体展示方向</div>
+        <div class="common-sub-title">色系选择</div>
+        <n-select
+          class="common-select"
+          v-model:value="themeColor.color"
+          round
+          size="small"
+          :options="chartColorsList"
+          :on-update:value="selectTheme"
+        />
+      </div>
+      <div class="common-item">
+        <div class="common-sub-title">展示方向</div>
         <n-radio-group
+          class="common-radio-group"
           v-model:value="value"
           name="radiogroup"
           :on-update:value="changeBarDirection"
@@ -110,95 +127,7 @@ const changeBarDirection = (val: string | number | boolean): void => {
           </n-space>
         </n-radio-group>
       </div>
-
-      <div class="common-title">背景样式</div>
-      <div class="common-item">
-        <div class="common-double-space"></div>
-        <div class="common-sub-title">柱宽</div>
-        <el-input-number
-          v-model="series.barWidth"
-          class="common-number-input"
-          :min="1"
-          :max="44"
-          controls-position="right"
-          size="small"
-        />
-      </div>
-      <div class="common-item">
-        <div class="common-double-space"></div>
-        <div class="common-sub-title">圆角半径</div>
-        <el-input-number
-          v-model="series.itemStyle.borderRadius"
-          class="common-number-input"
-          :min="0"
-          :max="44"
-          controls-position="right"
-          size="small"
-        />
-      </div>
-
-      <div class="common-item">
-        <n-checkbox v-model:checked="series.label.show">
-          <div>显示数据标签</div>
-        </n-checkbox>
-      </div>
-      <div class="common-item">
-        <div class="common-double-space"></div>
-        <div class="common-sub-title">文本</div>
-        <el-input-number
-          v-model="series.label.fontSize"
-          class="common-number-input"
-          :disabled="!series.label.show"
-          :min="1"
-          :max="44"
-          controls-position="right"
-          size="small"
-        />
-        <n-color-picker
-          class="common-color-picker"
-          style="display: inline-block"
-          v-model:value="series.label.color"
-          :disabled="!series.label.show"
-        >
-          <template #label>
-            <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
-          </template>
-        </n-color-picker>
-      </div>
-      <div class="common-item">
-        <div class="common-double-space"></div>
-        <div class="common-double-space"></div>
-        <div class="common-double-space"></div>
-        <div
-          class="commmon-switch-self"
-          @click="
-            switchCommon(
-              series.label,
-              'fontWeight',
-              seriesItemFontWeightFlag.type ? 'normal' : 'bold',
-              seriesItemFontWeightFlag
-            )
-          "
-          :class="{ commonActive: seriesItemFontWeightFlag.type }"
-        >
-          B
-        </div>
-        <div
-          class="commmon-switch-self"
-          :class="{ commonActive: seriesItemFontStyleFlag.type }"
-          @click="
-            switchCommon(
-              series.label,
-              'fontStyle',
-              seriesItemFontStyleFlag.type ? 'normal' : 'oblique',
-              seriesItemFontStyleFlag
-            )
-          "
-        >
-          I
-        </div>
-      </div>
-
+      <slot name="series"></slot>
       <template #arrow>
         <n-icon size="16" color="#869299">
           <chevron-up />
@@ -443,75 +372,6 @@ const changeBarDirection = (val: string | number | boolean): void => {
     }
     :deep .n-collapse-item__content-inner {
       padding: 0 25px 18px 25px;
-    }
-    .common-title {
-      color: #6b797f;
-      font-family: "PingFang-SC-Medium";
-      font-size: 12px;
-      text-align: left;
-      margin: 18px 0 12px 0;
-      font-weight: 400;
-    }
-    .common-item {
-      display: flex;
-      align-items: center;
-      color: #6b797f;
-      font-family: "PingFang-SC-Medium";
-      font-size: 12px;
-      .common-input {
-        width: 160px;
-        margin-left: 10px;
-      }
-      .common-select {
-        width: 160px;
-        margin-left: 10px;
-      }
-      .common-small-select {
-        width: 76px;
-        margin-left: 10px;
-      }
-      .common-number {
-        width: 56px;
-        margin-left: 10px;
-      }
-      .common-color-picker {
-        margin-left: 10px;
-      }
-      .common-sub-title {
-        min-width: 25px;
-        flex-shrink: 0;
-      }
-      .common-number-input {
-        width: 75px;
-        margin-left: 9px;
-      }
-      .common-space {
-        width: 10px;
-      }
-      .common-double-space {
-        width: 20px;
-      }
-      .commmon-switch-self {
-        width: 33px;
-        height: 21px;
-        color: #6b797f;
-        border: 1px solid #dcdde0;
-        text-align: center;
-        line-height: 21px;
-        border-radius: 11px;
-        cursor: pointer;
-      }
-      .commonActive {
-        border: 1px solid #6d79ff;
-        background: #6d79ff;
-        color: #ffffff;
-      }
-      .commmon-switch-self + .commmon-switch-self {
-        margin-left: 23px;
-      }
-    }
-    .common-item {
-      margin-top: 12px;
     }
   }
   :deep .n-collapse-item.n-collapse-item--active {

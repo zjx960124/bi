@@ -191,6 +191,7 @@ export const useChartEditStore = defineStore({
       K extends EditCanvasConfigType[T]
     >(key: T, value: K) {
       this.editCanvasConfig[key] = value;
+      console.log(this.editCanvasConfig);
     },
     // * 设置右键菜单
     setRightMenuShow(value: boolean) {

@@ -8,7 +8,7 @@ import {
   DocumentText,
 } from "@vicons/ionicons5";
 import { useTargetData } from "@/utils/hooks/useTargetData";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { LayoutData } from "../layoutData";
 const { targetData, chartEditStore } = useTargetData();
 
@@ -56,6 +56,7 @@ const hiddenConfiguration = () => {
           v-show="activeTab === 'config'"
           :is="targetData.chartConfig.conKey"
           :optionData="targetData.option"
+          :themeColor="targetData.themeColor"
         ></component>
       </div>
       <div class="update-btn">更新</div>

@@ -1,6 +1,5 @@
 import { LangEnum, PreviewScaleEnum } from '@/enums/styleEnum';
 import { RequestHttpIntervalEnum } from '@/enums/httpEnum';
-import designColor from './designColor.json';
 
 // 默认语言
 export const lang = LangEnum.ZH;

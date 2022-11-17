@@ -1,7 +1,7 @@
 <template>
   <v-chart
     ref="vChartRef"
-    :theme="themeColor"
+    :theme="color"
     :option="option"
     :manual-update="isPreview()"
     :update-options="{
@@ -30,6 +30,7 @@ import {
   TooltipComponent,
   LegendComponent,
 } from "echarts/components";
+import { chartColors } from "@/settings/chartThemes/index";
 
 const props = defineProps({
   themeSetting: {
@@ -58,12 +59,15 @@ use([
 const replaceMergeArr = ref<string[]>();
 
 const option = computed(() => {
-  console.log(props.chartConfig.option);
   let resultOption = expendSeries(cloneDeep(props.chartConfig.option));
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
-console.log(option);
+const color = computed(() => {
+  return chartColors[props.themeColor.color];
+});
+
+console.log(props);
 
 // dataset 无法变更条数的补丁
 watch(

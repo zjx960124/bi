@@ -11,7 +11,6 @@ import { fileToUrl, loadAsyncComponent } from "@/utils";
 import Project from "@/store/pageEditStore/pageEditStore";
 
 const chartEditStore = useChartEditStore();
-const editCanvas = chartEditStore.getEditCanvas;
 
 const fontFamily = ref<string>("");
 const fontFamilyOptions = ref<any[]>([]);
@@ -23,7 +22,7 @@ const pageAnimationOptions = ref<any[]>([
 ]);
 
 const handleChange = (e: Event) => {
-  canvasConfig.backgroundType = (e.target as HTMLInputElement).value;
+  canvasConfig.value.backgroundType = (e.target as HTMLInputElement).value;
 };
 
 const canvasConfig = computed(() => {

@@ -49,6 +49,83 @@
     :deep .n-collapse-item__content-inner {
       padding: 0 25px 18px 25px;
     }
+    .common-title {
+      color: #6b797f;
+      font-family: "PingFang-SC-Medium";
+      font-size: 12px;
+      text-align: left;
+      margin: 18px 0 12px 0;
+      font-weight: 400;
+    }
+    .common-item {
+      display: flex;
+      align-items: center;
+      color: #6b797f;
+      font-family: "PingFang-SC-Medium";
+      font-size: 12px;
+      .common-input {
+        width: 160px;
+        margin-left: 10px;
+      }
+      .common-select {
+        width: 160px;
+        margin-left: 10px;
+      }
+      .common-small-select {
+        width: 76px;
+        margin-left: 10px;
+      }
+      .common-medium-select {
+        max-width: 126px;
+        flex: 1;
+        margin-left: 10px;
+      }
+      .common-number {
+        width: 56px;
+        margin-left: 10px;
+      }
+      .common-color-picker {
+        margin-left: 10px;
+      }
+      .common-sub-title {
+        min-width: 25px;
+        flex-shrink: 0;
+      }
+      .common-number-input {
+        width: 75px;
+        margin-left: 9px;
+      }
+      .common-radio-group {
+        margin-left: 10px;
+      }
+      .common-space {
+        width: 10px;
+      }
+      .common-double-space {
+        width: 20px;
+      }
+      .commmon-switch-self {
+        width: 33px;
+        height: 21px;
+        color: #6b797f;
+        border: 1px solid #dcdde0;
+        text-align: center;
+        line-height: 21px;
+        border-radius: 11px;
+        cursor: pointer;
+      }
+      .commonActive {
+        border: 1px solid #6d79ff;
+        background: #6d79ff;
+        color: #ffffff;
+      }
+      .commmon-switch-self + .commmon-switch-self {
+        margin-left: 23px;
+      }
+    }
+    .common-item {
+      margin-top: 12px;
+    }
   }
   :deep .n-collapse-item.n-collapse-item--active {
     .n-collapse-item__header.n-collapse-item__header--active {

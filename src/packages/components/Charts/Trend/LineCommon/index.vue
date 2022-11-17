@@ -19,7 +19,7 @@ import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { LineChart } from "echarts/charts";
 import config, { includes, seriesItem } from "./config";
-import { mergeTheme } from "@/packages/public/chart";
+import { mergeTheme, expendSeries } from "@/packages/hook/chart";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 // import { useChartDataFetch } from "@/hooks";
 import { isPreview } from "@/utils";
@@ -29,6 +29,7 @@ import {
   TooltipComponent,
   LegendComponent,
 } from "echarts/components";
+import cloneDeep from "lodash/cloneDeep";
 
 const props = defineProps({
   themeSetting: {
@@ -57,7 +58,9 @@ use([
 const replaceMergeArr = ref<string[]>();
 
 const option = computed(() => {
-  return mergeTheme(props.chartConfig.option, props.themeSetting, includes);
+  let resultOption = expendSeries(cloneDeep(props.chartConfig.option));
+  return mergeTheme(resultOption, props.themeSetting, includes);
+  // return mergeTheme(props.chartConfig.option, props.themeSetting, includes);
 });
 
 // dataset 无法变更条数的补丁

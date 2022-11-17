@@ -1,4 +1,3 @@
-import { ref } from 'vue';
 import {
   echartOptionProfixHandle,
   PublicConfigClass,
@@ -7,6 +6,7 @@ import { BarCommonConfig } from './index';
 import { CreateComponentType } from '@/packages/index.d';
 import cloneDeep from 'lodash/cloneDeep';
 import dataJson from './data.json';
+import { markRaw } from 'vue';
 
 export const includes = ['legend', 'xAxis', 'yAxis', 'series'];
 
@@ -73,6 +73,8 @@ export const option = {
   series: seriesItem,
 };
 
+const themeColor = { color: 'customed' };
+
 export default class Config
   extends PublicConfigClass
   implements CreateComponentType
@@ -80,4 +82,5 @@ export default class Config
   public key = BarCommonConfig.key;
   public chartConfig = cloneDeep(BarCommonConfig);
   public option = echartOptionProfixHandle(option, includes);
+  public themeColor = cloneDeep(markRaw(themeColor));
 }

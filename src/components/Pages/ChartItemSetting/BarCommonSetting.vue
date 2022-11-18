@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { ChevronDown } from "@vicons/ionicons5";
+import { isNumber } from "@/utils";
 
 const props = defineProps({
   optionData: {
@@ -12,8 +13,33 @@ const props = defineProps({
 const series = computed(() => {
   return props.optionData.series;
 });
+
+const borderRadius = computed(() => {
+  const radius = props.optionData.series.itemStyle.borderRadius;
+  return Math.max(...radius);
+});
+
 const seriesItemFontWeightFlag = ref({ type: false });
 const seriesItemFontStyleFlag = ref({ type: false });
+
+const changeBarRadius = (val: number) => {
+  if (props.optionData.xAxis.type === "category")
+    props.optionData.series.itemStyle.borderRadius = [val, val, 0, 0];
+  else props.optionData.series.itemStyle.borderRadius = [0, val, val, 0];
+};
+
+const checkSeriesLabel = (val: boolean) => {
+  console.log(val);
+  props.optionData.series.label.show = val;
+  if (props.optionData.xAxis.type === "category")
+    props.optionData.series.label.position = "top";
+  else props.optionData.series.label.position = "right";
+};
+
+const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
+  target[key] = form;
+  depend.type = !depend.type;
+};
 </script>
 <template>
   <div class="common-title">背景样式</div>
@@ -33,17 +59,21 @@ const seriesItemFontStyleFlag = ref({ type: false });
     <div class="common-double-space"></div>
     <div class="common-sub-title">圆角半径</div>
     <el-input-number
-      v-model="series.itemStyle.borderRadius"
+      v-model="borderRadius"
       class="common-number-input"
       :min="0"
       :max="44"
       controls-position="right"
+      @input="changeBarRadius"
       size="small"
     />
   </div>
 
   <div class="common-item">
-    <n-checkbox v-model:checked="series.label.show">
+    <n-checkbox
+      v-model:checked="series.label.show"
+      :on-update:checked="checkSeriesLabel"
+    >
       <div>显示数据标签</div>
     </n-checkbox>
   </div>

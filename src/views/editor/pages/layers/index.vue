@@ -9,9 +9,9 @@ import { EllipsisHorizontal, GridOutline } from "@vicons/ionicons5";
 import { MouseEventButton } from "@/enums/editPageEnum";
 
 const chartEditStore = useChartEditStore();
-const { defaultOptions, handleContextMenu, onClickOutSide } = useContextMenu();
+const { menuOptions, defaultOptions, handleContextMenu, onClickOutSide } =
+  useContextMenu();
 const layerList = ref<any>([]);
-const menuOptions = ref<MenuOptionsItemType[]>([]);
 
 // 逆序展示
 const reverseList = computed(() => {

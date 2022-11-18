@@ -121,6 +121,13 @@
       }
       .commmon-switch-self + .commmon-switch-self {
         margin-left: 23px;
+        font-style: oblique;
+      }
+      .common-active {
+        color: #6d79ff;
+        .n-button__border {
+          border: 1px solid #6d79ff;
+        }
       }
     }
     .common-item {
@@ -218,6 +225,10 @@
 }
 
 // 重写button
+.n-button + .n-button {
+  margin-left: 29px;
+}
+
 .n-button.n-button--tiny-type {
   width: 33px;
 }

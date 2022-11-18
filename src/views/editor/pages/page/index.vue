@@ -1,16 +1,30 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { computed, ref, watch, toRef } from "vue";
 import Project from "@/store/pageEditStore/pageEditStore";
 import { DocumentTextSharp } from "@vicons/ionicons5";
 import { Delete } from "@vicons/carbon";
 import Draggable from "vuedraggable";
+import { useModal } from "@/utils/hooks/useModal";
 
 const checkPage = (index: number) => {
   Project.value.checkPage(index);
 };
 
 const deletePage = (index: number) => {
-  Project.value.deletePage(index);
+  useModal({
+    title: "提 示",
+    props: {
+      width: 700,
+    },
+    content: () => (
+      <>
+        <span>是否删除该页面,删除后无法恢复！</span>
+      </>
+    ),
+    onConfirm: () => {
+      Project.value.deletePage(index);
+    },
+  });
 };
 
 // 移动结束处理

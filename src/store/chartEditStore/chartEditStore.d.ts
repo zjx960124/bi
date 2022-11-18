@@ -188,6 +188,13 @@ export interface ChartEditStoreType {
   >;
 }
 
+export interface PageEditStoreType {
+  [ChartEditStoreEnum.EDIT_CANVAS_CONFIG]: EditCanvasConfigType;
+  [ChartEditStoreEnum.COMPONENT_LIST]: Array<
+    CreateComponentType | CreateComponentGroupType
+  >;
+}
+
 // 存储数据类型
 export interface ChartEditStorage {
   [ChartEditStoreEnum.EDIT_CANVAS_CONFIG]: EditCanvasConfigType;

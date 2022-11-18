@@ -15,7 +15,7 @@ export const seriesItem = {
   barWidth: 20,
   itemStyle: {
     color: null,
-    borderRadius: 0,
+    borderRadius: [0, 0, 0, 0],
   },
   label: {
     show: false,
@@ -38,6 +38,7 @@ export const option = {
   legend: {
     show: true,
     top: '5%',
+    legendPosition: 'top',
     textStyle: {
       color: '#333333',
       fontSize: 12,
@@ -56,6 +57,12 @@ export const option = {
       fontWeight: 'normal',
       fontStyle: 'normal',
     },
+    axisLabel: {
+      color: '#ffffff',
+      fontSize: 12,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+    },
     axisLine: {
       show: true,
       lineStyle: {
@@ -68,6 +75,28 @@ export const option = {
   yAxis: {
     show: true,
     type: 'value',
+    nameLocation: 'center',
+    nameGap: 30,
+    nameTextStyle: {
+      color: '#333333',
+      fontSize: 12,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+    },
+    axisLabel: {
+      color: '#ffffff',
+      fontSize: 12,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+    },
+    axisLine: {
+      show: true,
+      lineStyle: {
+        color: '#6D79FF',
+        type: 'solid',
+        width: 1,
+      },
+    },
   },
   dataset: { ...dataJson },
   series: seriesItem,

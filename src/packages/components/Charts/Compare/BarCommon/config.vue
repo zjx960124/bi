@@ -1,5 +1,9 @@
 <template>
-  <common-setting :optionData="optionData" :themeColor="themeColor">
+  <common-setting
+    :optionData="optionData"
+    :themeColor="themeColor"
+    type="barCommon"
+  >
     <template #series>
       <bar-common-setting :optionData="optionData"></bar-common-setting>
     </template>
@@ -24,10 +28,4 @@ const props = defineProps({
     required: true,
   },
 });
-
-console.log(props);
-
-// const seriesList = computed(() => {
-//   return props.optionData.series;
-// });
 </script>

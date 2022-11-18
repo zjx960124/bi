@@ -35,16 +35,34 @@ const hiddenConfiguration = () => {
           style="cursor: pointer"
         ></n-icon>
         <n-button-group size="small">
-          <n-button type="default" @click="handleActiveTab('data')">
-            <template #icon>
-              <n-icon :component="DocumentText"></n-icon>
+          <n-popover trigger="hover">
+            <template #trigger>
+              <n-button
+                type="default"
+                @click="handleActiveTab('data')"
+                :class="{ active: activeTab === 'data' }"
+              >
+                <template #icon>
+                  <n-icon :component="DocumentText"></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-button type="default" @click="handleActiveTab('config')">
-            <template #icon>
-              <n-icon :component="ColorPalette"></n-icon>
+            <span>数据</span>
+          </n-popover>
+          <n-popover trigger="hover">
+            <template #trigger>
+              <n-button
+                type="default"
+                @click="handleActiveTab('config')"
+                :class="{ active: activeTab === 'config' }"
+              >
+                <template #icon>
+                  <n-icon :component="ColorPalette"></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
+            <span>样式</span>
+          </n-popover>
         </n-button-group>
       </div>
       <div class="configuration-view">
@@ -90,12 +108,22 @@ const hiddenConfiguration = () => {
       height: 55px;
       box-sizing: border-box;
       padding: 0 10px;
+      :deep .active {
+        color: #6d79ff;
+        .n-button__border {
+          border: 1px solid #6d79ff;
+        }
+        .n-button__state-border {
+          border: 1px solid #6d79ff;
+        }
+      }
     }
     .configuration-view {
       width: 260px;
       height: calc(100% - 60px);
       background: #ffffff;
       border-radius: 15px;
+      overflow-y: auto;
       .n-collapse {
         height: 100%;
         display: flex;

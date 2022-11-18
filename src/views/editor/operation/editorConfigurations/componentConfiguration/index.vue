@@ -73,6 +73,7 @@ const hiddenConfiguration = () => {
         <component
           v-show="activeTab === 'config'"
           :is="targetData.chartConfig.conKey"
+          :attr="targetData.attr"
           :optionData="targetData.option"
           :themeColor="targetData.themeColor"
         ></component>

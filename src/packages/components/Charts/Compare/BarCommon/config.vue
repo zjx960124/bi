@@ -1,5 +1,6 @@
 <template>
   <common-setting
+    :attr="attr"
     :optionData="optionData"
     :themeColor="themeColor"
     type="barCommon"
@@ -21,6 +22,10 @@ import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
 const props = defineProps({
   optionData: {
     type: Object as PropType<GlobalThemeJsonType>,
+    required: true,
+  },
+  attr: {
+    type: Object,
     required: true,
   },
   themeColor: {

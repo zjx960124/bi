@@ -209,9 +209,9 @@ export const useChartEditStore = defineStore({
       // 无 id 清空
       if (!selectId) {
         this.targetChart.selectId = [];
-        setTimeout(() => {
-          this.computedScale();
-        }, 200);
+        // setTimeout(() => {
+        //   this.computedScale();
+        // }, 200);
         return;
       }
       // 多选
@@ -230,9 +230,9 @@ export const useChartEditStore = defineStore({
         // 字符串
         if (isString(selectId)) {
           this.targetChart.selectId = [selectId];
-          setTimeout(() => {
-            this.computedScale();
-          }, 200);
+          // setTimeout(() => {
+          //   this.computedScale();
+          // }, 200);
           return;
         }
         // 数组

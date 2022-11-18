@@ -9,7 +9,7 @@ import dataJson from './data.json';
 import { markRaw } from 'vue';
 
 export const includes = ['legend', 'xAxis', 'yAxis', 'series'];
-
+const themeColor = { color: 'customed' };
 export const seriesItem = {
   type: 'bar',
   barWidth: 20,
@@ -101,8 +101,6 @@ export const option = {
   dataset: { ...dataJson },
   series: seriesItem,
 };
-
-const themeColor = { color: 'customed' };
 
 export default class Config
   extends PublicConfigClass

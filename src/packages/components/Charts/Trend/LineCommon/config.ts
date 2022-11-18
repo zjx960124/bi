@@ -2,9 +2,11 @@ import { echartOptionProfixHandle, PublicConfigClass } from '@/packages/public';
 import { LineCommonConfig } from './index';
 import { CreateComponentType } from '@/packages/index.d';
 import dataJson from './data.json';
+import cloneDeep from 'lodash/cloneDeep';
+import { markRaw } from 'vue';
 
 export const includes = ['legend', 'xAxis', 'yAxis'];
-
+const themeColor = { color: 'customed' };
 export const seriesItem = {
   type: 'line',
   smooth: false,
@@ -27,7 +29,7 @@ export const seriesItem = {
     fontStyle: 'normal',
   },
   areaStyle: {
-    opacity: 1,
+    opacity: 0,
   },
 };
 
@@ -85,4 +87,5 @@ export default class Config
   public chartConfig = LineCommonConfig;
   // 图表配置项
   public option = echartOptionProfixHandle(option, includes);
+  public themeColor = cloneDeep(markRaw(themeColor));
 }

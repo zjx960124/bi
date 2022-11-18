@@ -91,10 +91,7 @@ const previewHandle = () => {
 };
 
 const changeProjectName = (e) => {
-  console.log(e.target.innerHTML.length);
-
   if (e.target.innerHTML.length > 10) {
-    Project.value.setProjectName(e.target.innerHTML);
     let result = e.target.innerHTML.substr(0, 10);
     Project.value.setProjectName(result);
   } else {
@@ -103,8 +100,6 @@ const changeProjectName = (e) => {
 };
 
 const projectName = computed(() => {
-  console.log(Project.value.getProjectName());
-
   return Project.value.getProjectName();
 });
 </script>

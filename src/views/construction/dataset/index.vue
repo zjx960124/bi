@@ -12,8 +12,11 @@
 import { ref } from "vue";
 import list from "./components/list.vue";
 import { dataTypes } from "@/views/construction/types/index";
-
-const openSetting = (val: dataTypes) => {};
+import { useRouter } from "vue-router";
+const router = useRouter();
+const openSetting = (val: dataTypes) => {
+  router.push("/dataset/create");
+};
 </script>
 <style scoped lang="scss">
 .datasource-container {

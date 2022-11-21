@@ -48,7 +48,7 @@ const showStatus = (status: number) => {
 const service = axios.create({
   baseURL: config.mock ? config.mockApi : config.baseApi,
   headers: {
-    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    "Content-Type": "application/json;charset=utf-8",
     Authorization: "",
   },
   // 是否跨站点访问控制请求
@@ -106,7 +106,7 @@ service.interceptors.response.use(
         response.data.msg = msg;
       }
     }
-    return response;
+    return response.data;
   },
   (error) => {
     if (axios.isCancel(error)) {

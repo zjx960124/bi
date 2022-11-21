@@ -5,7 +5,7 @@ import { DataSourceListType, checkDatasourceType } from '@/views/construction/ty
 
 export class DataSource {
     //获取数据源列表
-    static async getDatasourceList(params: DataSourceListType): Promise<HttpResponse> {
+    static async getDatasourceList(params: DataSourceListType): Promise<any> {
         return Request("/rest/bi/getDatasourceList", {
             method: "get",
             responseType: "json",
@@ -16,12 +16,19 @@ export class DataSource {
     }
 
     //数据库连接测试（添加数据源）
-    static async checkDatasource(data: checkDatasourceType): Promise<HttpResponse> {
-        console.log(JSON.stringify(data));
-
+    static async checkDatasource(data: checkDatasourceType): Promise<any> {
         return Request("/rest/bi/checkDatasource", {
             method: "post",
-            // responseType: "json",
+            responseType: "json",
+            data
+        });
+    }
+
+    //保存数据源
+    static async saveDatasource(data: checkDatasourceType): Promise<any> {
+        return Request("/rest/bi/saveDatasource", {
+            method: "post",
+            responseType: "json",
             data
         });
     }

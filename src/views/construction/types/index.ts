@@ -1,12 +1,14 @@
 interface checkDatasourceType {
   dataSourceShowName?: string;
-  dataSourceUrl?: string;
+  ipContent?: string;
   port?: number;
   dataSourceName?: string;
   username?: string;
   password?: string;
   fileName?: string
   dataSourceType?: number | string
+  status?:number
+  accessType?:number
 }
 
 
@@ -37,6 +39,7 @@ interface DataSourceListType {
 interface statusFormType {
   status?: string | number
   text?: string
+  isOpen:boolean
 }
 
 export {

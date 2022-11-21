@@ -59,8 +59,8 @@
 
 <script lang="ts" setup>
 import { reactive } from "vue";
-import { sizeForm } from "@/views/construction/types/index";
-const sizeform = reactive<sizeForm>({
+import { checkDatasourceType } from "@/views/construction/types/index";
+const sizeform = reactive<checkDatasourceType>({
   fileName: "",
 });
 

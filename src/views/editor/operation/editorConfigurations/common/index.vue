@@ -11,7 +11,6 @@ import { fileToUrl, loadAsyncComponent } from "@/utils";
 import Project from "@/store/pageEditStore/pageEditStore";
 
 const chartEditStore = useChartEditStore();
-const editCanvas = chartEditStore.getEditCanvas;
 
 const fontFamily = ref<string>("");
 const fontFamilyOptions = ref<any[]>([]);
@@ -23,7 +22,7 @@ const pageAnimationOptions = ref<any[]>([
 ]);
 
 const handleChange = (e: Event) => {
-  canvasConfig.backgroundType = (e.target as HTMLInputElement).value;
+  canvasConfig.value.backgroundType = (e.target as HTMLInputElement).value;
 };
 
 const canvasConfig = computed(() => {
@@ -167,14 +166,14 @@ const customRequest = (options: UploadCustomRequestOptions) => {
         </div>
         <div class="common-item">
           <div>轮播间隔</div>
-          <n-input-number
+          <n-input
             class="common-input"
             round
             v-model:value="Project.pageConfig.shuffingInterval"
             :disabled="!Project.pageConfig.onShuffing"
           >
             <template #suffix> <span color="#BBBCBB">s</span></template>
-          </n-input-number>
+          </n-input>
         </div>
         <div class="common-item">
           <div>过渡类型</div>

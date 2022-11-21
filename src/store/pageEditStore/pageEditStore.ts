@@ -3,10 +3,16 @@ import { ChartEditStoreType } from './../chartEditStore/chartEditStore.d';
 import { HistoryItemType } from './../chartHistoryStore/chartHistoryStore.d';
 import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
 import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
-import { ref } from 'vue';
+import { ref, reactive, Ref } from 'vue';
 import { defaultTheme, globalThemeJson } from '@/settings/chartThemes/index';
 import { previewScaleType } from '@/settings/designSetting';
 import { getUUID } from '@/utils';
+import type { ChartColorsNameType } from '@/settings/chartThemes/index';
+import {
+  BaseProductType,
+  PageConfigTypeList,
+  PageConfigType,
+} from './pageEditStore.d';
 
 const chartHistoryStore = useChartHistoryStore();
 const chartEditStore = useChartEditStore();
@@ -47,7 +53,7 @@ function createBasePage() {
         // 是否使用纯颜色
         selectColor: true,
         // chart 主题色
-        chartThemeColor: defaultTheme || 'dark',
+        chartThemeColor: 'dark' as ChartColorsNameType,
         // 全局配置
         chartThemeSetting: globalThemeJson,
         // 预览方式
@@ -73,11 +79,11 @@ export type PageConfig = {
   shuffingAnimation: string;
 };
 
-class pageEditClass {
+class pageEditClass implements BaseProductType {
   public projectName: string;
-  public pageList!: Array<PageItem>;
-  public currentPage!: PageItem;
-  public basePage!: PageItem;
+  public pageList!: PageConfigTypeList;
+  public currentPage!: PageConfigType;
+  public basePage!: PageConfigType;
   public currentIndex: number;
   public id: string;
   public pageAnimation!: string | null;

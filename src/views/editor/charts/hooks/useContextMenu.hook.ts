@@ -186,7 +186,6 @@ const handleContextMenu = (
     // * 单选默认选项
     menuOptions.value = defaultOptions;
   }
-
   if (!targetInstance) {
     menuOptions.value = pickOption(toRaw(menuOptions.value), defaultNoItemKeys);
   }
@@ -211,6 +210,7 @@ const handleContextMenu = (
     );
   }
   nextTick().then(() => {
+    console.log(menuOptions.value);
     chartEditStore.setMousePosition(e.clientX, e.clientY);
     chartEditStore.setRightMenuShow(true);
   });

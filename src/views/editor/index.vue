@@ -91,8 +91,17 @@ const previewHandle = () => {
 };
 
 const changeProjectName = (e) => {
-  Project.value.setName(e.target.innerHTML);
+  if (e.target.innerHTML.length > 10) {
+    let result = e.target.innerHTML.substr(0, 10);
+    Project.value.setProjectName(result);
+  } else {
+    Project.value.setProjectName(e.target.innerHTML);
+  }
 };
+
+const projectName = computed(() => {
+  return Project.value.getProjectName();
+});
 </script>
 <template>
   <div class="editor">
@@ -109,11 +118,9 @@ const changeProjectName = (e) => {
         <div
           class="screen-name"
           contenteditable="true"
-          baseData="1555"
-          id="base"
-          @blur="changeProjectName"
+          @input="changeProjectName"
         >
-          {{ Project.projectName }}
+          {{ projectName }}
         </div>
 
         <!-- <div class="size">
@@ -129,19 +136,32 @@ const changeProjectName = (e) => {
         </div> -->
       </template>
       <template #ri-left>
-        <n-button
-          v-for="item in historyList"
-          :key="item.key"
-          text
-          :disabled="!item.select"
-          @click="clickHistoryHandle(item.key)"
-        >
-          <n-icon
-            :component="item.icon"
-            size="24"
-            style="margin-right: 29px"
-          ></n-icon>
-        </n-button>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <n-button
+              text
+              style="textalign: center"
+              :disabled="!isBackStack"
+              @click="clickHistoryHandle('backStack')"
+            >
+              <n-icon :component="ArrowUndo" size="24"></n-icon>
+            </n-button>
+          </template>
+          撤销
+        </n-tooltip>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <n-button
+              text
+              style="textalign: center"
+              :disabled="!isForwardStack"
+              @click="clickHistoryHandle('forward')"
+            >
+              <n-icon :component="ArrowRedo" size="24"></n-icon>
+            </n-button>
+          </template>
+          重做
+        </n-tooltip>
         <n-button round @click="previewHandle" class="preview-btn">
           <template #icon>
             <n-icon>
@@ -182,13 +202,19 @@ const changeProjectName = (e) => {
     font-family: "PingFang SC";
     font-weight: bold;
     color: #293270;
-    margin-left: 44px;
+    padding-left: 44px;
     position: relative;
+    width: fit-content;
+    min-width: 1px;
+    max-width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .screen-name::before {
     content: "";
     position: absolute;
-    left: -13px;
+    left: 27px;
     top: 50%;
     margin-top: -8px;
     width: 2px;

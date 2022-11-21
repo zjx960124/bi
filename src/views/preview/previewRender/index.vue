@@ -37,7 +37,7 @@ const themeColor = computed(() => {
       :is="item.chartConfig.chartKey"
       :chartConfig="item"
       :themeSetting="themeSetting"
-      :themeColor="themeColor"
+      :themeColor="item.themeColor"
       :style="{ ...getSizeStyle(item.attr) }"
     ></component>
   </div>

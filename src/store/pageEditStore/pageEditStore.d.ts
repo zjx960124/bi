@@ -1,18 +1,16 @@
-import { ChartEditStoreType } from './../chartEditStore/chartEditStore.d';
+import { PageEditStoreType } from './../chartEditStore/chartEditStore.d';
 import { HistoryItemType } from './../chartHistoryStore/chartHistoryStore.d';
 
 // 页面实例类
 export interface PageConfigType {
   id: string;
   name: string;
-  component: ChartEditStoreType;
+  component: PageEditStoreType;
   backStack: HistoryItemType[];
   forwardStack: HistoryItemType[];
 }
 
-export interface PageConfigTypeList {
-  [index: number]: PageConfigType;
-}
+export type PageConfigTypeList = Array<PageConfigType>;
 
 export interface PageConfig {
   onShuffing: boolean;
@@ -21,9 +19,9 @@ export interface PageConfig {
 }
 
 export interface ProductClass {
-  setProjectName(): void;
+  setProjectName(T: string): void;
   getProjectName(): string;
-  setComponent<T>(T: ChartEditStoreType): void;
+  setComponent<T>(T: PageEditStoreType): void;
 }
 
 export interface BaseProductType extends ProductClass {

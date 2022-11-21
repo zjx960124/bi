@@ -25,10 +25,10 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click.native="openRelpaceDialog"
+            <el-dropdown-item @click="openRelpaceDialog"
               >替换数据</el-dropdown-item
             >
-            <el-dropdown-item @click.native="openAddDialog"
+            <el-dropdown-item @click="openAddDialog"
               >增加数据</el-dropdown-item
             >
           </el-dropdown-menu>

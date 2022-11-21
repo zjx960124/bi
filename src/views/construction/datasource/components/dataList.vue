@@ -28,8 +28,8 @@
             <div class="desc">创建者:{{ it.creater }}</div>
           </div>
           <div class="item-btn">
-            <img src="@/assets/data/edit.png" />
-            <img src="@/assets/data/del.png" />
+            <img src="~@/assets/data/edit.png" />
+            <img src="~@/assets/data/del.png" />
           </div>
         </div>
       </el-scrollbar>

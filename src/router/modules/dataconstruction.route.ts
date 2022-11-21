@@ -15,7 +15,7 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.DATA_SOURCE'],
     meta: {
       title: '数据源',
-      isShow: true,
+      isShow: true
     },
   },
   {
@@ -24,7 +24,7 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.DATA_SET'],
     meta: {
       title: '数据集',
-      isShow: true,
+      isShow: true
     },
   },
   {
@@ -33,16 +33,16 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.PREVIEW'],
     meta: {
       title: '预览页',
-      isShow: true,
+      isShow: true
     },
   },
   {
-    path: PageEnum.DATA_SOURCE_LIST,
-    name: PageEnum.DATA_SOURCE_LIST_NAME,
-    component: importRoute['.DATA_SOURCE_LIST'],
+    path: '/datasource/list',
+    name: 'datasource_list',
+    component: () => import('@/views/construction/datasource/list.vue'),
     meta: {
       title: '数据源',
-      isShow: false,
+      isShow: false
     },
   },
   {
@@ -51,7 +51,16 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/construction/dataset/addExcel.vue'),
     meta: {
       title: '新建数据集',
-      isShow: false,
+      isShow: false
+    },
+  },
+  {
+    path: '/dataset/list',
+    name: 'dataset_list',
+    component: () => import('@/views/construction/dataset/dataIndex.vue'),
+    meta: {
+      title: '数据集',
+      isShow: false
     },
   },
 ];

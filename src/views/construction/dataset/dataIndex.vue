@@ -88,9 +88,45 @@
     </div>
     <div class="right">
       <div class="right-title">
-        <div class="left">
-          <div class="item active"></div>
-          <div class="item"></div>
+        <div class="right-title-left">
+          <div class="item active" @click="tabClick(0)">
+            <div class="info">
+              <p>
+                SQL数据集名称
+                <popover-box>
+                  <template #reference>
+                    <img src="@/assets/data/warning.png" />
+                  </template>
+                  <template #content>
+                    <div class="info-box"></div>
+                  </template>
+                </popover-box>
+              </p>
+              <p>创建者：用户名</p>
+            </div>
+            <div class="preview">数据预览</div>
+          </div>
+          <div class="item" @click="tabClick(1)">字段管理</div>
+        </div>
+        <div class="right-title-right">
+          <div class="searchBox">
+            <img width="22" height="21" src="~@/assets/analysis/search.png" />
+            <el-input
+              class="input"
+              v-model="searchValue"
+              clearable
+              placeholder="共X个文件"
+            >
+            </el-input>
+          </div>
+          <div class="el-button-primary margin-left-22">
+            <img width="18" height="18" src="~@/assets/data/addData.png" />
+            <span class="text">新建文件夹</span>
+          </div>
+          <div class="el-button-primary margin-left-22">
+            <img width="18" height="18" src="~@/assets/data/addData.png" />
+            <span class="text">新建数据集</span>
+          </div>
         </div>
       </div>
       <div class="right-content">
@@ -155,6 +191,7 @@
 
 <script lang="ts" setup>
 import noData from "@/assets/data/excelNo.png";
+import popoverBox from "@/components/popover/index.vue";
 import up from "@/assets/data/up.png";
 import { ref } from "vue";
 const imgUrl = ref(noData);
@@ -162,6 +199,10 @@ const searchValue = ref("");
 const dataList = ref([{}]);
 
 const tableData = ref([{}, {}, {}]);
+
+const tabClick = (val: number) => {
+  console.log(val);
+};
 </script>
 <style scoped lang="scss">
 .excel-create-container {
@@ -242,17 +283,101 @@ const tableData = ref([{}, {}, {}]);
     .right-title {
       width: 100%;
       height: 63px;
-      & .item {
-        background-color: #abb2ff;
-        &:nth-child(1) {
-          border-bottom: 100px solid red;
-          border-left: 50% solid transparent;
-          border-right: 50% solid transparent;
-          height: 0;
-          width: 100%;
+      display: flex;
+      justify-content: space-between;
+      & .right-title-left {
+        display: flex;
+        position: relative;
+        width: 260px;
+        height: 100%;
+        & .item {
+          background-color: #f3f5ff;
+          height: 100%;
+          &:nth-child(1) {
+            width: 95%;
+            background: url("@/assets/data/tab_1.png") no-repeat center;
+            background-size: 100% 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            padding-left: 15px;
+            padding-right: 60px;
+            padding-top: 20px;
+            box-sizing: border-box;
+            & .info {
+              width: 70%;
+              height: 100%;
+              font-size: 12px;
+              & p {
+                &:nth-child(1) {
+                  font-size: 7px;
+                  font-family: "PingFang SC";
+                  font-weight: bold;
+                  color: #293270;
+                }
+                &:nth-child(2) {
+                  font-size: 6px;
+                  font-family: "PingFang SC";
+                  font-weight: 400;
+                  color: #6b797f;
+                }
+              }
+            }
+
+            & .preview {
+              width: 15%;
+              font-size: 7px;
+              font-family: "PingFang SC";
+              font-weight: bold;
+              color: #293270;
+            }
+          }
+          &:nth-child(2) {
+            width: 45%;
+            background: url("@/assets/data/tab_2.png") no-repeat center;
+            background-size: 100% 100%;
+            position: absolute;
+            left: 75%;
+            cursor: pointer;
+            font-size: 7px;
+            font-family: "PingFang SC";
+            font-weight: bold;
+            color: #b8bbbc;
+            line-height: 18px;
+            padding-left: 50px;
+            padding-right: 40px;
+            padding-top: 15px;
+            box-sizing: border-box;
+          }
+          &.active {
+            // background-color: #fff;
+          }
         }
-        &.active {
-          background-color: #fff;
+      }
+      & .right-title-right {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .searchBox {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          width: 393px;
+          height: 43px;
+          line-height: 43px;
+          padding: 0 17px;
+          background: #ffffff;
+          border-radius: 22px;
+          .input {
+            :deep(.el-input__wrapper) {
+              box-shadow: none;
+              .el-input__inner {
+                padding: 0 12px;
+                border: none;
+              }
+            }
+          }
         }
       }
     }
@@ -375,5 +500,17 @@ const tableData = ref([{}, {}, {}]);
 .ml12 {
   margin-left: 10px;
   margin-top: -5px;
+}
+
+.margin-left-22 {
+  margin-left: 22px;
+}
+
+.el-popover {
+  background: #f5f6f9 !important;
+}
+.info-box {
+  width: 100%;
+  min-height: 200px;
 }
 </style>

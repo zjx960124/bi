@@ -1,11 +1,12 @@
-interface sizeForm {
-  name?: string;
-  url?: string;
+interface checkDatasourceType {
+  dataSourceShowName?: string;
+  dataSourceUrl?: string;
   port?: number;
-  databases?: string;
+  dataSourceName?: string;
   username?: string;
   password?: string;
   fileName?: string
+  dataSourceType?: number | string
 }
 
 
@@ -25,10 +26,24 @@ interface datasourceType {
   creater?: string
 }
 
+//获取数据源列表
+interface DataSourceListType {
+  pageNum: number
+  pageSize: number
+  showName?: string
+}
+
+//状态栏盒子
+interface statusFormType {
+  status?: string | number
+  text?: string
+}
 
 export {
-  sizeForm,
+  checkDatasourceType,
   dataTypes,
   drawerTypes,
-  datasourceType
+  datasourceType,
+  DataSourceListType,
+  statusFormType
 }

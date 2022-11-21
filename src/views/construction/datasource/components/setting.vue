@@ -13,18 +13,21 @@
       >
         <el-form-item label="显示名称" required>
           <el-input
-            v-model="sizeform.name"
+            v-model="sizeform.dataSourceShowName"
             placeholder="数据源配置列表显示名称"
           />
         </el-form-item>
         <el-form-item label="数据库地址" required>
-          <el-input v-model="sizeform.url" placeholder="IP" />
+          <el-input v-model="sizeform.dataSourceUrl" placeholder="IP" />
         </el-form-item>
         <el-form-item label="端口" required>
           <el-input v-model="sizeform.port" placeholder="3306" />
         </el-form-item>
         <el-form-item label="数据库" required>
-          <el-input v-model="sizeform.databases" placeholder="数据库名称" />
+          <el-input
+            v-model="sizeform.dataSourceName"
+            placeholder="数据库名称"
+          />
         </el-form-item>
         <el-form-item label="用户名" required>
           <el-input v-model="sizeform.username" placeholder="请输入用户名" />
@@ -34,7 +37,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button type="primary"
+    <el-button type="primary" @click="checkDataSourceTest"
       ><img src="@/assets/data/test.png" />连接测试</el-button
     >
     <el-button type="info"
@@ -42,7 +45,7 @@
         src="@/assets/data/cancel.png"
       />取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</el-button
     >
-    <div class="datasource-set-status">
+    <div class="datasource-set-status" v-if="statusForm.status">
       <img src="@/assets/data/faild.png" v-if="statusForm.status == 0" />
       <img src="@/assets/data/success.png" v-if="statusForm.status == 1" />
       <div>{{ statusForm.text }}</div>
@@ -52,20 +55,29 @@
 
 <script lang="ts" setup>
 import { reactive } from "vue";
-import { sizeForm } from "@/views/construction/types/index";
-const sizeform = reactive<sizeForm>({
-  name: "",
-  url: "",
+import {
+  checkDatasourceType,
+  statusFormType,
+} from "@/views/construction/types/index";
+import { DataSource } from "@/api/dataSource";
+const sizeform = reactive<checkDatasourceType>({
+  dataSourceShowName: "test_project",
+  dataSourceUrl: "http://192.168.1.101",
   port: 3306,
-  databases: "",
-  username: "",
-  password: "",
+  dataSourceName: "bi_report",
+  username: "root",
+  password: "123456",
+  dataSourceType: 1, //远程数据库类型
 });
 
-const statusForm = reactive({
-  status: 1,
+const statusForm = reactive<statusFormType>({
+  status: "",
   text: "连接失败 +失败原因，报错提示",
 });
+const { checkDatasource } = DataSource;
+const checkDataSourceTest = async () => {
+  const res = await checkDatasource(sizeform);
+};
 </script>
 <style scoped lang="scss">
 .datasource-set {
@@ -89,7 +101,7 @@ const statusForm = reactive({
     background-color: #fff;
     border-radius: 15px;
     height: 430px;
-    margin-top: 10px;
+    // margin-top: 10px;
     padding: 15px;
     ::v-deep .el-input--small .el-input__wrapper {
       border-radius: 11px;
@@ -125,7 +137,7 @@ const statusForm = reactive({
 
   .datasource-set-status {
     width: 100%;
-    height: 160px;
+    height: 200px;
     background: #ffffff;
     border-radius: 15px;
     margin-top: 12px;

@@ -17,11 +17,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import list from "./components/list.vue";
 import setting from "./components/setting.vue";
 import uploadfile from "./components/uploadFile.vue";
 import { dataTypes } from "@/views/construction/types/index";
+import { DataSource } from "@/api/dataSource";
+
+const { getDatasourceList } = DataSource;
+const router = useRouter();
+onMounted(async () => {
+  const {
+    data: { data },
+  } = await getDatasourceList({ pageNum: 1, pageSize: 10 });
+  if (data && data.length > 0) {
+    router.push("/datasource/list");
+  }
+});
+
 const isShowType = ref<string>("");
 const getSetting = (val: dataTypes) => {
   const { type } = val;

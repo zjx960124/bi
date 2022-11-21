@@ -34,7 +34,7 @@ const imgUrl = ref(noData);
 const dataList = ref<Array<dataTypes>>([
   { type: "sql", title: "MySQL" },
   { type: "file", title: "本地文件（.csv  .xlsx  .xls）" },
-  { type: "api", title: "API数据" },
+  // { type: "api", title: "API数据" },
 ]);
 
 const emit = defineEmits(["openSetting"]);

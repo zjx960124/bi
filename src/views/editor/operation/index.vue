@@ -11,11 +11,9 @@ import {
 import { useAddKeyboard } from "@/utils/hooks/useKeyboard";
 import { useComponentStyle, useSizeStyle } from "@/utils/hooks/useStyle";
 import { useContextMenu } from "@/views/editor/charts/hooks/useContextMenu.hook";
-import { MenuOptionsItemType } from "@/views/editor/charts/hooks/useContextMenu.hook.d";
 import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 import { useLayout } from "@/utils/hooks/useLayout";
 import { useRouter } from "vue-router";
-import { useTargetData } from "@/utils/hooks/useTargetData";
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
@@ -115,7 +113,7 @@ const rangeStyle = computed(() => {
                 @mousedown="mousedownHandle($event, item)"
                 @mouseenter="mouseenterHandle($event, item)"
                 @mouseleave="mouseleaveHandle($event, item)"
-                @contextmenu="handleContextMenu($event, item, optionsHandle)"
+                @contextmenu="handleContextMenu($event, item)"
               >
                 <component
                   class="edit-content-chart"

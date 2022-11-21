@@ -16,10 +16,10 @@ const axis = computed(() => {
   return props.axis;
 });
 
-const axisFontWeightFlag = ref({ tyep: false });
-const axisFontStyleFlag = ref({ tyep: false });
-const axisLabelFontWeightFlag = ref({ tyep: false });
-const axisLabelFontStyleFlag = ref({ tyep: false });
+const axisFontWeightFlag = ref({ type: false });
+const axisFontStyleFlag = ref({ type: false });
+const axisLabelFontWeightFlag = ref({ type: false });
+const axisLabelFontStyleFlag = ref({ type: false });
 const lineTypeOptions = ref([
   {
     label: "·········",
@@ -31,7 +31,7 @@ const lineTypeOptions = ref([
   },
 ]);
 
-const switchCommon = (target: Proxy, key: string, form: any, depend: Proxy) => {
+const switchCommon = (target: any, key: string, form: any, depend: {type: boolean}) => {
   target[key] = form;
   depend.type = !depend.type;
 };

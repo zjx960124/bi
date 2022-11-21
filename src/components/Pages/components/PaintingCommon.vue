@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { PropType, computed, ref, watch } from "vue";
+import { PropType, ref, } from "vue";
 import {
   chartColorsList,
   ChartColorsNameType,
 } from "@/settings/chartThemes/index";
+import { GlobalThemeJsonType } from "@/settings/chartThemes";
 const props = defineProps({
   optionData: {
     type: Object as PropType<GlobalThemeJsonType>,
@@ -13,8 +14,12 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  type: {
+    type: String,
+    requeire: true,
+  },
 });
-const value = ref("vertical");
+const value = ref<string | number | boolean>("vertical");
 const changeBarDirection = (val: string | number | boolean): void => {
   value.value = val;
   if (val === "level") {
@@ -53,23 +58,13 @@ const selectTheme = (theme: ChartColorsNameType) => {
 <template>
   <div class="common-item">
     <div class="common-sub-title">色系选择</div>
-    <n-select
-      class="common-select"
-      v-model:value="themeColor.color"
-      round
-      size="small"
-      :options="chartColorsList"
-      :on-update:value="selectTheme"
-    />
+    <n-select class="common-select" v-model:value="themeColor.color" round size="small" :options="chartColorsList"
+      :on-update:value="selectTheme" />
   </div>
   <div class="common-item">
     <div class="common-sub-title">展示方向</div>
-    <n-radio-group
-      class="common-radio-group"
-      v-model:value="value"
-      name="radiogroup"
-      :on-update:value="changeBarDirection"
-    >
+    <n-radio-group class="common-radio-group" v-model:value="value" name="radiogroup"
+      :on-update:value="changeBarDirection">
       <n-space>
         <n-radio key="1" value="level"> 水平 </n-radio>
         <n-radio key="2" value="vertical"> 垂直 </n-radio>
@@ -78,4 +73,5 @@ const selectTheme = (theme: ChartColorsNameType) => {
   </div>
 </template>
 <style lang='scss' scoped>
+
 </style>

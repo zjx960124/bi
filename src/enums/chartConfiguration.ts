@@ -19,7 +19,7 @@ export interface LegendPositionType extends PositionType {
 }
 
 export type LegendConfigurationType = {
-  [T in LegendEnum]: LegendPositionType;
+  [T: string]: LegendPositionType;
 };
 
 export const LegendConfiguration: LegendConfigurationType = {

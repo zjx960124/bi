@@ -1,25 +1,26 @@
 <template>
   <v-chart ref="vChartRef" :theme="color" :option="option" :manual-update="isPreview()" :update-options="{
     replaceMerge: replaceMergeArr,
-  }" autoresize></v-chart>
+  }" autoresize>
+  </v-chart>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed, watch, PropType, reactive } from "vue";
+import { PropType, computed, watch, ref, nextTick, reactive } from "vue";
 import VChart from "vue-echarts";
-import { use } from "echarts/core";
+import { use, LinearGradientObject } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { BarChart } from "echarts/charts";
+import { LineChart } from "echarts/charts";
 import config, { includes, seriesItem } from "./config";
 import { mergeTheme, expendSeries } from "@/packages/hook/chart";
 import { isPreview } from "@/utils";
-import cloneDeep from "lodash/cloneDeep";
 import {
   DatasetComponent,
   GridComponent,
   TooltipComponent,
   LegendComponent,
 } from "echarts/components";
+import cloneDeep from "lodash/cloneDeep";
 import { chartColors, ChartColorsNameType } from "@/settings/chartThemes/index";
 
 const props = defineProps({
@@ -40,7 +41,7 @@ const props = defineProps({
 use([
   DatasetComponent,
   CanvasRenderer,
-  BarChart,
+  LineChart,
   GridComponent,
   TooltipComponent,
   LegendComponent,
@@ -49,7 +50,8 @@ use([
 const replaceMergeArr = ref<string[]>();
 
 const option = computed(() => {
-  let resultOption = expendSeries(cloneDeep(props.chartConfig.option));
+  let resultOption = expendSeries(cloneDeep(props.chartConfig.option), props.themeColor);
+  console.log(resultOption);
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
@@ -57,13 +59,11 @@ const color = computed(() => {
   return chartColors[props.themeColor.color];
 });
 
-console.log(props);
-
 // dataset 无法变更条数的补丁
 watch(
   () => props.chartConfig.option.dataset,
   (newData, oldData) => {
-    if (newData.dimensions.length !== oldData.dimensions.length) {
+    if (newData?.dimensions.length !== oldData?.dimensions.length) {
       const seriesArr = [];
       for (let i = 0; i < newData.dimensions.length - 1; i++) {
         seriesArr.push(seriesItem);
@@ -80,6 +80,6 @@ watch(
   }
 );
 
-// const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
-const vChartRef = reactive("cccccc");
+// const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore)
+const vChartRef = reactive("ddddd");
 </script>

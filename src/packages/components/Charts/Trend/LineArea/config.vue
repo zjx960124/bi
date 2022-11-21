@@ -3,6 +3,7 @@
   <common-setting :attr="attr" :optionData="optionData" :themeColor="themeColor">
     <template #series>
       <line-common-setting :optionData="optionData"></line-common-setting>
+      <line-area-setting :optionData="optionData" :themeColor="props.themeColor"></line-area-setting>
     </template>
   </common-setting>
 </template>
@@ -14,6 +15,10 @@ import {
   CommonSetting,
   LineCommonSetting,
 } from "@/components/Pages/ChartItemSetting";
+import {
+  LineAreaSetting
+} from "@/components/Pages/components";
+import { ChartColorsNameType } from "@/settings/chartThemes/index";
 
 const props = defineProps({
   optionData: {
@@ -25,12 +30,9 @@ const props = defineProps({
     required: true,
   },
   themeColor: {
-    type: Object,
+    type: Object as PropType<{ color: ChartColorsNameType }>,
     required: true,
   },
 });
 
-const seriesList = computed(() => {
-  return props.optionData.series;
-});
 </script>

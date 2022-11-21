@@ -1,5 +1,8 @@
 import { GenreEnum, GenreEnumName } from './components/Charts/index.d';
-import type { GlobalThemeJsonType } from '@/settings/chartThemes/index';
+import type {
+  GlobalThemeJsonType,
+  ChartColorsNameType,
+} from '@/settings/chartThemes/index';
 
 // 组件配置
 export type ConfigType = {
@@ -118,6 +121,7 @@ export interface CreateComponentType extends PublicConfigType {
   key: string;
   chartConfig: ConfigType;
   option: GlobalThemeJsonType;
+  themeColor: { color: ChartColorsNameType } & any;
 }
 
 // 组件成组实例类

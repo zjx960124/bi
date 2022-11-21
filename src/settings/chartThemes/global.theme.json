@@ -12,6 +12,7 @@
   },
   "xAxis": {
     "show": true,
+    "type": "category",
     "name": "",
     "nameGap": 15,
     "nameTextStyle": {
@@ -48,6 +49,7 @@
   },
   "yAxis": {
     "show": true,
+    "type": "value",
     "name": "",
     "nameGap": 15,
     "nameTextStyle": {
@@ -84,8 +86,10 @@
   },
   "legend": {
     "show": true,
+    "legendPosition": "top",
     "textStyle": {
-      "color": "#B9B8CE"
+      "color": "#B9B8CE",
+      "fontSize": 12
     }
   }
 }

@@ -1,14 +1,7 @@
 <template>
-  <v-chart
-    ref="vChartRef"
-    :theme="themeColor"
-    :option="option"
-    :manual-update="isPreview()"
-    :update-options="{
-      replaceMerge: replaceMergeArr,
-    }"
-    autoresize
-  >
+  <v-chart ref="vChartRef" :theme="color" :option="option" :manual-update="isPreview()" :update-options="{
+    replaceMerge: replaceMergeArr,
+  }" autoresize>
   </v-chart>
 </template>
 
@@ -20,8 +13,6 @@ import { CanvasRenderer } from "echarts/renderers";
 import { LineChart } from "echarts/charts";
 import config, { includes, seriesItem } from "./config";
 import { mergeTheme, expendSeries } from "@/packages/hook/chart";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-// import { useChartDataFetch } from "@/hooks";
 import { isPreview } from "@/utils";
 import {
   DatasetComponent,
@@ -30,6 +21,7 @@ import {
   LegendComponent,
 } from "echarts/components";
 import cloneDeep from "lodash/cloneDeep";
+import { chartColors, ChartColorsNameType } from "@/settings/chartThemes/index";
 
 const props = defineProps({
   themeSetting: {
@@ -37,7 +29,7 @@ const props = defineProps({
     required: true,
   },
   themeColor: {
-    type: Object,
+    type: Object as PropType<{ color: ChartColorsNameType }>,
     required: true,
   },
   chartConfig: {
@@ -60,7 +52,10 @@ const replaceMergeArr = ref<string[]>();
 const option = computed(() => {
   let resultOption = expendSeries(cloneDeep(props.chartConfig.option));
   return mergeTheme(resultOption, props.themeSetting, includes);
-  // return mergeTheme(props.chartConfig.option, props.themeSetting, includes);
+});
+
+const color = computed(() => {
+  return chartColors[props.themeColor.color];
 });
 
 // dataset 无法变更条数的补丁

@@ -18,7 +18,7 @@
           />
         </el-form-item>
         <el-form-item label="数据库地址" required>
-          <el-input v-model="sizeform.dataSourceUrl" placeholder="IP" />
+          <el-input v-model="sizeform.ipContent" placeholder="IP" />
         </el-form-item>
         <el-form-item label="端口" required>
           <el-input v-model="sizeform.port" placeholder="3306" />
@@ -40,43 +40,68 @@
     <el-button type="primary" @click="checkDataSourceTest"
       ><img src="@/assets/data/test.png" />连接测试</el-button
     >
-    <el-button type="info"
+    <el-button type="info" @click="checkDataSourceCancel"
       ><img
         src="@/assets/data/cancel.png"
       />取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</el-button
     >
-    <div class="datasource-set-status" v-if="statusForm.status">
+    <div class="datasource-set-status" v-if="statusForm.isOpen">
       <img src="@/assets/data/faild.png" v-if="statusForm.status == 0" />
       <img src="@/assets/data/success.png" v-if="statusForm.status == 1" />
-      <div>{{ statusForm.text }}</div>
+      <div :class="{ success: statusForm.status == 1 }">
+        {{ statusForm.text }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { reactive, defineEmits } from "vue";
+import { useRouter } from "vue-router";
 import {
   checkDatasourceType,
   statusFormType,
 } from "@/views/construction/types/index";
 import { DataSource } from "@/api/dataSource";
 const sizeform = reactive<checkDatasourceType>({
-  dataSourceShowName: "test_project",
-  dataSourceUrl: "http://192.168.1.101",
+  dataSourceShowName: "test_project2",
+  ipContent: "192.168.1.101",
   port: 3306,
   dataSourceName: "bi_report",
   username: "root",
   password: "123456",
   dataSourceType: 1, //远程数据库类型
+  status: 2,
+  accessType: 1,
 });
 
 const statusForm = reactive<statusFormType>({
   status: "",
   text: "连接失败 +失败原因，报错提示",
+  isOpen: false,
 });
-const { checkDatasource } = DataSource;
+//连接测试
+const { checkDatasource, saveDatasource } = DataSource;
+const router = useRouter();
 const checkDataSourceTest = async () => {
-  const res = await checkDatasource(sizeform);
+  const { code, msg } = await checkDatasource(sizeform);
+
+  if (code == "200") {
+    statusForm.status = 1;
+    statusForm.text = "连接成功";
+    saveDatasource(sizeform);
+    router.push("/datasource/list");
+  } else {
+    statusForm.status = 0;
+    statusForm.text = msg;
+  }
+  statusForm.isOpen = true;
+};
+
+//取消测试
+const emit = defineEmits(["setIsShowType"]);
+const checkDataSourceCancel = () => {
+  emit("setIsShowType", "");
 };
 </script>
 <style scoped lang="scss">
@@ -144,7 +169,7 @@ const checkDataSourceTest = async () => {
 
     & > img {
       width: 86px;
-      margin-top: 30px;
+      margin-top: 45px;
     }
     & > div {
       height: 35px;
@@ -157,6 +182,9 @@ const checkDataSourceTest = async () => {
       padding: 0 20px;
       box-sizing: border-box;
       margin-top: 15px;
+      &.success {
+        color: #13d4bd;
+      }
     }
   }
 }

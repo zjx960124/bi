@@ -14,7 +14,10 @@
             ref="uploadRef"
             class="upload-file"
             action=""
+            :limit="1"
             :auto-upload="false"
+            accept=".xlsx,.xls,.csv"
+            :on-change="fileChange"
           >
             <template #trigger>
               <el-button type="primary" class="upload-button"
@@ -30,7 +33,10 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="自定义文件名称" required>
-          <el-input v-model="sizeform.fileName" placeholder="请输入名称" />
+          <el-input
+            v-model="sizeform.excelDataSourceShowName"
+            placeholder="请输入名称"
+          />
           <div class="el-upload__tip">
             名称只能由中英文、数字及下划线（_）
             斜线（\）、反斜线(/）、数线（|）、 小括号（()）、（[]）、组成，
@@ -39,7 +45,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button type="primary"
+    <el-button type="primary" @click="saveUploadFile"
       ><img
         src="@/assets/data/save.png"
       />保&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存</el-button
@@ -49,25 +55,46 @@
         src="@/assets/data/cancel.png"
       />取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</el-button
     >
-    <div class="datasource-set-status">
+    <div class="datasource-set-status" v-if="statusForm.isOpen">
       <img src="@/assets/data/faild.png" v-if="statusForm.status == 0" />
       <img src="@/assets/data/success.png" v-if="statusForm.status == 1" />
-      <div>{{ statusForm.text }}</div>
+      <div :class="{ success: statusForm.status == 1 }">
+        {{ statusForm.text }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
-import { sizeForm } from "@/views/construction/types/index";
-const sizeform = reactive<sizeForm>({
-  fileName: "",
+import { reactive, ref } from "vue";
+import {
+  checkDatasourceType,
+  statusFormType,
+  excelType,
+} from "@/views/construction/types/index";
+import { DataSource } from "@/api/dataSource";
+const sizeform = reactive<checkDatasourceType>({
+  excelDataSourceShowName: "",
 });
 
-const statusForm = reactive({
-  status: 1,
-  text: "连接失败 +失败原因，报错提示",
+const statusForm = reactive<statusFormType>({
+  status: "",
+  text: "",
+  isOpen: false,
 });
+const { uploadExcelFiles } = DataSource;
+const files = ref();
+const fileChange = async (file: any) => {
+  files.value = file;
+};
+
+const saveUploadFile = async () => {
+  let formdata = new FormData();
+  formdata.append("files", files.value.raw);
+  console.log(formdata.get('files'));
+
+  const res = await uploadExcelFiles(formdata)
+};
 </script>
 <style scoped lang="scss">
 .datasource-set {
@@ -127,14 +154,14 @@ const statusForm = reactive({
 
   .datasource-set-status {
     width: 100%;
-    height: 160px;
+    height: 200px;
     background: #ffffff;
     border-radius: 15px;
     margin-top: 12px;
 
     & > img {
       width: 86px;
-      margin-top: 30px;
+      margin-top: 60px;
     }
     & > div {
       height: 35px;
@@ -147,6 +174,9 @@ const statusForm = reactive({
       padding: 0 20px;
       box-sizing: border-box;
       margin-top: 15px;
+      &.success {
+        color: #13d4bd;
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ export interface HttpResponse {
   status: number;
   statusText: string;
   data: {
-    code: number;
+    code: number | string;
     desc: string;
     [key: string]: any;
   };

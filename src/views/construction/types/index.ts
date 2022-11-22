@@ -1,12 +1,14 @@
 interface checkDatasourceType {
   dataSourceShowName?: string;
-  dataSourceUrl?: string;
+  ipContent?: string;
   port?: number;
   dataSourceName?: string;
   username?: string;
   password?: string;
-  fileName?: string
+  excelDataSourceShowName?: string
   dataSourceType?: number | string
+  status?:number
+  accessType?:number
 }
 
 
@@ -37,6 +39,12 @@ interface DataSourceListType {
 interface statusFormType {
   status?: string | number
   text?: string
+  isOpen:boolean
+}
+
+//Excel上传文件
+interface excelType {
+  files?:FormData
 }
 
 export {
@@ -45,5 +53,6 @@ export {
   drawerTypes,
   datasourceType,
   DataSourceListType,
-  statusFormType
+  statusFormType,
+  excelType
 }

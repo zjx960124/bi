@@ -7,7 +7,10 @@
             <list @openSetting="getSetting" />
           </el-col>
           <el-col :span="4" v-if="isShowType">
-            <setting v-if="isShowType == 'sql'" />
+            <setting
+              v-if="isShowType == 'sql'"
+              @setIsShowType="setIsShowType"
+            />
             <uploadfile v-if="isShowType == 'file'" />
           </el-col>
         </el-row>
@@ -25,21 +28,27 @@ import uploadfile from "./components/uploadFile.vue";
 import { dataTypes } from "@/views/construction/types/index";
 import { DataSource } from "@/api/dataSource";
 
+//判断是否有数据，有数据跳转列表页
 const { getDatasourceList } = DataSource;
 const router = useRouter();
 onMounted(async () => {
   const {
-    data: { data },
-  } = await getDatasourceList({ pageNum: 1, pageSize: 10 });
-  if (data && data.length > 0) {
+    data: { counts },
+  } = await getDatasourceList({ pageNum: 0, pageSize: 10 });
+  if (counts > 0) {
     router.push("/datasource/list");
   }
 });
-
+//打开右边添加数据源组件
 const isShowType = ref<string>("");
 const getSetting = (val: dataTypes) => {
   const { type } = val;
   isShowType.value = type as string;
+};
+
+//MySQL数据源取消按钮
+const setIsShowType = (val: string) => {
+  isShowType.value = val;
 };
 </script>
 <style scoped lang="scss">

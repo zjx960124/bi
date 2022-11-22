@@ -1,3 +1,4 @@
 import { BarCommonConfig } from './BarCommon/index';
+import { BarHeapConfig } from './BarHeap';
 
-export default [BarCommonConfig];
+export default [BarCommonConfig, BarHeapConfig];

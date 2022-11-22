@@ -1,4 +1,4 @@
-import { toRefs } from 'vue';
+import { toString } from './../../utils/general';
 import { PublicConfigType } from './../index.d';
 import merge from 'lodash/merge';
 import pick from 'lodash/pick';
@@ -45,6 +45,58 @@ export const expendSeries = (
   return option;
 };
 
+/**
+ * 组合Formatter
+ * @param option
+ * @param arrange
+ * @returns
+ */
+export const formatterFunc = (option: string[], arrange: string) => {
+  const options = option;
+  return (params: any) => {
+    if (options.length < 1) {
+      return '';
+    } else {
+      let result = '';
+      options.forEach((item: string, index: number) => {
+        result += params[item];
+        if (item === 'percent') {
+          result += '%';
+        }
+        index < options.length - 1 && (result += ',');
+        if (arrange === 'top' && options.length > 1 && index === 0) {
+          result += '\n';
+        }
+      });
+      return result;
+    }
+  };
+};
+
+/**
+ * 处理饼图样式
+ * @param option
+ * @returns
+ */
+export const handlePieSeries = (option: ChartConfigType) => {
+  option.series.radius = option?.series?.radius.map(
+    (item: number) => item + '%'
+  );
+  if (option.series.label.show) {
+    option.series.label.formatter = formatterFunc(
+      option.series.label.formatterOption,
+      option.series.label.formatterArrange
+    );
+  }
+  return option;
+};
+
+/**
+ * 处理渐变
+ * @param series 配置
+ * @param theme 主题色
+ * @returns
+ */
 export const handleGradient = (
   series: Array<{ [K in string]: any }>,
   theme: {
@@ -95,7 +147,12 @@ export class PublicConfigClass implements PublicConfigType {
   }
 }
 
-// 16进制转rgba
+/**
+ * 16进制转rgba
+ * @param hex 16进制颜色码
+ * @param opacity 透明度
+ * @returns
+ */
 export function hexToRgba(hex: string, opacity: number) {
   return `rgba(${parseInt('0x' + hex.slice(1, 3))},${parseInt(
     '0x' + hex.slice(3, 5)
@@ -107,7 +164,9 @@ type GradientColorStop = {
   color: string;
 };
 
-// 处理渐变
+/**
+ * 渐变基础实例
+ */
 export class GraphicClass {
   public color: LinearGradientObject;
   constructor(

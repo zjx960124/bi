@@ -57,13 +57,14 @@
 
 <script lang="ts" setup>
 import { reactive, defineEmits } from "vue";
+import { useRouter } from "vue-router";
 import {
   checkDatasourceType,
   statusFormType,
 } from "@/views/construction/types/index";
 import { DataSource } from "@/api/dataSource";
 const sizeform = reactive<checkDatasourceType>({
-  dataSourceShowName: "test_project",
+  dataSourceShowName: "test_project2",
   ipContent: "192.168.1.101",
   port: 3306,
   dataSourceName: "bi_report",
@@ -81,6 +82,7 @@ const statusForm = reactive<statusFormType>({
 });
 //连接测试
 const { checkDatasource, saveDatasource } = DataSource;
+const router = useRouter();
 const checkDataSourceTest = async () => {
   const { code, msg } = await checkDatasource(sizeform);
 
@@ -88,6 +90,7 @@ const checkDataSourceTest = async () => {
     statusForm.status = 1;
     statusForm.text = "连接成功";
     saveDatasource(sizeform);
+    router.push("/datasource/list");
   } else {
     statusForm.status = 0;
     statusForm.text = msg;

@@ -48,7 +48,7 @@ const showStatus = (status: number) => {
 const service = axios.create({
   baseURL: config.mock ? config.mockApi : config.baseApi,
   headers: {
-    "Content-Type": "application/json;charset=utf-8",
+    
     Authorization: "",
   },
   // 是否跨站点访问控制请求

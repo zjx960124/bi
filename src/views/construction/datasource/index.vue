@@ -32,8 +32,10 @@ import { DataSource } from "@/api/dataSource";
 const { getDatasourceList } = DataSource;
 const router = useRouter();
 onMounted(async () => {
-  const { data } = await getDatasourceList({ pageNum: 1, pageSize: 10 });
-  if (data && data.length > 0) {
+  const {
+    data: { counts },
+  } = await getDatasourceList({ pageNum: 0, pageSize: 10 });
+  if (counts > 0) {
     router.push("/datasource/list");
   }
 });

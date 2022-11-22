@@ -5,7 +5,7 @@ interface checkDatasourceType {
   dataSourceName?: string;
   username?: string;
   password?: string;
-  fileName?: string
+  excelDataSourceShowName?: string
   dataSourceType?: number | string
   status?:number
   accessType?:number
@@ -42,11 +42,17 @@ interface statusFormType {
   isOpen:boolean
 }
 
+//Excel上传文件
+interface excelType {
+  files?:FormData
+}
+
 export {
   checkDatasourceType,
   dataTypes,
   drawerTypes,
   datasourceType,
   DataSourceListType,
-  statusFormType
+  statusFormType,
+  excelType
 }

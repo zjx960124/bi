@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import omit from "lodash/omit";
-import { DragKeyEnum } from "@/types";
-import { createComponent } from "@/packages";
-import { ConfigType, CreateComponentType } from "@/packages/index.d";
-import { EditCanvasTypeEnum } from "@/store/chartEditStore/chartEditStore.d";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
+import { ref, PropType } from 'vue';
+import omit from 'lodash/omit';
+import { DragKeyEnum } from '@/types';
+import { createComponent } from '@/packages';
+import { ConfigType, CreateComponentType } from '@/packages/index.d';
+import { EditCanvasTypeEnum } from '@/store/chartEditStore/chartEditStore.d';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
 import {
   componentInstall,
   loadingStart,
   loadingFinish,
   loadingError,
-} from "@/utils";
-import { fetchConfigComponent, fetchChartComponent } from "@/packages/index";
+} from '@/utils';
+import { fetchConfigComponent, fetchChartComponent } from '@/packages/index';
 const chartEditStore = useChartEditStore();
 const props = defineProps({
   menuOptions: {
-    type: Array,
+    type: Array as PropType<ConfigType[]>,
     default: () => [],
   },
 });
@@ -25,7 +25,7 @@ const dragStartHandle = (e: DragEvent, item: ConfigType) => {
   componentInstall(item.conKey, fetchConfigComponent(item));
   e!.dataTransfer!.setData(
     DragKeyEnum.DRAG_KEY,
-    JSON.stringify(omit(item, ["image"]))
+    JSON.stringify(omit(item, ['image']))
   );
   chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, true);
 };
@@ -57,7 +57,7 @@ const dblclickHandle = async (item: ConfigType) => {
       class="charts-item"
       v-for="(item, index) in menuOptions"
       :key="index"
-      :id="item.category + index"
+      :id="item.category"
       draggable
       @dragstart="dragStartHandle($event, item)"
       @dragend="dragendHandle"
@@ -70,13 +70,14 @@ const dblclickHandle = async (item: ConfigType) => {
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .editor-charts-item {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 40px;
-  width: 100%;
+  margin: 0 40px;
+  width: calc(100% - 80px);
+  box-sizing: border-box;
   flex: 1;
   .charts-item {
     width: 120px;

@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { reactive, ref, toRefs, watch, watchEffect } from "vue";
-import { loadAsyncComponent } from "@/utils";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-import { EditCanvasTypeEnum } from "@/store/chartEditStore/chartEditStore.d";
-import { ReorderFour, AddCircle, RemoveCircle } from "@vicons/ionicons5";
+import { reactive, ref, toRefs, watch, watchEffect } from 'vue';
+import { loadAsyncComponent } from '@/utils';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { EditCanvasTypeEnum } from '@/store/chartEditStore/chartEditStore.d';
+import { ReorderFour, AddCircle, RemoveCircle } from '@vicons/ionicons5';
 
 // 获取全部分类组件
-import { genreMenuOptions } from "@/utils/hooks/useAside";
-import cloneDeep from "lodash/cloneDeep";
+import { genreMenuOptions, genreMenuOptionsType } from '@/utils/hooks/useAside';
 
 const chartEditStore = useChartEditStore();
 const { lockScale, scale } = toRefs(chartEditStore.getEditCanvas);
 
 const chartsItem = loadAsyncComponent(
-  () => import("../../charts/components/chartsItem/index.vue")
+  () => import('../../charts/components/chartsItem/index.vue')
 );
 
 // 拖动
@@ -28,7 +27,7 @@ const sliderHandle = (v: number) => {
   chartEditStore.setScale(v / 100);
 };
 const sliderMaks = reactive({
-  100: "",
+  100: '',
 });
 
 // 加减Scale
@@ -41,14 +40,15 @@ const handleIncreaseScale = () => {
 };
 
 // 弹出框
-const currentMenuOptions = ref([]);
-const handleClick = (item, index) => {
+const currentMenuOptions = ref<genreMenuOptionsType>();
+const handleClick = (item: genreMenuOptionsType, index: number) => {
   const domRect = document
-    .getElementById("editor-toolbar")
+    .getElementById('editor-toolbar')!
     .getBoundingClientRect();
   x.value = domRect.x;
   y.value = domRect.height + domRect.y;
-  currentMenuOptions.value = item;
+  currentMenuOptions.value = item as genreMenuOptionsType;
+  console.log(currentMenuOptions.value);
   if (index === currenIndex.value) {
     showPopover.value = !showPopover.value;
   } else {
@@ -58,8 +58,10 @@ const handleClick = (item, index) => {
 };
 
 //滚动到指定位置
-const intoView = (key) => {
-  const dom = document.getElementById(key + 0);
+const intoView = (key: string) => {
+  console.log(key);
+  const dom = document.getElementById(key);
+  console.log(dom);
   if (dom) {
     dom.scrollIntoView();
   }
@@ -115,20 +117,16 @@ const y = ref(0);
               </n-button>
             </template>
             <div class="popover-menu-btn-view">
-              <template
-                v-for="(items, indexs) in currentMenuOptions.list"
-                :key="indexs"
-              >
-                <div class="menu-btn">
-                  <n-button type="text" @click="intoView(items.key)">{{
-                    items.label
-                  }}</n-button>
+              <template v-for="items in currentMenuOptions!.list" :key="indexs">
+                <div class="menu-btn" @click="intoView(items!.key)">
+                  <n-button type="text">{{ items!.label }}</n-button>
                 </div>
               </template>
             </div>
             <charts-item
               class="popover-charts-view"
-              :menuOptions="currentMenuOptions.all"
+              style="overflow: auto"
+              :menuOptions="currentMenuOptions!.all"
             ></charts-item>
           </n-popover>
         </template>
@@ -136,7 +134,7 @@ const y = ref(0);
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .editor-toolbar {
   height: 50px;
   position: absolute;
@@ -163,7 +161,7 @@ const y = ref(0);
       }
       .slider-value {
         margin-left: 11px;
-        font-family: "PingFang-SC-Regular";
+        font-family: 'PingFang-SC-Regular';
         color: #6b797f;
         font-size: 12px;
       }

@@ -239,3 +239,12 @@
 .n-button.n-button--tiny-type + .n-button.n-button--tiny-type {
   margin-left: 10px;
 }
+
+// 弹出框
+.v-binder-follower-content {
+  max-width: 800px;
+  width: fit-content;
+  .editor-charts-item .popover-charts-view {
+    overflow: auto;
+  }
+}

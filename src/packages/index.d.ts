@@ -41,17 +41,32 @@ export type PackagesType = {
   [PackagesCategoryEnum.MATERIAL]?: ConfigType[];
 };
 
+export type GenreConfigType = {
+  key: string;
+  label: string;
+  list: ConfigType[];
+};
+
+// export type GenreType = {
+//   [GenreEnum.COMPARE]?: ConfigType[];
+//   [GenreEnum.TREND]?: ConfigType[];
+//   [GenreEnum.TABLE]?: ConfigType[];
+//   [GenreEnum.TARGET]?: ConfigType[];
+//   [GenreEnum.DISTRIBUTION]?: ConfigType[];
+//   [GenreEnum.SPACE]?: ConfigType[];
+// };
+
 export type GenreType = {
-  [GenreEnum.COMPARE]?: ConfigType[];
-  [GenreEnum.TREND]?: ConfigType[];
-  [GenreEnum.TABLE]?: ConfigType[];
-  [GenreEnum.TARGET]?: ConfigType[];
-  [GenreEnum.DISTRIBUTION]?: ConfigType[];
-  [GenreEnum.SPACE]?: ConfigType[];
+  [GenreEnum.COMPARE]?: GenreConfigType;
+  [GenreEnum.TREND]?: GenreConfigType;
+  [GenreEnum.TABLE]?: GenreConfigType;
+  [GenreEnum.TARGET]?: GenreConfigType;
+  [GenreEnum.DISTRIBUTION]?: GenreConfigType;
+  [GenreEnum.SPACE]?: GenreConfigType;
 };
 
 export type PackagesGenreType = {
-  [PackagesCategoryEnum.CHARTS]: GenreType;
+  [PackagesCategoryEnum.CHARTS]?: GenreType;
   [PackagesCategoryEnum.TEXT]?: GenreType;
   [PackagesCategoryEnum.MEDIA]?: GenreType;
   [PackagesCategoryEnum.MATERIAL]?: GenreType;

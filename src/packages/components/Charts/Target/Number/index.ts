@@ -1,9 +1,5 @@
 import image from '@/assets/img/bar.png';
-import {
-  ConfigType,
-  PackagesCategoryEnum,
-  ChartFrameEnum,
-} from '@/packages/index.d';
+import { ConfigType, PackagesCategoryEnum } from '@/packages/index.d';
 import { GenreEnum, GenreEnumName } from '../../index.d';
 
 export const NumberConfig: ConfigType = {

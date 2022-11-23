@@ -6,6 +6,7 @@ import LineAreaSetting from './LineAreaSetting.vue';
 import ProgressComponent from './ProgressComponent.vue';
 import PieLabelCommon from './PieLabelCommon.vue';
 import NumberSetting from './NumberSetting.vue';
+import ProcessSetting from './ProcessSetting.vue';
 
 export {
   Coordinates,
@@ -16,4 +17,5 @@ export {
   ProgressComponent,
   PieLabelCommon,
   NumberSetting,
+  ProcessSetting,
 };

@@ -169,6 +169,17 @@
       I
     </div>
   </div>
+  <div class="common-item">
+    <div class="common-sub-title">动画时间</div>
+    <el-input-number
+      v-model="optionData.dur"
+      class="common-number-input"
+      :min="1"
+      :max="44"
+      controls-position="right"
+      size="small"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">

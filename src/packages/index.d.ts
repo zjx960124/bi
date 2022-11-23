@@ -121,7 +121,7 @@ export interface CreateComponentType extends PublicConfigType {
   key: string;
   chartConfig: ConfigType;
   option: GlobalThemeJsonType;
-  themeColor: { color: ChartColorsNameType } & any;
+  themeColor?: { color: ChartColorsNameType } & any;
 }
 
 // 组件成组实例类

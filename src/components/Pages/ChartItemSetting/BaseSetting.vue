@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { ChevronUp } from '@vicons/ionicons5';
-import { PropType } from 'vue';
-import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
-import {
-  Coordinates,
-  PaintingCommon,
-  Shaft,
-  LegendCommon,
-} from '../components';
+import { Coordinates } from '../components';
 
 const props = defineProps({
   optionData: {
-    type: Object as PropType<GlobalThemeJsonType>,
+    type: Object,
     required: true,
   },
   attr: {
@@ -25,10 +18,18 @@ const props = defineProps({
 });
 </script>
 <template>
-  <n-collapse :default-expanded-names="['1', '2']">
+  <n-collapse :default-expanded-names="['1', '2', '3']">
     <coordinates :attr="props.attr"></coordinates>
     <n-collapse-item title="指标" name="2">
       <slot name="target"></slot>
+      <template #arrow>
+        <n-icon size="16" color="#869299">
+          <chevron-up />
+        </n-icon>
+      </template>
+    </n-collapse-item>
+    <n-collapse-item title="进度条" name="3">
+      <slot name="process"></slot>
       <template #arrow>
         <n-icon size="16" color="#869299">
           <chevron-up />

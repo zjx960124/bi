@@ -4,7 +4,7 @@ import {
 } from '@/enums/httpEnum';
 import { PageConfig } from '@/store/pageEditStore/pageEditStore';
 import cloneDeep from 'lodash/cloneDeep';
-import { isNumber, isObject } from './is';
+import { isNumber, isObject, isString } from './is';
 import { h } from 'vue';
 import { NIcon } from 'naive-ui';
 
@@ -132,4 +132,8 @@ export const animationsClass = (pageConfig: PageConfig) => {
     return `animate__animated  animate__${pageConfig.shuffingAnimation}`;
   }
   return '';
+};
+
+export const toNumber = (number: number | string, toFixedNumber = 2) => {
+  return isString(number) ? parseFloat(parseFloat(number).toFixed(2)) : number;
 };

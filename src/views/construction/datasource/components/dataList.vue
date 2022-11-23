@@ -19,17 +19,31 @@
           @click="getDataSource(it, idx)"
         >
           <svg-icon
-            class-name="icon"
+            class-name="icondatalist"
+            :icon="`file`"
+            class="mr10"
+            v-if="it?.accessType == 2"
+          ></svg-icon>
+          <svg-icon
+            class-name="icondatalist"
+            v-if="it?.accessType == 1"
             :icon="`datasource`"
             class="mr10"
           ></svg-icon>
           <div class="item-info">
-            <div class="title">{{ it.title }}</div>
-            <div class="desc">创建者:{{ it.creater }}</div>
+            <div class="title">{{ it.dataSourceShowName }}</div>
+            <div class="desc">创建者:{{ it.creator }}</div>
           </div>
           <div class="item-btn">
             <img src="~@/assets/data/edit.png" />
-            <img src="~@/assets/data/del.png" />
+            <el-popconfirm
+              title="确定删除该数据源？"
+              @confirm.stop="delDataSourceById(it)"
+            >
+              <template #reference>
+                <img src="~@/assets/data/del.png" />
+              </template>
+            </el-popconfirm>
           </div>
         </div>
       </el-scrollbar>
@@ -38,16 +52,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { datasourceType } from "@/views/construction/types/index";
 import svgIcon from "@/components/svg-icon/index.vue";
+import { DataSource } from "@/api/dataSource";
+const { getDatasourceList, deleteDatasource } = DataSource;
 const searchValue = ref("");
 const current = ref<number>(0);
-const datas = ref<Array<datasourceType>>([
-  { title: "SQL数据源名称", type: "sql", creater: "用户名222" },
-  { title: "文件数据源名称", type: "file", creater: "用户名333" },
-  { title: "API数据源名称", type: "api", creater: "用户名111" },
-]);
+const datas = ref<Array<datasourceType>>([]);
 
 const emit = defineEmits(["getDatasourceType"]);
 
@@ -55,6 +67,31 @@ const getDataSource = (val: datasourceType, index: number) => {
   current.value = index;
   emit("getDatasourceType", val);
 };
+
+const getDataList = async () => {
+  const {
+    data: { data },
+  } = await getDatasourceList({
+    pageNum: 0,
+    pageSize: 999,
+    showName: searchValue.value,
+  });
+  datas.value = data;
+};
+
+const delDataSourceById = async (val: datasourceType) => {
+  const { id } = val;
+  const { code } = await deleteDatasource({
+    datasourceId: id,
+  });
+  if (code == "200") {
+    getDataList();
+  }
+};
+
+onMounted(() => {
+  getDataList();
+});
 </script>
 <style scoped lang="scss">
 .datalist-container-box {
@@ -130,8 +167,10 @@ const getDataSource = (val: datasourceType, index: number) => {
           font-weight: bold;
           color: #293270;
         }
-        .icon {
-          color: #293270;
+        .icondatalist {
+          :deep(".svg-icon") {
+            fill: #293270 !important;
+          }
         }
       }
       & .item-btn {
@@ -150,8 +189,8 @@ const getDataSource = (val: datasourceType, index: number) => {
         color: #293270;
       }
 
-      &:hover .icon {
-        color: #293270;
+      &:hover .icondatalist {
+        fill: #293270 !important;
       }
     }
   }

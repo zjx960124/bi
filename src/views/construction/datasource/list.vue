@@ -15,7 +15,7 @@
         <img width="18" height="18" src="~@/assets/data/addData.png" />
         <span class="text">新建数据源</span>
       </div>
-      <el-dropdown class="margin-left-22" v-if="datasource?.type == 'file'">
+      <el-dropdown class="margin-left-22" v-if="datasource?.accessType == 2">
         <el-button type="primary">
           <img
             width="18"

@@ -90,7 +90,9 @@ const checkDataSourceTest = async () => {
     statusForm.status = 1;
     statusForm.text = "连接成功";
     saveDatasource(sizeform);
-    router.push("/datasource/list");
+    setTimeout(() => {
+      router.push("/datasource/list");
+    }, 1500);
   } else {
     statusForm.status = 0;
     statusForm.text = msg;

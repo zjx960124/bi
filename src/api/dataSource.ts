@@ -58,9 +58,19 @@ export class DataSource {
         return Request("/rest/bi/template/file", {
             method: "post",
             responseType: "json",
+            headers: {
+                "Content-Type": "multipart/form-data;boundary=ebf9f03029db4c2799ae16b5428b06bd1"
+            },
             data
         });
     }
 
+    //删除数据源根据id
+    static async deleteDatasource(params: any): Promise<any> {
+        return Request(`/rest/bi/deleteDatasource/${params.datasourceId}`, {
+            method: "DELETE",
+            responseType: "json",
+        });
+    }
 }
 

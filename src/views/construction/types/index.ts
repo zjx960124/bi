@@ -7,8 +7,8 @@ interface checkDatasourceType {
   password?: string;
   excelDataSourceShowName?: string
   dataSourceType?: number | string
-  status?:number
-  accessType?:number
+  status?: number
+  accessType?: number
 }
 
 
@@ -23,9 +23,11 @@ interface drawerTypes {
 }
 
 interface datasourceType {
-  title?: string
-  type?: string
-  creater?: string
+  dataSourceShowName?: string
+  accessType?: number
+  creator?: string
+  icon?: string
+  id?:number
 }
 
 //获取数据源列表
@@ -39,12 +41,12 @@ interface DataSourceListType {
 interface statusFormType {
   status?: string | number
   text?: string
-  isOpen:boolean
+  isOpen: boolean
 }
 
 //Excel上传文件
 interface excelType {
-  files?:FormData
+  files?: FormData
 }
 
 export {

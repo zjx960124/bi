@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'svgIcon'
+  name: "svgIcon",
 };
 </script>
 
@@ -11,40 +11,33 @@ export default {
     class="svg-icon svg-icon-online"
     :class="className"
   />
-  <svg
-    v-else
-    class="svg-icon"
-    :class="className"
-    aria-hidden="true"
-  >
+  <svg v-else class="svg-icon" :class="className" aria-hidden="true">
     <use :xlink:href="`#icon-${icon}`" />
   </svg>
 </template>
-  
-  <script lang="ts" setup>
-import { computed } from 'vue';
 
-const props = defineProps({
-  // SVG 图标名称或在线URL
-  icon: {
-    type: String,
-    required: true
-  },
-  // 图标类名
-  className: {
-    type: String,
-    default: ''
+<script lang="ts" setup>
+import { computed } from "vue";
+
+const props = withDefaults(
+  defineProps<{
+    icon?: string;
+    className?: string;
+  }>(),
+  {
+    icon: "",
+    className: "",
   }
-});
+);
 
 const isOnlineSvg = computed(() => /^(https?:)/.test(props.icon));
 </script>
-  
-  <style scoped lang="scss">
+
+<style scoped lang="scss">
 .svg-icon {
   width: 1em;
   height: 1em;
-  fill: currentColor;
+  // fill: currentColor;
   overflow: hidden;
 }
 

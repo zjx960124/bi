@@ -67,6 +67,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import {
   checkDatasourceType,
   statusFormType,
@@ -82,18 +83,32 @@ const statusForm = reactive<statusFormType>({
   text: "",
   isOpen: false,
 });
-const { uploadExcelFiles } = DataSource;
+const { uploadExcelFiles, saveTemplateData } = DataSource;
 const files = ref();
 const fileChange = async (file: any) => {
   files.value = file;
 };
-
+const router = useRouter();
 const saveUploadFile = async () => {
   let formdata = new FormData();
   formdata.append("files", files.value.raw);
-  console.log(formdata.get('files'));
-
-  const res = await uploadExcelFiles(formdata)
+  const { data } = await uploadExcelFiles(formdata);
+  if (data && data.length > 0) {
+    let params = data[0];
+    params["excelDataSourceShowName"] = sizeform.excelDataSourceShowName;
+    const { code, msg } = await saveTemplateData(params);
+    if (code == "200") {
+      statusForm.status = 1;
+      statusForm.text = "上传成功";
+      setTimeout(()=>{
+        router.push("/datasource/list");
+      },1500)
+    } else {
+      statusForm.status = 0;
+      statusForm.text = msg;
+    }
+    statusForm.isOpen = true;
+  }
 };
 </script>
 <style scoped lang="scss">

@@ -13,7 +13,7 @@ export function deleteDataScreen(data: {
 }): Promise<ControllerResult<any>> {
   return Request({
     method: 'delete',
-    url: `/deleteDataScreenById/${data.id}`,
+    url: `/rest/bi/deleteDataScreenById/${data.id}`,
   });
 }
 
@@ -25,7 +25,7 @@ export function getDataScreenContent(params: {
 }): Promise<ControllerResult<any>> {
   return Request({
     method: 'get',
-    url: `/getDataScreenById/${params.id}`,
+    url: `/rest/bi/getDataScreenById/${params.id}`,
   });
 }
 
@@ -40,7 +40,7 @@ export function getDataScreenList(
 ): Promise<ControllerResult<any>> {
   return Request({
     method: 'GET',
-    url: `/getDataScreenList/${pathVars.category}`,
+    url: `/rest/bi/getDataScreenList/${pathVars.category}`,
     params: params,
   });
 }
@@ -53,7 +53,7 @@ export function saveOrUpdateDataScreen(
 ): Promise<ControllerResult<any>> {
   return Request({
     method: 'POST',
-    url: `/saveOrUpdateDataScreen`,
+    url: `/rest/bi/saveOrUpdateDataScreen`,
     data,
   });
 }

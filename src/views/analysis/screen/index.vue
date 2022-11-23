@@ -1,52 +1,76 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive, toRefs } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { borderRadius } from "@/settings/designSetting";
-import { useRouter } from "vue-router";
+import { ref, onMounted, reactive, toRefs } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { borderRadius } from '@/settings/designSetting';
+import { useRouter } from 'vue-router';
+import { getDataScreenList, deleteDataScreen } from '@/api/dataAnalysis';
+import { dataScreenListParam } from '@/views/analysis/types';
 
 const router = useRouter();
 
 const state = reactive({
-  searchValue: "",
+  queryParams: { keyword: '', pageNum: 0, pageSize: 10 } as dataScreenListParam,
+  loading: false,
   tableData: [
-    {
-      id: 0,
-      name: "数据集名称",
-      creator: "用户名",
-      createTime: "2020-00-00 00:00:00",
-      lastEditor: "用户名",
-      lastEditTime: "2020-00-00 00:00:00",
-    },
-    {
-      id: 1,
-      name: "数据集名称",
-      creator: "用户名",
-      createTime: "2020-00-00 00:00:00",
-      lastEditor: "用户名",
-      lastEditTime: "2020-00-00 00:00:00",
-    },
-    {
-      id: 2,
-      name: "数据集名称",
-      creator: "用户名",
-      createTime: "2020-00-00 00:00:00",
-      lastEditor: "用户名",
-      lastEditTime: "2020-00-00 00:00:00",
-    },
+    // {
+    //   id: 0,
+    //   name: '数据集名称',
+    //   creator: '用户名',
+    //   createTime: '2020-00-00 00:00:00',
+    //   lastEditor: '用户名',
+    //   lastEditTime: '2020-00-00 00:00:00'
+    // },
+    // {
+    //   id: 1,
+    //   name: '数据集名称',
+    //   creator: '用户名',
+    //   createTime: '2020-00-00 00:00:00',
+    //   lastEditor: '用户名',
+    //   lastEditTime: '2020-00-00 00:00:00'
+    // },
+    // {
+    //   id: 2,
+    //   name: '数据集名称',
+    //   creator: '用户名',
+    //   createTime: '2020-00-00 00:00:00',
+    //   lastEditor: '用户名',
+    //   lastEditTime: '2020-00-00 00:00:00'
+    // }
   ],
+  total: 0
 });
 
-const { searchValue, tableData } = toRefs(state);
+const { queryParams, loading, tableData, total } = toRefs(state);
+
+onMounted(() => {
+  getData();
+});
+
+function getData() {
+  state.loading = true;
+  getDataScreenList({ category: 1 }, state.queryParams).then(({ data }) => {
+    state.tableData = data.data;
+    state.total = data.counts;
+    state.loading = false;
+  });
+}
 
 const handleAddScreen = () => {
   const { href } = router.resolve({
-    path: "/editor",
-    query: {},
+    path: '/editor',
+    query: {}
   });
-  window.open(href, "_blank");
+  window.open(href, '_blank');
 };
 
-const handleDel = (row: any) => {};
+const handleDel = (row: any) => {
+  deleteDataScreen({ id: row.id }).then(({ data }) => {
+    ElMessage({
+      type: 'success',
+      message: '删除成功'
+    });
+  });
+};
 
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`);
@@ -59,16 +83,23 @@ const handleCurrentChange = (val: number) => {
   <JsLayout title="数据大屏">
     <template #operation>
       <div class="searchBox">
-        <img width="22" height="21" src="/src/assets/analysis/search.png" />
+        <img
+          width="22"
+          height="21"
+          src="/src/assets/analysis/search.png"
+        />
         <el-input
           class="input"
-          v-model="searchValue"
+          v-model="queryParams.keyword"
           clearable
           placeholder="请输入关键字搜索"
         >
         </el-input>
       </div>
-      <div class="el-button-primary margin-left-22" @click="handleAddScreen">
+      <div
+        class="el-button-primary margin-left-22"
+        @click="handleAddScreen"
+      >
         <img
           width="20"
           height="14"
@@ -84,6 +115,7 @@ const handleCurrentChange = (val: number) => {
           fit
           :highlight-current-row="false"
           :border="false"
+          v-loading="loading"
           style="width: 100%"
         >
           <el-table-column
@@ -105,18 +137,22 @@ const handleCurrentChange = (val: number) => {
             align="center"
           />
           <el-table-column
-            prop="lastEditor"
+            prop="updater"
             label="最后修改人"
             min-width="120"
             align="center"
           />
           <el-table-column
-            prop="lastEditTime"
+            prop="updateTime"
             label="最后修改时间"
             min-width="180"
             align="center"
           />
-          <el-table-column label="操作" min-width="240" align="center">
+          <el-table-column
+            label="操作"
+            min-width="240"
+            align="center"
+          >
             <template #default="scope">
               <el-button
                 class="el-button-edit"
@@ -136,7 +172,10 @@ const handleCurrentChange = (val: number) => {
               >
                 分享
               </el-button>
-              <el-popconfirm title="确认删除?" @confirm="handleDel(scope.row)">
+              <el-popconfirm
+                title="确认删除?"
+                @confirm="handleDel(scope.row)"
+              >
                 <template #reference>
                   <el-button
                     class="el-button-delete"
@@ -156,7 +195,9 @@ const handleCurrentChange = (val: number) => {
           class="pagination"
           background
           layout="->,prev, pager, next, total, sizes,jumper"
-          :total="1000"
+          :total="total"
+          :current-page="queryParams.pageNum"
+          :page-size="queryParams.pageSize"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />

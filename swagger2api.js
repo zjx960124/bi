@@ -14,7 +14,7 @@ const swagger2serviceTool = new Swagger2serviceTool({ url: swaggerUrl });
 swagger2serviceTool.generateService({
   template: 'request', // 想要生成的 HTTP 客户端模板
   importText: `import Request from "../request/request";`, // 导入依赖的语句
-  basePath: '', // 基础地址
+  basePath: '/rest/bi', // 基础地址
   typescript: true, // 是否生成 ts 文件和类型
   outputDir, // 输出目录
 });

@@ -2,38 +2,53 @@
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import router from '@/router';
+import { getDataScreenList, deleteDataScreen } from '@/api/dataAnalysis';
+import { dataScreenListParam } from '@/views/analysis/types';
 
 const state = reactive({
-  searchValue: '',
+  queryParams: { keyword: '', pageNum: 0, pageSize: 10 } as dataScreenListParam,
+  loading: false,
   list: [
-    {
-      id: 0,
-      name: '文件夹名称',
-      data: [
-        { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/bar.png' },
-        { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/line.png' }
-      ]
-    },
-    {
-      id: 1,
-      name: '文件夹名称1',
-      data: [
-        { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
-        { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
-      ]
-    },
-    {
-      id: 2,
-      name: '文件夹名称2',
-      data: [
-        { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
-        { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
-      ]
-    }
+    // {
+    //   id: 0,
+    //   name: '文件夹名称',
+    //   data: [
+    //     { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/bar.png' },
+    //     { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/line.png' }
+    //   ]
+    // },
+    // {
+    //   id: 1,
+    //   name: '文件夹名称1',
+    //   data: [
+    //     { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
+    //     { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
+    //   ]
+    // },
+    // {
+    //   id: 2,
+    //   name: '文件夹名称2',
+    //   data: [
+    //     { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
+    //     { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
+    //   ]
+    // }
   ]
 });
 
-const { searchValue, list } = toRefs(state);
+const { queryParams, loading, list } = toRefs(state);
+
+onMounted(() => {
+  getData();
+});
+
+function getData() {
+  state.loading = true;
+  getDataScreenList({ category: 0 }, state.queryParams).then(({ data }) => {
+    state.list = data.data;
+    state.loading = false;
+  });
+}
 
 function handleAddFolder() {
   ElMessageBox.prompt('请输入文件夹名称', '提示', {
@@ -69,14 +84,24 @@ const handleAddDashboard = () => {
 
 function handleView(data: any) {}
 
-function handleDelete(data: any) {}
+function handleDelete(data: any) {
+  deleteDataScreen({ id: data.id }).then(({ data }) => {
+    ElMessage({
+      type: 'success',
+      message: '删除成功'
+    });
+  });
+}
 
 function handleAttribute(data: any) {}
 
 function handleCopy(data: any) {}
 </script>
 <template>
-  <JsLayout title="仪表盘">
+  <JsLayout
+    title="仪表盘"
+    v-loading='loading'
+  >
     <template #operation>
       <div class="searchBox">
         <img
@@ -86,7 +111,7 @@ function handleCopy(data: any) {}
         />
         <el-input
           class="input"
-          v-model="searchValue"
+          v-model="queryParams.keyword"
           clearable
           placeholder="请输入关键字搜索"
         >

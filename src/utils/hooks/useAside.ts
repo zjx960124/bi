@@ -7,7 +7,12 @@ import {
   PackagesCategoryEnum,
   PackagesCategoryName,
 } from './../../packages/index.d';
-import { PackagesType, PackagesGenreType, GenreType } from '@/packages/index.d';
+import {
+  PackagesType,
+  PackagesGenreType,
+  GenreType,
+  ConfigType,
+} from '@/packages/index.d';
 // 图表列表
 import { usePackagesStore } from '@/store/packagesStore/packagesStore';
 
@@ -19,16 +24,16 @@ export type MenuOptionsType = {
 };
 
 export type genreMenuOptionsType = {
-  key: string;
-  label: string;
+  key?: string;
+  label?: string;
   list: GenreType;
-  all: GenreType;
+  all: ConfigType[];
 };
 
 const { getPackagesList, getPackagesGenreList } = usePackagesStore();
 
 const menuOptions: MenuOptionsType[] = [];
-const genreMenuOptions: MenuOptionsType[] = [];
+const genreMenuOptions: genreMenuOptionsType[] = [];
 
 const packagesListObj = {
   [PackagesCategoryEnum.CHARTS]: {

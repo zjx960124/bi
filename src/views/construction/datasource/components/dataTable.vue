@@ -9,6 +9,7 @@
         :data="tableData"
         align="center"
         fit
+        show-overflow-tooltip
         :highlight-current-row="false"
         :border="false"
         style="width: 100%"
@@ -19,7 +20,11 @@
           min-width="120"
           align="center"
         />
-        <el-table-column label="操作" width="300" align="center">
+        <el-table-column
+          label="操作"
+          width="300"
+          align="center"
+        >
           <template #default="{ row }">
             <el-button
               class="el-button-edit"
@@ -40,6 +45,7 @@
         align="center"
         fit
         :highlight-current-row="false"
+        show-overflow-tooltip
         :border="false"
         style="width: 100%"
       >
@@ -108,14 +114,30 @@
     />
   </div>
 
-  <el-drawer v-model="drawInfo.drawer" :direction="direction" :size="getSize">
+  <el-drawer
+    v-model="drawInfo.drawer"
+    :direction="direction"
+    :size="getSize"
+  >
     <template #title>
-      <h4 class="title" v-if="drawInfo.type == 'detail'">表详情</h4>
-      <h4 class="title" v-if="drawInfo.type == 'add' && !isShowType">
+      <h4
+        class="title"
+        v-if="drawInfo.type == 'detail'"
+      >表详情</h4>
+      <h4
+        class="title"
+        v-if="drawInfo.type == 'add' && !isShowType"
+      >
         新建数据源
       </h4>
-      <h4 class="title" v-if="isShowType == 'sql'">添加MySQL数据源</h4>
-      <h4 class="title" v-if="isShowType == 'file'">上传文件</h4>
+      <h4
+        class="title"
+        v-if="isShowType == 'sql'"
+      >添加MySQL数据源</h4>
+      <h4
+        class="title"
+        v-if="isShowType == 'file'"
+      >上传文件</h4>
     </template>
     <template #default>
       <template v-if="drawInfo.type == 'detail'">
@@ -127,6 +149,7 @@
             align="center"
             fit
             :highlight-current-row="false"
+            show-overflow-tooltip
             :border="false"
             style="width: 100%"
           >
@@ -152,7 +175,10 @@
         </div>
       </template>
       <template v-if="drawInfo.type == 'add'">
-        <div class="datasource-action-content" v-if="!isShowType">
+        <div
+          class="datasource-action-content"
+          v-if="!isShowType"
+        >
           <div
             class="item"
             v-for="(item, idx) in dataList"
@@ -164,8 +190,14 @@
           </div>
         </div>
         <template v-if="isShowType">
-          <setting v-if="isShowType == 'sql'" :isShowTitle="false" />
-          <uploadfile v-if="isShowType == 'file'" :isShowTitle="false" />
+          <setting
+            v-if="isShowType == 'sql'"
+            :isShowTitle="false"
+          />
+          <uploadfile
+            v-if="isShowType == 'file'"
+            :isShowTitle="false"
+          />
         </template>
       </template>
     </template>
@@ -196,23 +228,23 @@ const drawData = ref([]);
 const direction = ref("rtl");
 const isShowType = ref<string>("");
 let drawInfo = ref<drawerTypes>({
-  type: "add",
-  drawer: false,
+  type: 'add',
+  drawer: false
 });
 
 let datasource = ref<checkDatasourceType>();
 
 //新建数据源
 const dataList = ref<Array<dataTypes>>([
-  { type: "sql", title: "MySQL" },
-  { type: "file", title: "本地文件（.csv  .xlsx  .xls）" },
-  { type: "api", title: "API数据" },
+  { type: 'sql', title: 'MySQL' },
+  { type: 'file', title: '本地文件（.csv  .xlsx  .xls）' },
+  { type: 'api', title: 'API数据' }
 ]);
 
 //监听数据
 const props = defineProps({
   drawData: {
-    type: Object,
+    type: Object
   },
   datasource: {
     type: Object,
@@ -223,10 +255,10 @@ const props = defineProps({
 });
 
 const getSize = computed(() => {
-  if (drawInfo.value.type == "add") {
-    return "20%";
-  } else if (drawInfo.value.type == "detail") {
-    return "30%";
+  if (drawInfo.value.type == 'add') {
+    return '20%';
+  } else if (drawInfo.value.type == 'detail') {
+    return '30%';
   }
 });
 
@@ -237,7 +269,7 @@ const openSetting = (item: dataTypes) => {
 
 //详情
 const openDetail = (val: any) => {
-  drawInfo.value = { type: "detail", drawer: true };
+  drawInfo.value = { type: 'detail', drawer: true };
 };
 
 const { getAllExcelDataByDataSourceId, getDataSourceById } = DataSource;
@@ -320,7 +352,7 @@ h4.title {
   position: relative;
   padding-left: 15px;
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     left: 0;
@@ -370,7 +402,7 @@ h4.title {
     }
     .item-title {
       font-size: 14px;
-      font-family: "PingFang SC";
+      font-family: 'PingFang SC';
       font-weight: 400;
       color: #293270;
       text-align: left;

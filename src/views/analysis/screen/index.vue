@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { borderRadius } from '@/settings/designSetting';
 import { useRouter } from 'vue-router';
 import { getDataScreenList, deleteDataScreen } from '@/api/dataAnalysis';
 import { dataScreenListParam } from '@/views/analysis/types';
@@ -11,32 +10,7 @@ const router = useRouter();
 const state = reactive({
   queryParams: { keyword: '', pageNum: 0, pageSize: 10 } as dataScreenListParam,
   loading: false,
-  tableData: [
-    // {
-    //   id: 0,
-    //   name: '数据集名称',
-    //   creator: '用户名',
-    //   createTime: '2020-00-00 00:00:00',
-    //   lastEditor: '用户名',
-    //   lastEditTime: '2020-00-00 00:00:00'
-    // },
-    // {
-    //   id: 1,
-    //   name: '数据集名称',
-    //   creator: '用户名',
-    //   createTime: '2020-00-00 00:00:00',
-    //   lastEditor: '用户名',
-    //   lastEditTime: '2020-00-00 00:00:00'
-    // },
-    // {
-    //   id: 2,
-    //   name: '数据集名称',
-    //   creator: '用户名',
-    //   createTime: '2020-00-00 00:00:00',
-    //   lastEditor: '用户名',
-    //   lastEditTime: '2020-00-00 00:00:00'
-    // }
-  ],
+  tableData: [],
   total: 0
 });
 
@@ -69,6 +43,21 @@ const handleDel = (row: any) => {
       type: 'success',
       message: '删除成功'
     });
+  });
+};
+
+const handleEdit = (row: any) => {
+  const { href } = router.resolve({
+    path: '/editor',
+    query: { id: row.id }
+  });
+  window.open(href, '_blank');
+};
+
+const handleShare = (row: any) => {
+  ElMessage({
+    type: 'success',
+    message: '点击了分享'
   });
 };
 
@@ -161,6 +150,7 @@ const handleCurrentChange = (val: number) => {
                 type="primary"
                 size="small"
                 icon="EditPen"
+                @click="handleEdit(scope.row)"
               >
                 编辑
               </el-button>
@@ -170,6 +160,7 @@ const handleCurrentChange = (val: number) => {
                 type="primary"
                 size="small"
                 icon="Share"
+                @click="handleShare(scope.row)"
               >
                 分享
               </el-button>

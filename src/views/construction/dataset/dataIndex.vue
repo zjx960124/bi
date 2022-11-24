@@ -17,7 +17,11 @@
       </div>
       <div class="upload-file-container">
         <div class="searchBox">
-          <img width="22" height="21" src="~@/assets/analysis/search.png" />
+          <img
+            width="22"
+            height="21"
+            src="~@/assets/analysis/search.png"
+          />
           <el-input
             class="input"
             v-model="searchValue"
@@ -26,7 +30,10 @@
           >
           </el-input>
         </div>
-        <el-menu default-active="2" class="el-menu-vertical-demo">
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+        >
           <el-sub-menu index="1">
             <template #title>
               <i class="files-icon"></i>
@@ -54,8 +61,7 @@
                 </template>
               </el-dropdown>
             </template>
-            <el-menu-item index="1-4"
-              ><i class="files-icon"></i>
+            <el-menu-item index="1-4"><i class="files-icon"></i>
               item one
               <el-dropdown class="dataMore">
                 <i class="data-more"></i>
@@ -68,8 +74,7 @@
                 </template>
               </el-dropdown>
             </el-menu-item>
-            <el-menu-item index="1-5"
-              ><i class="files-icon"></i>
+            <el-menu-item index="1-5"><i class="files-icon"></i>
               item one
               <el-dropdown class="dataMore">
                 <i class="data-more"></i>
@@ -89,7 +94,10 @@
     <div class="right">
       <div class="right-title">
         <div class="right-title-left">
-          <div class="item active" @click="tabClick(0)">
+          <div
+            class="item active"
+            @click="tabClick(0)"
+          >
             <div class="info">
               <p>
                 SQL数据集名称
@@ -106,11 +114,18 @@
             </div>
             <div class="preview">数据预览</div>
           </div>
-          <div class="item" @click="tabClick(1)">字段管理</div>
+          <div
+            class="item"
+            @click="tabClick(1)"
+          >字段管理</div>
         </div>
         <div class="right-title-right">
           <div class="searchBox">
-            <img width="22" height="21" src="~@/assets/analysis/search.png" />
+            <img
+              width="22"
+              height="21"
+              src="~@/assets/analysis/search.png"
+            />
             <el-input
               class="input"
               v-model="searchValue"
@@ -120,11 +135,19 @@
             </el-input>
           </div>
           <div class="el-button-primary margin-left-22">
-            <img width="18" height="18" src="~@/assets/data/addData.png" />
+            <img
+              width="18"
+              height="18"
+              src="~@/assets/data/addData.png"
+            />
             <span class="text">新建文件夹</span>
           </div>
           <div class="el-button-primary margin-left-22">
-            <img width="18" height="18" src="~@/assets/data/addData.png" />
+            <img
+              width="18"
+              height="18"
+              src="~@/assets/data/addData.png"
+            />
             <span class="text">新建数据集</span>
           </div>
         </div>
@@ -143,6 +166,7 @@
             fit
             :highlight-current-row="false"
             :border="false"
+            show-overflow-tooltip
             style="width: 100%"
           >
             <el-table-column
@@ -190,12 +214,12 @@
 </template>
 
 <script lang="ts" setup>
-import noData from "@/assets/data/excelNo.png";
-import popoverBox from "@/components/popover/index.vue";
-import up from "@/assets/data/up.png";
-import { ref } from "vue";
+import noData from '@/assets/data/excelNo.png';
+import popoverBox from '@/components/popover/index.vue';
+import up from '@/assets/data/up.png';
+import { ref } from 'vue';
 const imgUrl = ref(noData);
-const searchValue = ref("");
+const searchValue = ref('');
 const dataList = ref([{}]);
 
 const tableData = ref([{}, {}, {}]);
@@ -218,7 +242,7 @@ const tabClick = (val: number) => {
       height: 43px;
       width: 100%;
       font-size: 24px;
-      font-family: "PingFang SC";
+      font-family: 'PingFang SC';
       font-weight: bold;
       color: #293270;
       //   text-align: left;
@@ -229,7 +253,7 @@ const tabClick = (val: number) => {
       align-items: center;
       justify-content: space-between;
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 50%;
         left: 0;
@@ -295,7 +319,7 @@ const tabClick = (val: number) => {
           height: 100%;
           &:nth-child(1) {
             width: 95%;
-            background: url("@/assets/data/tab_1.png") no-repeat center;
+            background: url('@/assets/data/tab_1.png') no-repeat center;
             background-size: 100% 100%;
             cursor: pointer;
             display: flex;
@@ -311,13 +335,13 @@ const tabClick = (val: number) => {
               & p {
                 &:nth-child(1) {
                   font-size: 7px;
-                  font-family: "PingFang SC";
+                  font-family: 'PingFang SC';
                   font-weight: bold;
                   color: #293270;
                 }
                 &:nth-child(2) {
                   font-size: 6px;
-                  font-family: "PingFang SC";
+                  font-family: 'PingFang SC';
                   font-weight: 400;
                   color: #6b797f;
                 }
@@ -327,20 +351,20 @@ const tabClick = (val: number) => {
             & .preview {
               width: 15%;
               font-size: 7px;
-              font-family: "PingFang SC";
+              font-family: 'PingFang SC';
               font-weight: bold;
               color: #293270;
             }
           }
           &:nth-child(2) {
             width: 45%;
-            background: url("@/assets/data/tab_2.png") no-repeat center;
+            background: url('@/assets/data/tab_2.png') no-repeat center;
             background-size: 100% 100%;
             position: absolute;
             left: 75%;
             cursor: pointer;
             font-size: 7px;
-            font-family: "PingFang SC";
+            font-family: 'PingFang SC';
             font-weight: bold;
             color: #b8bbbc;
             line-height: 18px;
@@ -419,13 +443,13 @@ const tabClick = (val: number) => {
   width: 15px;
   height: 13px;
   display: block;
-  background: url("@/assets/data/add.png") no-repeat;
+  background: url('@/assets/data/add.png') no-repeat;
 }
 .data-more {
   width: 13px;
   height: 3px;
   display: block;
-  background: url("@/assets/data/more.png") no-repeat;
+  background: url('@/assets/data/more.png') no-repeat;
 }
 .files-icon {
   width: 15px;
@@ -442,7 +466,7 @@ const tabClick = (val: number) => {
   & span {
     // margin-top: -5px;
     margin-left: 12px;
-    font-family: "PingFang SC";
+    font-family: 'PingFang SC';
     font-weight: 400;
     color: #6b797f;
   }
@@ -450,14 +474,14 @@ const tabClick = (val: number) => {
     width: 15px;
     height: 13px;
     display: block;
-    background: url("@/assets/data/files.png") no-repeat;
+    background: url('@/assets/data/files.png') no-repeat;
     margin-left: 12px;
   }
   .dataset-add {
     width: 15px;
     height: 13px;
     display: block;
-    background: url("@/assets/data/add.png") no-repeat;
+    background: url('@/assets/data/add.png') no-repeat;
     position: absolute;
     right: 30px;
   }
@@ -465,7 +489,7 @@ const tabClick = (val: number) => {
     width: 13px;
     height: 3px;
     display: block;
-    background: url("@/assets/data/more.png") no-repeat;
+    background: url('@/assets/data/more.png') no-repeat;
     position: absolute;
     right: 10px;
   }
@@ -473,7 +497,7 @@ const tabClick = (val: number) => {
 ::v-deep .el-sub-menu__icon-arrow {
   right: unset !important;
   left: 12px !important;
-  background: url("@/assets/data/down.png") no-repeat;
+  background: url('@/assets/data/down.png') no-repeat;
   width: 8px;
   height: 6px;
   background-size: 100% 100%;
@@ -489,7 +513,7 @@ const tabClick = (val: number) => {
       color: #293270;
     }
     .files-icon {
-      background: url("@/assets/data/files-open.png") no-repeat;
+      background: url('@/assets/data/files-open.png') no-repeat;
     }
   }
 }

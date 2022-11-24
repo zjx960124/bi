@@ -1,14 +1,23 @@
 <template>
   <div class="excel-create-container">
     <div class="left">
-      <el-button type="primary" class="left-button"
-        ><el-icon><ArrowLeft /></el-icon>返回</el-button
+      <el-button
+        type="primary"
+        class="left-button"
       >
+        <el-icon>
+          <ArrowLeft />
+        </el-icon>返回
+      </el-button>
       <div class="upload-file-container">
         <div class="title">新建Excel数据集/替换数据/追加数据</div>
         <div class="container-content-title">
           选择数据
-          <el-popover placement="right" :width="400" trigger="hover">
+          <el-popover
+            placement="right"
+            :width="400"
+            trigger="hover"
+          >
             <template #reference>
               <img src="~@/assets/data/warning.png" />
             </template>
@@ -22,7 +31,9 @@
         <div class="content-list">
           <div class="item active">
             <span>222222222222222</span>
-            <el-icon><Close /></el-icon>
+            <el-icon>
+              <Close />
+            </el-icon>
           </div>
         </div>
         <el-upload
@@ -34,9 +45,10 @@
           v-if="dataList && dataList.length == 0"
         >
           <template #trigger>
-            <el-button type="primary" class="upload-button"
-              ><img src="~@/assets/data/upload.png" />上传文件</el-button
-            >
+            <el-button
+              type="primary"
+              class="upload-button"
+            ><img src="~@/assets/data/upload.png" />上传文件</el-button>
           </template>
         </el-upload>
       </div>
@@ -60,6 +72,7 @@
             fit
             :highlight-current-row="false"
             :border="false"
+            show-overflow-tooltip
             style="width: 100%"
           >
             <el-table-column
@@ -107,8 +120,8 @@
 </template>
 
 <script lang="ts" setup>
-import noData from "@/assets/data/excelNo.png";
-import { ref } from "vue";
+import noData from '@/assets/data/excelNo.png';
+import { ref } from 'vue';
 const imgUrl = ref(noData);
 
 const dataList = ref([{}]);
@@ -143,7 +156,7 @@ const tableData = ref([{}, {}, {}]);
       margin-top: 15px;
       & > .title {
         font-size: 14px;
-        font-family: "PingFang SC";
+        font-family: 'PingFang SC';
         font-weight: bold;
         color: #293270;
         line-height: 30px;
@@ -154,7 +167,7 @@ const tableData = ref([{}, {}, {}]);
         padding: 0 15px;
         box-sizing: border-box;
         font-size: 12px;
-        font-family: "PingFang SC";
+        font-family: 'PingFang SC';
         font-weight: 400;
         color: #6b797f;
         line-height: 30px;
@@ -200,14 +213,14 @@ const tableData = ref([{}, {}, {}]);
       align-items: center;
       height: 43px;
       font-size: 24px;
-      font-family: "PingFang SC";
+      font-family: 'PingFang SC';
       font-weight: bold;
       color: #293270;
       position: relative;
       padding-left: 15px;
       box-sizing: border-box;
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 50%;
         left: 0;
@@ -218,7 +231,7 @@ const tableData = ref([{}, {}, {}]);
         border-radius: 1px;
       }
 
-      .el-button{
+      .el-button {
         width: 113px;
         border-radius: 16px;
       }
@@ -242,7 +255,7 @@ const tableData = ref([{}, {}, {}]);
 
 .popover-content {
   font-size: 12px;
-  font-family: "PingFang SC";
+  font-family: 'PingFang SC';
   font-weight: 400;
   color: #6b797f;
   line-height: 30px;

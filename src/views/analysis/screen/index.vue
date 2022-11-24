@@ -116,6 +116,7 @@ const handleCurrentChange = (val: number) => {
           :highlight-current-row="false"
           :border="false"
           v-loading="loading"
+          show-overflow-tooltip
           style="width: 100%"
         >
           <el-table-column

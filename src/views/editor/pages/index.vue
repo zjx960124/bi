@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { AddCircleOutline, CaretUp } from "@vicons/ionicons5";
-import { LayersContent } from "./layers";
-import { Page } from "./page";
-import Project from "@/store/pageEditStore/pageEditStore";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
+import { computed } from 'vue';
+import { AddCircleOutline, CaretUp } from '@vicons/ionicons5';
+import { LayersContent } from './layers';
+import { Page } from './page';
+import Project from '@/store/pageEditStore/pageEditStore';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
 
 const increasePage = () => {
   Project.value.increasePage();
@@ -38,7 +38,7 @@ const increasePage = () => {
     </n-collapse>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .editor-pages {
   width: 309px;
   height: 100%;
@@ -57,7 +57,7 @@ const increasePage = () => {
       border-radius: 15px;
       :deep .n-collapse-item__header {
         color: #293270;
-        font-family: "PingFang-SC-Bold";
+        font-family: 'PingFang-SC-Bold';
         font-size: 14px;
         height: 50px;
         position: relative;

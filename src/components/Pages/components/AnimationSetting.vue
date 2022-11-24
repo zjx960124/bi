@@ -1,30 +1,27 @@
 <script setup lang="ts">
-import { ChevronUp } from '@vicons/ionicons5';
-import { Coordinates } from '../components';
+import { ref } from 'vue';
+import { ChevronDown, ChevronUp } from '@vicons/ionicons5';
 
 const props = defineProps({
   optionData: {
     type: Object,
-    required: true,
-  },
-  attr: {
-    type: Object,
-    required: true,
-  },
-  type: {
-    type: String,
     requeire: true,
   },
 });
 </script>
 <template>
-  <n-collapse :default-expanded-names="['1', '2', '3', '4', '5', '6']">
-    <coordinates :attr="props.attr"></coordinates>
-    <slot name="target"></slot>
-    <slot name="process"></slot>
-    <slot name="label"></slot>
-    <slot></slot>
-  </n-collapse>
+  <n-collapse-item title="动效" name="6">
+    <div class="common-item">
+      <n-checkbox v-model:checked="optionData!.animationFlag"
+        >显示流光特效</n-checkbox
+      >
+    </div>
+    <template #arrow>
+      <n-icon size="16" color="#869299">
+        <chevron-up />
+      </n-icon>
+    </template>
+  </n-collapse-item>
 </template>
 <style lang="scss" scoped>
 .n-collapse {

@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { ChevronUp } from '@vicons/ionicons5';
+import { PropType } from 'vue';
+import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
 import {
-  ChevronUp,
-} from "@vicons/ionicons5";
-import { PropType } from "vue";
-import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
-import { Coordinates, PaintingCommon, Shaft, LegendCommon } from "../components";
+  Coordinates,
+  PaintingCommon,
+  Shaft,
+  LegendCommon,
+} from '../components';
 
 const props = defineProps({
   optionData: {
@@ -24,13 +27,16 @@ const props = defineProps({
     required: true,
   },
 });
-
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2', '3', '4', '5']">
     <coordinates :attr="props.attr"></coordinates>
     <n-collapse-item title="绘色区域" name="1">
-      <painting-common :optionData="props.optionData" :themeColor="props.themeColor" :type="props.type">
+      <painting-common
+        :optionData="props.optionData"
+        :themeColor="props.themeColor"
+        :type="props.type"
+      >
       </painting-common>
       <slot name="series"></slot>
       <template #arrow>
@@ -65,7 +71,7 @@ const props = defineProps({
     </n-collapse-item>
   </n-collapse>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .n-collapse {
   height: 100%;
   display: flex;
@@ -75,10 +81,9 @@ const props = defineProps({
     width: 100%;
     background: #ffffff;
     border-radius: 15px;
-
     :deep .n-collapse-item__header {
       color: #293270;
-      font-family: "PingFang-SC-Bold";
+      font-family: 'PingFang-SC-Bold';
       font-weight: bold;
       font-size: 14px;
       height: 33px;
@@ -98,7 +103,7 @@ const props = defineProps({
     }
 
     :deep .n-collapse-item__content-inner {
-      padding: 0 25px 18px 25px;
+      padding: 0 25px 2px 25px;
     }
   }
 

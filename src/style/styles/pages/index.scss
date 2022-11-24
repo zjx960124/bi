@@ -66,6 +66,12 @@
       .common-input {
         width: 160px;
         margin-left: 10px;
+        .n-input .n-input__suffix,
+        .n-input .n-input__prefix {
+          .n-button + .n-button {
+            margin: 0;
+          }
+        }
       }
       .common-select {
         width: 160px;
@@ -86,6 +92,7 @@
       }
       .common-color-picker {
         margin-left: 10px;
+        flex-shrink: 0;
       }
       .common-sub-title {
         min-width: 25px;

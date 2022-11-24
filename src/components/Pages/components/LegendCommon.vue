@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { computed, ref, PropType } from "vue";
+import { computed, ref, PropType } from 'vue';
 import {
   CaretUp,
   CaretDown,
   CaretBack,
   CaretForward,
   ChevronDown,
-} from "@vicons/ionicons5";
-import merge from "lodash/merge";
-import omit from "lodash/omit";
-import { LegendConfiguration } from "@/enums/chartConfiguration";
-import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
+} from '@vicons/ionicons5';
+import merge from 'lodash/merge';
+import omit from 'lodash/omit';
+import { LegendConfiguration } from '@/enums/chartConfiguration';
+import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
 
 const props = defineProps({
   optionData: {
-    type: Object as PropType<GlobalThemeJsonType>,
+    type: Object,
     required: true,
   },
 });
@@ -22,20 +22,25 @@ const legend = computed(() => {
   return props.optionData.legend;
 });
 const legendCurrentPosition = computed(() => {
-  return props.optionData.legend.legendPosition || "";
+  return props.optionData.legend.legendPosition || '';
 });
 const legendFontWeightFlag = ref({ type: false });
 const legendFontStyleFlag = ref({ type: false });
 
 const legendPosition = (position: string) => {
-  //@ts-ignore 
+  //@ts-ignore
   props.optionData.legend = merge(
     {},
-    omit(props.optionData.legend, LegendConfiguration[position]["except"]),
+    omit(props.optionData.legend, LegendConfiguration[position]['except']),
     LegendConfiguration[position]
   );
 };
-const switchCommon = (target: any, key: string, form: string, depend: {type: boolean}) => {
+const switchCommon = (
+  target: any,
+  key: string,
+  form: string,
+  depend: { type: boolean }
+) => {
   target[key] = form;
   depend.type! = !depend.type!;
 };
@@ -144,5 +149,4 @@ const switchCommon = (target: any, key: string, form: string, depend: {type: boo
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

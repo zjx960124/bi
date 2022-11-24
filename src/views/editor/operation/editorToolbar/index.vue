@@ -48,7 +48,6 @@ const handleClick = (item: genreMenuOptionsType, index: number) => {
   x.value = domRect.x;
   y.value = domRect.height + domRect.y;
   currentMenuOptions.value = item as genreMenuOptionsType;
-  console.log(currentMenuOptions.value);
   if (index === currenIndex.value) {
     showPopover.value = !showPopover.value;
   } else {
@@ -117,7 +116,7 @@ const y = ref(0);
               </n-button>
             </template>
             <div class="popover-menu-btn-view">
-              <template v-for="items in currentMenuOptions!.list" :key="indexs">
+              <template v-for="items in currentMenuOptions!.list">
                 <div class="menu-btn" @click="intoView(items!.key)">
                   <n-button type="text">{{ items!.label }}</n-button>
                 </div>

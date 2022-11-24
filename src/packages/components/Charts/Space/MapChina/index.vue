@@ -2,7 +2,7 @@
   <v-chart
     ref="vChartRef"
     :theme="themeColor"
-    :option="option.value"
+    :option="option"
     :manual-update="isPreview()"
     autoresize
   >
@@ -10,14 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, reactive, watch } from 'vue';
+import { PropType, reactive, watch, computed } from 'vue';
 import config, { includes } from './config';
 import VChart from 'vue-echarts';
 import { use, registerMap } from 'echarts/core';
 import { EffectScatterChart, MapChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
 // import { useChartDataFetch } from '@/hooks';
-import { mergeTheme } from '@/packages/public/chart';
+import { mergeTheme, handleMapSeries } from '@/packages/hook/chart';
 // import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore';
 import { isPreview } from '@/utils';
 import mapJson from './map.json';
@@ -28,6 +28,8 @@ import {
   TooltipComponent,
   LegendComponent,
   GeoComponent,
+  TitleComponent,
+  VisualMapComponent,
 } from 'echarts/components';
 
 const props = defineProps({
@@ -54,22 +56,36 @@ use([
   LegendComponent,
   GeoComponent,
   EffectScatterChart,
+  TitleComponent,
+  VisualMapComponent,
 ]);
 
-registerMap('china', { geoJSON: mapJson as any, specialAreas: {} });
-
-const option = reactive({
-  value: mergeTheme(props.chartConfig.option, props.themeSetting, includes),
+registerMap('china', {
+  geoJSON: mapJson as any,
+  specialAreas: {},
 });
 
-const dataSetHandle = (dataset: any) => {
-  props.chartConfig.option.series.forEach((item: any) => {
-    if (item.type === 'effectScatter' && dataset.point)
-      item.data = dataset.point;
-    else if (item.type === 'map' && dataset.point) item.data = dataset.map;
-    option.value = props.chartConfig.option;
-  });
-};
+// const option = reactive({
+//   value: mergeTheme(
+//     handleMapSeries(props.chartConfig.option),
+//     props.themeSetting,
+//     includes
+//   ),
+// });
+
+const option = computed(() => {
+  let resultOption = handleMapSeries(props.chartConfig.option);
+  return mergeTheme(resultOption, props.themeSetting, includes);
+});
+
+// const dataSetHandle = (dataset: any) => {
+//   props.chartConfig.option.series.forEach((item: any) => {
+//     if (item.type === 'effectScatter' && dataset.point)
+//       item.data = dataset.point;
+//     else if (item.type === 'map' && dataset.point) item.data = dataset.map;
+//     option.value = props.chartConfig.option;
+//   });
+// };
 
 const mapTypeHandle = (show: boolean) => {
   show
@@ -78,7 +94,6 @@ const mapTypeHandle = (show: boolean) => {
         geoJSON: mapJsonWithoutHainanIsLands as any,
         specialAreas: {},
       });
-  option.value = props.chartConfig.option;
 };
 
 watch(
@@ -92,16 +107,16 @@ watch(
   }
 );
 
-watch(
-  () => props.chartConfig.option.dataset,
-  (newData) => {
-    dataSetHandle(newData);
-  },
-  {
-    immediate: true,
-    deep: false,
-  }
-);
+// watch(
+//   () => props.chartConfig.option.dataset,
+//   (newData) => {
+//     dataSetHandle(newData);
+//   },
+//   {
+//     immediate: true,
+//     deep: false,
+//   }
+// );
 
 // 预览
 // useChartDataFetch(props.chartConfig, useChartEditStore, (newData: any) => {

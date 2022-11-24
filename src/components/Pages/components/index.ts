@@ -7,8 +7,12 @@ import ProgressComponent from './ProgressComponent.vue';
 import PieLabelCommon from './PieLabelCommon.vue';
 import NumberSetting from './NumberSetting.vue';
 import ProcessSetting from './ProcessSetting.vue';
+import ConfigItem from './ConfigItem.vue';
+import LabelSetting from './LabelSetting.vue';
+import AnimationSetting from './AnimationSetting.vue';
 
 export {
+  ConfigItem,
   Coordinates,
   PaintingCommon,
   Shaft,
@@ -18,4 +22,6 @@ export {
   PieLabelCommon,
   NumberSetting,
   ProcessSetting,
+  LabelSetting,
+  AnimationSetting,
 };

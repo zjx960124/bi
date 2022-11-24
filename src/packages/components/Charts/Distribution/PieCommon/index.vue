@@ -1,26 +1,33 @@
 <template>
-  <v-chart ref="vChartRef" :theme="color" :option="option" :manual-update="isPreview()" :update-options="{
-    replaceMerge: replaceMergeArr,
-  }" autoresize></v-chart>
+  <v-chart
+    ref="vChartRef"
+    :theme="color"
+    :option="option"
+    :manual-update="isPreview()"
+    :update-options="{
+      replaceMerge: replaceMergeArr,
+    }"
+    autoresize
+  ></v-chart>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed, watch, PropType, reactive } from "vue";
-import VChart from "vue-echarts";
-import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import { PieChart } from "echarts/charts";
-import config, { includes, seriesItem } from "./config";
-import { mergeTheme, handlePieSeries } from "@/packages/hook/chart";
-import { isPreview } from "@/utils";
-import cloneDeep from "lodash/cloneDeep";
+import { ref, nextTick, computed, watch, PropType, reactive } from 'vue';
+import VChart from 'vue-echarts';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { PieChart } from 'echarts/charts';
+import config, { includes, seriesItem } from './config';
+import { mergeTheme, handlePieSeries } from '@/packages/hook/chart';
+import { isPreview } from '@/utils';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   DatasetComponent,
   GridComponent,
   TooltipComponent,
   LegendComponent,
-} from "echarts/components";
-import { chartColors, ChartColorsNameType } from "@/settings/chartThemes/index";
+} from 'echarts/components';
+import { chartColors, ChartColorsNameType } from '@/settings/chartThemes/index';
 
 const props = defineProps({
   themeSetting: {
@@ -50,7 +57,6 @@ const replaceMergeArr = ref<string[]>();
 
 const option = computed(() => {
   let resultOption = handlePieSeries(cloneDeep(props.chartConfig.option));
-  console.log(resultOption);
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
@@ -67,7 +73,7 @@ watch(
       for (let i = 0; i < newData.dimensions.length - 1; i++) {
         seriesArr.push(seriesItem);
       }
-      replaceMergeArr.value = ["series"];
+      replaceMergeArr.value = ['series'];
       props.chartConfig.option.series = seriesArr;
       nextTick(() => {
         replaceMergeArr.value = [];
@@ -80,5 +86,5 @@ watch(
 );
 
 // const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
-const vChartRef = reactive("pie");
+const vChartRef = reactive('pie');
 </script>

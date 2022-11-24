@@ -28,9 +28,7 @@
             <el-dropdown-item @click="openRelpaceDialog"
               >替换数据</el-dropdown-item
             >
-            <el-dropdown-item @click="openAddDialog"
-              >增加数据</el-dropdown-item
-            >
+            <el-dropdown-item @click="openAddDialog">增加数据</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -56,7 +54,7 @@ import dataList from "./components/dataList.vue";
 import dataTable from "./components/dataTable.vue";
 import addDialog from "./components/addDialog.vue";
 import replaceDialog from "./components/replaceDialog.vue";
-import { drawerTypes, datasourceType } from "../types/index";
+import { drawerTypes, checkDatasourceType } from "../types/index";
 const searchValue = ref("");
 
 //新建数据源
@@ -66,8 +64,8 @@ const openDraw = () => {
 };
 
 //获取数据源类型
-const datasource = ref<datasourceType>();
-const getDatasourceType = (val: datasourceType) => {
+const datasource = ref<checkDatasourceType>();
+const getDatasourceType = (val: checkDatasourceType) => {
   datasource.value = val;
 };
 const addDialogs = ref();

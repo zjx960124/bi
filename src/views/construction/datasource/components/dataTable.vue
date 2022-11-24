@@ -1,8 +1,11 @@
 <template>
   <div class="datatable-container-box">
-    <div class="tableBox el-common-tableBox">
+    <div
+      class="tableBox el-common-tableBox"
+      v-if="datasource && Object.keys(datasource).length > 0"
+    >
       <el-table
-        v-if="datasource?.type === 'sql'"
+        v-if="datasource?.accessType === 1 && tableData.length > 0"
         :data="tableData"
         align="center"
         fit
@@ -32,7 +35,7 @@
         </el-table-column>
       </el-table>
       <el-table
-        v-if="datasource?.type === 'file'"
+        v-else-if="datasource?.accessType === 2 && tableData.length > 0"
         :data="tableData"
         align="center"
         fit
@@ -41,29 +44,13 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="name"
-          label="名称"
-          min-width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="name"
-          label="最近同步时间"
-          min-width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="name"
-          label="状态"
-          min-width="120"
-          align="center"
-        />
-        <el-table-column
-          prop="name"
-          label="大小"
-          min-width="120"
-          align="center"
-        />
+          :prop="item.value"
+          :label="item.name"
+          v-for="(item, index) in tableHeader"
+          :show-overflow-tooltip="true"
+          :key="index"
+        >
+        </el-table-column>
         <el-table-column label="操作" width="300" align="center">
           <template #default="{ row }">
             <el-button
@@ -103,9 +90,22 @@
         class="pagination"
         background
         layout="->,prev, pager, next, total, sizes,jumper"
-        :total="1000"
+        :total="page.counts"
+        v-if="tableData.length > 0"
+      />
+      <el-empty
+        :image="imgUrl"
+        class="datasource-empty"
+        description="暂无数据"
+        v-else
       />
     </div>
+    <el-empty
+      :image="imgUrl"
+      class="datasource-empty"
+      description="暂无数据"
+      v-else
+    />
   </div>
 
   <el-drawer v-model="drawInfo.drawer" :direction="direction" :size="getSize">
@@ -174,15 +174,25 @@
 
 <script lang="ts" setup>
 import { ref, computed, watchEffect } from "vue";
+import noData from "@/assets/data/noData.png";
 import setting from "./setting.vue";
 import uploadfile from "./uploadFile.vue";
+import { DataSource } from "@/api/dataSource";
 import {
   dataTypes,
   drawerTypes,
-  datasourceType,
+  checkDatasourceType,
+  excelByIdType,
 } from "@/views/construction/types/index";
-const tableData = ref([{ name: "2222" }]);
-const drawData = ref([{ fieldName: "2222" }]);
+const imgUrl = ref(noData);
+const tableData = ref([]);
+const tableHeader = ref<Array<{ name: string; value: string }>>([]);
+const page = ref<excelByIdType>({
+  pageNum: 0,
+  pageSize: 10,
+  counts: 0,
+});
+const drawData = ref([]);
 const direction = ref("rtl");
 const isShowType = ref<string>("");
 let drawInfo = ref<drawerTypes>({
@@ -190,7 +200,7 @@ let drawInfo = ref<drawerTypes>({
   drawer: false,
 });
 
-let datasource = ref<datasourceType>();
+let datasource = ref<checkDatasourceType>();
 
 //新建数据源
 const dataList = ref<Array<dataTypes>>([
@@ -207,20 +217,9 @@ const props = defineProps({
   datasource: {
     type: Object,
     default: () => {
-      return {
-        type: "sql",
-      };
+      return {};
     },
   },
-});
-
-watchEffect(() => {
-  if (props.drawData) {
-    drawInfo.value = props.drawData;
-  }
-  if (props.datasource) {
-    datasource.value = props.datasource;
-  }
 });
 
 const getSize = computed(() => {
@@ -240,6 +239,65 @@ const openSetting = (item: dataTypes) => {
 const openDetail = (val: any) => {
   drawInfo.value = { type: "detail", drawer: true };
 };
+
+const { getAllExcelDataByDataSourceId, getDataSourceById } = DataSource;
+//根据数据源id获取excel数据
+const getAllExcelDataById = async (val: checkDatasourceType) => {
+  const { id } = val;
+  tableData.value = [];
+  tableHeader.value = [];
+  const {
+    data: { data, counts },
+  } = await getAllExcelDataByDataSourceId({
+    dataSourceId: id,
+    pageNum: page.value.pageNum,
+    pageSize: page.value.pageSize,
+  });
+  if (data && data.length > 0) {
+    tableData.value = data;
+    page.value.counts = counts;
+    data.map((item: any, inx: number) => {
+      if (inx == 0) {
+        Object.keys(item).forEach((i) => {
+          let obj = { name: i, value: i };
+          tableHeader.value.push(obj);
+        });
+      }
+    });
+  }
+};
+
+//根据id获取数据源数据
+const getDataSourceByIdList = async (val: checkDatasourceType) => {
+  const { id } = val;
+  tableData.value = [];
+  const { data } = await getDataSourceById({ dataSourceId: id });
+  if (data && data.length > 0) {
+    tableData.value = data;
+    data.map((item: any, inx: number) => {
+      if (inx == 0) {
+        Object.keys(item).forEach((i) => {
+          let obj = { name: i, value: i };
+          tableHeader.value.push(obj);
+        });
+      }
+    });
+  }
+};
+
+//监听数据变化
+watchEffect(() => {
+  if (props.drawData) {
+    drawInfo.value = props.drawData;
+  }
+  if (props.datasource && Object.keys(props.datasource).length > 0) {
+    datasource.value = props.datasource;
+    if (datasource.value.accessType == 1) {
+    } else {
+      getAllExcelDataById(datasource.value);
+    }
+  }
+});
 </script>
 <style scoped lang="scss">
 .datatable-container-box {
@@ -248,6 +306,8 @@ const openDetail = (val: any) => {
   background-color: #fff;
   border-radius: 22px;
   padding: 14px;
+  box-sizing: border-box;
+  position: relative;
 }
 h4.title {
   height: auto;
@@ -318,6 +378,15 @@ h4.title {
       padding-left: 15px;
       box-sizing: border-box;
     }
+  }
+}
+.datasource-empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  ::v-deep .el-empty__image {
+    width: 140px !important;
   }
 }
 </style>

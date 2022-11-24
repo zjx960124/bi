@@ -1,7 +1,7 @@
 interface checkDatasourceType {
   dataSourceShowName?: string;
   ipContent?: string;
-  port?: number;
+  port?: number | string;
   dataSourceName?: string;
   username?: string;
   password?: string;
@@ -9,6 +9,14 @@ interface checkDatasourceType {
   dataSourceType?: number | string
   status?: number
   accessType?: number
+  createTime?: string
+  dataSourceUrl?: string
+  id?: number
+  isDeleted?: number
+  updateTime?: string
+  updater?: string
+  creator?: string
+  dataSourceId?: number
 }
 
 
@@ -22,13 +30,6 @@ interface drawerTypes {
   drawer?: boolean
 }
 
-interface datasourceType {
-  dataSourceShowName?: string
-  accessType?: number
-  creator?: string
-  icon?: string
-  id?:number
-}
 
 //获取数据源列表
 interface DataSourceListType {
@@ -49,12 +50,21 @@ interface excelType {
   files?: FormData
 }
 
+
+//根据id获取excel数据
+interface excelByIdType {
+  dataSourceId?:number
+  pageNum?:number
+  pageSize?:number
+  counts?:number
+}
+
 export {
   checkDatasourceType,
   dataTypes,
   drawerTypes,
-  datasourceType,
   DataSourceListType,
   statusFormType,
-  excelType
+  excelType,
+  excelByIdType
 }

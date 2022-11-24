@@ -1,5 +1,5 @@
 import Request from "../request/request";
-import { DataSourceListType, checkDatasourceType, excelType } from '@/views/construction/types'
+import { DataSourceListType, checkDatasourceType, excelByIdType } from '@/views/construction/types'
 
 
 export class DataSource {
@@ -43,13 +43,14 @@ export class DataSource {
     }
 
     //获取Excel数据源数据
-    static async getAllExcelDataByDataSourceId(params: checkDatasourceType): Promise<any> {
-        return Request("/rest/bi/getAllExcelDataByDataSourceId", {
+    static async getAllExcelDataByDataSourceId(params: excelByIdType): Promise<any> {
+        return Request(`/rest/bi/getAllExcelDataByDataSourceId/${params.dataSourceId}`, {
             method: "get",
             responseType: "json",
-            params: {
-                ...params,
-            },
+            params:{
+                pageNum:params.pageNum,
+                pageSize:params.pageSize
+            }
         });
     }
 
@@ -69,6 +70,22 @@ export class DataSource {
     static async deleteDatasource(params: any): Promise<any> {
         return Request(`/rest/bi/deleteDatasource/${params.datasourceId}`, {
             method: "DELETE",
+            responseType: "json",
+        });
+    }
+
+    //根据id更新数据源
+    static async updateDatasource(params: any): Promise<any> {
+        return Request(`/rest/bi/updateDatasource`, {
+            method: "put",
+            responseType: "json",
+            data:params
+        });
+    }
+    //根据id查询数据源
+    static async getDataSourceById(params: checkDatasourceType): Promise<any> {
+        return Request(`/rest/bi/getDataSourceById/${params.dataSourceId}`, {
+            method: "get",
             responseType: "json",
         });
     }

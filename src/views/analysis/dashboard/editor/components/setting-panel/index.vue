@@ -72,21 +72,44 @@ export default {
               @start="onStartDimension"
               @end="onEndDimension"
             >
-              <template #item="{ element }">
-                <div class="field-dimensionItem flex justify-space-between align-center ">
-                  <div class="left">
-                    <img src="/src/assets/analysis/icon-string.png" /><span>{{element.label}}</span>
-                  </div>
-                  <div class="right">
-                    <el-icon class="icon">
-                      <ArrowDown />
-                    </el-icon>
-                    <el-icon
-                      class="icon"
-                      @click="handleDelDimension(element,0)"
+              <template #item="{ element,index }">
+                <div class="field-item">
+                  <div
+                    class="field-item-in flex justify-space-between align-center"
+                    style="border: 1px dashed #7c87ff;"
+                  >
+                    <div class="left">
+                      <img
+                        src="/src/assets/analysis/icon-string.png" /><span>{{element.label}}</span>
+                    </div>
+                    <div
+                      class="right"
+                      style="color:#6D79FF;"
                     >
-                      <Delete />
-                    </el-icon>
+                      <el-icon
+                        :class="index === currentDimensionInfo? 'open':' '"
+                        class="icon"
+                        @click="handleDimensionInfo(element,index)"
+                      >
+                        <ArrowRight />
+                      </el-icon>
+                      <el-icon
+                        class="icon"
+                        @click="handleDelDimension(element,index)"
+                      >
+                        <Delete />
+                      </el-icon>
+                    </div>
+                  </div>
+                  <div
+                    v-if="index === currentDimensionInfo"
+                    class="field-info"
+                    style="background: #F3F5FF;"
+                  >
+                    <p>总和</p>
+                    <p>平均值</p>
+                    <p>计数</p>
+                    <p>去重计数</p>
                   </div>
                 </div>
               </template>
@@ -117,21 +140,43 @@ export default {
               @start="onStartDimension"
               @end="onEndDimension"
             >
-              <template #item="{ element }">
-                <div class="field-measureItem flex justify-space-between align-center">
-                  <div class="left">
-                    <img src="/src/assets/analysis/icon-num.png" /><span>{{element.label}}</span>
-                  </div>
-                  <div class="right">
-                    <el-icon class="icon">
-                      <ArrowDown />
-                    </el-icon>
-                    <el-icon
-                      class="icon"
-                      @click="handleDelMeasure(element,0)"
+              <template #item="{ element,index }">
+                <div class="field-item">
+                  <div
+                    class="field-item-in flex justify-space-between align-center"
+                    style="border: 1px dashed #23d8c2;"
+                  >
+                    <div class="left">
+                      <img src="/src/assets/analysis/icon-num.png" /><span>{{element.label}}</span>
+                    </div>
+                    <div
+                      class="right"
+                      style="color: #23d8c2;"
                     >
-                      <Delete />
-                    </el-icon>
+                      <el-icon
+                        class="icon"
+                        :class="index === currentMeasureInfo? 'open':' '"
+                        @click="handleMeasureInfo(element,index)"
+                      >
+                        <ArrowRight />
+                      </el-icon>
+                      <el-icon
+                        class="icon"
+                        @click="handleDelMeasure(element,index)"
+                      >
+                        <Delete />
+                      </el-icon>
+                    </div>
+                  </div>
+                  <div
+                    v-if="index === currentMeasureInfo"
+                    class="field-info"
+                    style="background: #e7faf8;"
+                  >
+                    <p>总和</p>
+                    <p>平均值</p>
+                    <p>计数</p>
+                    <p>去重计数</p>
                   </div>
                 </div>
               </template>
@@ -196,14 +241,39 @@ const state = reactive({
   measureList: [
     { id: 0, label: '女生人数（总和）', value: 0 },
     { id: 1, label: '男生人数（总和）', value: 1 }
-  ]
+  ],
+  currentDimensionInfo: -1,
+  currentMeasureInfo: -1
 });
 
-const { activeItem, activeItem1, currentTab, dimensionList, measureList } =
-  toRefs(state);
+const {
+  activeItem,
+  activeItem1,
+  currentTab,
+  dimensionList,
+  measureList,
+  currentDimensionInfo,
+  currentMeasureInfo
+} = toRefs(state);
 
 const handleTab = (tab: number) => {
   state.currentTab = tab;
+};
+
+const handleDimensionInfo = (item: any, index: number) => {
+  if (index === state.currentDimensionInfo) {
+    state.currentDimensionInfo = -1;
+  } else {
+    state.currentDimensionInfo = index;
+  }
+};
+
+const handleMeasureInfo = (item: any, index: number) => {
+  if (index === state.currentMeasureInfo) {
+    state.currentMeasureInfo = -1;
+  } else {
+    state.currentMeasureInfo = index;
+  }
 };
 
 const handleDelDimension = (item: any, index: number) => {
@@ -394,96 +464,119 @@ const onEndDimension = (event: any) => {};
     border: 1px dashed #dcdde0;
     border-radius: 12px;
   }
-  .field-dimensionItem {
-    margin-bottom: 16px;
-    width: 100%;
-    height: 24px;
-    padding: 0 10px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #293270;
-    line-height: 24px;
-    background: #f3f5ff;
-    border: 1px dashed #7c87ff;
-    border-radius: 12px;
-    cursor: move;
-    &:hover {
-      .right {
-        .icon {
-          display: inline-block;
-          transition: ease-in-out 0.3s;
-        }
-      }
-    }
-    .left {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: 100%;
-      img {
-        width: 22px;
-        height: 11px;
-      }
-      span {
-        margin-left: 10px;
-      }
-    }
-    .right {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      color: #7c87ff;
-      .icon {
-        display: none;
-        margin-left: 10px;
-        cursor: pointer;
-      }
-    }
-  }
+  // .field-dimensionItem {
+  //   margin-bottom: 16px;
+  //   width: 100%;
+  //   height: 24px;
+  //   padding: 0 10px;
+  //   font-size: 12px;
+  //   font-weight: 400;
+  //   color: #293270;
+  //   line-height: 24px;
+  //   background: #f3f5ff;
+  //   border: 1px dashed #7c87ff;
+  //   border-radius: 12px;
+  //   cursor: move;
+  //   &:hover {
+  //     .right {
+  //       .icon {
+  //         display: inline-block;
+  //         transition: ease-in-out 0.3s;
+  //       }
+  //     }
+  //   }
+  //   .left {
+  //     display: flex;
+  //     flex-direction: row;
+  //     align-items: center;
+  //     height: 100%;
+  //     img {
+  //       width: 22px;
+  //       height: 11px;
+  //     }
+  //     span {
+  //       margin-left: 10px;
+  //     }
+  //   }
+  //   .right {
+  //     display: flex;
+  //     flex-direction: row;
+  //     align-items: center;
+  //     color: #7c87ff;
+  //     .icon {
+  //       display: none;
+  //       margin-left: 10px;
+  //       cursor: pointer;
+  //     }
+  //   }
+  // }
 
-  .field-measureItem {
+  .field-item {
     margin-bottom: 16px;
     width: 100%;
-    height: 24px;
-    padding: 0 10px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #293270;
-    line-height: 24px;
-    background: #f3f5ff;
-    border: 1px dashed #23d8c2;
-    border-radius: 12px;
-    cursor: move;
-    &:hover {
+    height: auto;
+    .field-item-in {
+      margin-bottom: 4px;
+      width: 100%;
+      height: 24px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #293270;
+      line-height: 24px;
+      background: #f3f5ff;
+      border: 1px dashed #23d8c2;
+      border-radius: 12px;
+      cursor: move;
+      &:hover {
+        .right {
+          .icon {
+            display: inline-block;
+            transition: ease-in-out 0.3s;
+          }
+        }
+      }
+      .left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 100%;
+        img {
+          width: 17px;
+          height: 11px;
+        }
+        span {
+          margin-left: 10px;
+        }
+      }
       .right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         .icon {
-          display: inline-block;
-          transition: ease-in-out 0.3s;
+          display: none;
+          margin-left: 10px;
+          transform: rotate(0deg);
+          transition: all 0.3s;
+          cursor: pointer;
+        }
+        .open {
+          transform: rotate(90deg);
         }
       }
     }
-    .left {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: 100%;
-      img {
-        width: 17px;
-        height: 11px;
-      }
-      span {
-        margin-left: 10px;
-      }
-    }
-    .right {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      color: #23d8c2;
-      .icon {
-        display: none;
-        margin-left: 10px;
-        cursor: pointer;
+    .field-info {
+      width: 100%;
+      height: auto;
+      padding: 10px;
+      border-radius: 10px;
+      transition: ease-in-out 0.3s;
+      p {
+        font-size: 12px;
+        font-weight: 400;
+        color: #293270;
+        line-height: 30px;
+        text-align: left;
       }
     }
   }

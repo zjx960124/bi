@@ -6,7 +6,8 @@ import {
   getAllScreenDataByFoldId,
   deleteDataScreen,
   saveFileFold,
-  updateFileFold
+  updateFileFold,
+  deleteFileFoldById
 } from '@/api/dataAnalysis';
 
 const state = reactive({
@@ -61,6 +62,22 @@ function handleEditFolderName(data: any) {
       ElMessage({
         type: 'success',
         message: '修改成功'
+      });
+    });
+  });
+}
+
+function handleDelFolderName(data: any) {
+  ElMessageBox.confirm(`确认删除文件夹“${data.name}”?`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    deleteFileFoldById({ id: data.id }).then(({ data }) => {
+      getData();
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
       });
     });
   });
@@ -141,13 +158,26 @@ function handleCopy(data: any) {}
               src="/src/assets/analysis/folderSign.png"
             />
             <span class="name">{{ item.name }}</span>
-            <img
+            <!-- <img
               class="btn"
               width="13"
               height="15"
               src="/src/assets/analysis/edit.png"
               @click="handleEditFolderName(item)"
-            />
+            /> -->
+            <el-icon
+              class="fold-icon"
+              @click="handleEditFolderName(item)"
+            >
+              <EditPen />
+            </el-icon>
+
+            <el-icon
+              class="fold-icon"
+              @click="handleDelFolderName(item)"
+            >
+              <Delete />
+            </el-icon>
           </div>
           <div class="item-list clearfix">
             <div
@@ -271,6 +301,11 @@ function handleCopy(data: any) {}
         line-height: 1;
       }
       .btn {
+        cursor: pointer;
+      }
+
+      .fold-icon {
+        margin: 0 10px;
         cursor: pointer;
       }
     }

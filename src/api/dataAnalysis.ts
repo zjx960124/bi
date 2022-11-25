@@ -31,6 +31,19 @@ export function getDataScreenContent(params: {
 }
 
 /**
+ * 查询所有仪表盘数据
+ */
+export function getAllScreenDataByFoldId(params: {
+  name?: string;
+}): Promise<ControllerResult<any>> {
+  return Request({
+    method: 'get',
+    url: '/rest/bi/getAllScreenDataByFoldId',
+    params: params,
+  });
+}
+
+/**
  * 分页查询数据列表
  */
 export function getDataScreenList(
@@ -60,14 +73,27 @@ export function saveOrUpdateDataScreen(
 }
 
 /**
- * 新增或者更新文件夹
+ * 新增文件夹
  */
 export function saveFileFold(
   data: fileFoldParam
 ): Promise<ControllerResult<fileFoldParam>> {
   return Request({
     method: 'POST',
-    url: `/rest/bi/saveFileFold`,
-    data,
+    url: `/rest/bi/addFileFold`,
+    params: data,
+  });
+}
+
+/**
+ * 更新文件夹
+ */
+export function updateFileFold(
+  data: fileFoldParam
+): Promise<ControllerResult<fileFoldParam>> {
+  return Request({
+    method: 'PUT',
+    url: `/rest/bi/updateFileFold`,
+    params: data,
   });
 }

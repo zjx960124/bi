@@ -7,6 +7,14 @@ import SimulatorEditor from './components/simulator-editor/index.vue';
 import SettingPanel from './components/setting-panel/index.vue';
 import DataPanel from './components/data-panel/index.vue';
 import ThemePanel from './components/theme-panel/index.vue';
+const settingPanelRef = ref(SettingPanel);
+
+const dbClickDimension = (node: any, data: any) => {
+  settingPanelRef.value.addDimension(node, data);
+};
+const dbClickMeasure = (node: any, data: any) => {
+  settingPanelRef.value.addMeasure(node, data);
+};
 </script>
 
 <template>
@@ -28,8 +36,11 @@ import ThemePanel from './components/theme-panel/index.vue';
         <div class="main">
           <components-panel />
           <simulator-editor />
-          <setting-panel />
-          <data-panel />
+          <setting-panel ref="settingPanelRef" />
+          <data-panel
+            @dbClickDimension="dbClickDimension"
+            @dbClickMeasure="dbClickMeasure"
+          />
           <!-- <theme-panel /> -->
         </div>
       </el-main>

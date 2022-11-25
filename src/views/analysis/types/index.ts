@@ -23,3 +23,12 @@ export interface dataScreenListParam {
   pageSize: number;
 }
 
+export interface fileFoldParam {
+  createTime?: string; // 创建时间
+  creator?: string; // 创建者
+  id?: number; // 主键id
+  isDeleted?: number; //
+  name?: string; // 名称
+  updateTime?: string; // 更新时间
+  updater?: string; // 修改者
+}

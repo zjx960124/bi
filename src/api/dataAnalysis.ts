@@ -3,6 +3,7 @@ import {
   ControllerResult,
   dataScreenParam,
   dataScreenListParam,
+  fileFoldParam,
 } from '@/views/analysis/types';
 
 /**
@@ -54,6 +55,19 @@ export function saveOrUpdateDataScreen(
   return Request({
     method: 'POST',
     url: `/rest/bi/saveOrUpdateDataScreen`,
+    data,
+  });
+}
+
+/**
+ * 新增或者更新文件夹
+ */
+export function saveFileFold(
+  data: fileFoldParam
+): Promise<ControllerResult<fileFoldParam>> {
+  return Request({
+    method: 'POST',
+    url: `/rest/bi/saveFileFold`,
     data,
   });
 }

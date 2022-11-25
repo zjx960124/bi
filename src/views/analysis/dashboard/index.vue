@@ -2,7 +2,11 @@
 import { ref, onMounted, reactive, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import router from '@/router';
-import { getDataScreenList, deleteDataScreen } from '@/api/dataAnalysis';
+import {
+  getDataScreenList,
+  deleteDataScreen,
+  saveFileFold
+} from '@/api/dataAnalysis';
 import { dataScreenListParam } from '@/views/analysis/types';
 
 const state = reactive({
@@ -57,9 +61,12 @@ function handleAddFolder() {
     inputPattern: /^.+$/,
     inputErrorMessage: '文件夹名称输入有误'
   }).then(({ value }) => {
-    ElMessage({
-      type: 'success',
-      message: '创建成功'
+    saveFileFold({ name: value }).then(({ data }) => {
+      getData();
+      ElMessage({
+        type: 'success',
+        message: '创建成功'
+      });
     });
   });
 }

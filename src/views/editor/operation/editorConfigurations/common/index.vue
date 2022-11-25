@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { ref, nextTick, computed } from "vue";
-import { AddCircleOutline, ChevronUp } from "@vicons/ionicons5";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-import { EditCanvasConfigEnum } from "@/store/chartEditStore/chartEditStore.d";
-import { ChevronDown } from "@vicons/ionicons5";
-import { backgroundImageSize } from "@/settings/designSetting";
-import { FileTypeEnum } from "@/enums/fileTypeEnum";
-import { UploadCustomRequestOptions } from "naive-ui";
-import { fileToUrl, loadAsyncComponent } from "@/utils";
-import Project from "@/store/pageEditStore/pageEditStore";
+import { ref, nextTick, computed } from 'vue';
+import { AddCircleOutline, ChevronUp } from '@vicons/ionicons5';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { EditCanvasConfigEnum } from '@/store/chartEditStore/chartEditStore.d';
+import { ChevronDown } from '@vicons/ionicons5';
+import { backgroundImageSize } from '@/settings/designSetting';
+import { FileTypeEnum } from '@/enums/fileTypeEnum';
+import { UploadCustomRequestOptions } from 'naive-ui';
+import { fileToUrl, loadAsyncComponent } from '@/utils';
+import Project from '@/store/pageEditStore/pageEditStore';
 
 const chartEditStore = useChartEditStore();
 
-const fontFamily = ref<string>("");
+const fontFamily = ref<string>('');
 const fontFamilyOptions = ref<any[]>([]);
 const uploadFileListRef = ref();
-const pageAnimation = ref<string>("fadeInLeft");
+const pageAnimation = ref<string>('fadeInLeft');
 const pageAnimationOptions = ref<any[]>([
-  { label: "向右进入", value: "fadeInLeft" },
-  { label: "向左进入", value: "fadeInRight" },
+  { label: '向右进入', value: 'fadeInLeft' },
+  { label: '向左进入', value: 'fadeInRight' },
 ]);
 
 const handleChange = (e: Event) => {
@@ -37,7 +37,7 @@ const beforeUploadHandle = async ({ file }) => {
   const size = file.file.size;
 
   if (size > 1024 * 1024 * backgroundImageSize) {
-    window["$message"].warning(
+    window['$message'].warning(
       `图片超出 ${backgroundImageSize}M 限制，请重新上传！`
     );
     return false;
@@ -47,7 +47,7 @@ const beforeUploadHandle = async ({ file }) => {
     type !== FileTypeEnum.JPEG &&
     type !== FileTypeEnum.GIF
   ) {
-    window["$message"].warning("文件格式不符合，请重新上传！");
+    window['$message'].warning('文件格式不符合，请重新上传！');
     return false;
   }
   return true;
@@ -68,7 +68,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
         false
       );
     } else {
-      window["$message"].error("添加图片失败，请稍后重试！");
+      window['$message'].error('添加图片失败，请稍后重试！');
     }
   });
 };
@@ -166,14 +166,14 @@ const customRequest = (options: UploadCustomRequestOptions) => {
         </div>
         <div class="common-item">
           <div>轮播间隔</div>
-          <n-input
+          <n-input-number
             class="common-input"
             round
             v-model:value="Project.pageConfig.shuffingInterval"
             :disabled="!Project.pageConfig.onShuffing"
           >
             <template #suffix> <span color="#BBBCBB">s</span></template>
-          </n-input>
+          </n-input-number>
         </div>
         <div class="common-item">
           <div>过渡类型</div>
@@ -190,7 +190,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
     </n-collapse>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .configuration-titile {
   width: 100%;
   height: 48px;
@@ -213,7 +213,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
     border-radius: 15px;
     :deep .n-collapse-item__header {
       color: #293270;
-      font-family: "PingFang-SC-Bold";
+      font-family: 'PingFang-SC-Bold';
       font-size: 14px;
       height: 50px;
       position: relative;
@@ -231,7 +231,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
     }
     .common-title {
       color: #6b797f;
-      font-family: "PingFang-SC-Medium";
+      font-family: 'PingFang-SC-Medium';
       font-size: 12px;
       text-align: left;
       margin: 18px 0 12px 0;
@@ -241,7 +241,7 @@ const customRequest = (options: UploadCustomRequestOptions) => {
       display: flex;
       align-items: center;
       color: #6b797f;
-      font-family: "PingFang-SC-Medium";
+      font-family: 'PingFang-SC-Medium';
       font-size: 12px;
       .common-input {
         width: 160px;

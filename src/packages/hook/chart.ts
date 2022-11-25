@@ -46,7 +46,7 @@ export const expendSeries = (
 };
 
 /**
- * 组合Formatter
+ * 组合饼图Formatter
  * @param option
  * @param arrange
  * @returns
@@ -88,6 +88,47 @@ export const handlePieSeries = (option: ChartConfigType) => {
       option.series.label.formatterArrange
     );
   }
+  return option;
+};
+
+/**
+ * 处理地图Label
+ * @param option 显示数据配置
+ * @returns
+ */
+export const mapFormatterFunc = (option: string[]) => {
+  const options = option;
+  return (params: any) => {
+    if (options.length < 1) {
+      return '';
+    } else {
+      let result = '';
+      options.forEach((item: string, index: number) => {
+        index < options.length - 1 && index !== 0 && (result += ',');
+        result += params[item];
+      });
+      return result;
+    }
+  };
+};
+
+/**
+ * 处理地图样式
+ * @param option
+ */
+export const handleMapSeries = (option: ChartConfigType) => {
+  option.series.forEach((item: any) => {
+    if (item.type === 'effectScatter' && option.dataset.point)
+      item.data = option.dataset.point;
+    else if (item.type === 'map' && option.dataset.point)
+      item.data = option.dataset.map;
+  });
+  if (option.series[1].label.show) {
+    option.series[1].label.formatter = mapFormatterFunc(
+      option.series[1].label.formatterOption
+    );
+  }
+  console.log(option);
   return option;
 };
 

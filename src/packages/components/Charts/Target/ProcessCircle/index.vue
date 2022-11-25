@@ -1,8 +1,8 @@
 <template>
   <n-progress
     :type="type"
-    :height="h"
-    :processing="processing"
+    :height="height"
+    :processing="animationFlag"
     :percentage="option.dataset"
     :indicator-placement="indicatorPlacement"
     :color="color"
@@ -15,6 +15,8 @@
       :style="{
         color: indicatorTextColor,
         fontSize: `${indicatorTextSize}px`,
+        indicatorFontStyle,
+        indicatorFontWeight,
       }"
     >
       {{ option.dataset }} {{ unit }}
@@ -36,17 +38,18 @@ const props = defineProps({
   },
 });
 
-// 取配置数据
-const { w, h } = toRefs(props.chartConfig.attr);
 const {
   type,
+  height,
   unit,
   color,
-  processing,
+  animationFlag,
   railColor,
   indicatorTextColor,
   indicatorPlacement,
   indicatorTextSize,
+  indicatorFontStyle,
+  indicatorFontWeight,
   offsetDegree,
   dataset,
   fillBorderRadius,

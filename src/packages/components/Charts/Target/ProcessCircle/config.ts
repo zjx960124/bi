@@ -34,8 +34,7 @@ export const option = {
   dataset: 36,
   // 默认类型
   type: 'circle',
-  // 进行时效果
-  processing: true,
+  height: 24,
   // 主颜色
   color: '#4992FFFF',
   // 轨道颜色
@@ -45,12 +44,16 @@ export const option = {
   // 指标大小
   indicatorTextSize: 34,
   // 指标位置（线条时可用）
-  indicatorPlacement: 'outside',
+  indicatorPlacement: 'inside',
+  precision: 0,
   // 指标颜色
-  indicatorTextColor: '#FFFFFFFF',
+  indicatorTextColor: '#FFFFFF',
+  indicatorFontWeight: 'normal',
+  indicatorFontStyle: 'normal',
   // 偏移角度
   offsetDegree: 0,
   fillBorderRadius: 12,
+  animationFlag: true,
 };
 
 export default class Config

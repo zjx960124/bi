@@ -1,8 +1,8 @@
 <template>
   <n-progress
     :type="type"
-    :height="24"
-    :processing="processing"
+    :height="height"
+    :processing="animationFlag"
     :percentage="option.dataset"
     :indicator-placement="indicatorPlacement"
     :color="color"
@@ -15,6 +15,8 @@
       :style="{
         color: indicatorTextColor,
         fontSize: `${indicatorTextSize}px`,
+        indicatorFontStyle,
+        indicatorFontWeight,
       }"
     >
       {{ option.dataset }} {{ unit }}
@@ -38,13 +40,16 @@ const props = defineProps({
 
 const {
   type,
+  height,
   unit,
   color,
-  processing,
+  animationFlag,
   railColor,
   indicatorTextColor,
   indicatorPlacement,
   indicatorTextSize,
+  indicatorFontStyle,
+  indicatorFontWeight,
   offsetDegree,
   dataset,
   fillBorderRadius,

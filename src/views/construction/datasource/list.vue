@@ -44,7 +44,7 @@
       </div>
     </template>
   </JsLayout>
-  <addDialog ref="addDialogs" />
+  <addDialog ref="addDialogs" @restData="restData"/>
   <replaceDialog ref="replaceDialogs" />
 </template>
 
@@ -67,7 +67,7 @@ const openDraw = () => {
 //打开新增数据
 const addDialogs = ref();
 const openAddDialog = () => {
-  addDialogs.value.initData();
+  addDialogs.value.initData(datasource.value);
 };
 
 //打开替换数据
@@ -80,7 +80,6 @@ const openRelpaceDialog = () => {
 const { getTableByDataSourceId } = DataSource;
 const datasource = ref<checkDatasourceType>();
 const getDatasourceType = async (val: checkDatasourceType) => {
-  addDialogs.value.path = `${val.dataSourceUrl}${val.dataSourceName}`;
   const { data } = await getTableByDataSourceId({
     dataSourceId: val.id,
   });
@@ -90,6 +89,11 @@ const getDatasourceType = async (val: checkDatasourceType) => {
     datasource.value["tableName"] = tableName;
   }
 };
+
+//刷新
+const restData = ()=>{
+  
+}
 </script>
 <style scoped lang="scss">
 .datalist-container {

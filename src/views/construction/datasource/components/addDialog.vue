@@ -59,22 +59,24 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { DataSource } from "@/api/dataSource";
+import { checkDatasourceType } from "@/views/construction/types";
+import { ElMessage } from "element-plus";
 const dialogVisible = ref(false);
-let path = ref<string>("");
 const handleClose = () => {
   dialogVisible.value = !dialogVisible.value;
 };
-
+const datasource = ref<checkDatasourceType>();
 const initData = (val: any) => {
+  datasource.value = val;
   dialogVisible.value = !dialogVisible.value;
 };
 //点击下载模板
 const goUrl = (val: number) => {
   let url = "";
   if (val == 0) {
-    url = `/rest/bi/template/file?path=${path.value}`;
+    url = `/rest/bi/template/file?dataSourceId=${datasource.value?.id}`;
   } else {
-    url = `/rest/bi/template/headFile?path=${path.value}`;
+    url = `/rest/bi/template/headFile?dataSourceId=${datasource.value?.id}`;
   }
   var down = document.createElement("a");
   down.href = url;
@@ -89,18 +91,27 @@ const fileChange = async (file: any) => {
   files.value = file;
 };
 
+const emit = defineEmits(['restData'])
 const saveData = async () => {
   let formdata = new FormData();
   formdata.append("files", files.value.raw);
   const { data } = await uploadExcelFiles(formdata);
-  if(data){
-    
+  if (data && data.length > 0) {
+    const { code,msg } = await addExcelData({
+      actualFileName: datasource.value?.dataSourceName,
+      addFileName: data[0].actualFileName,
+      dataPath: datasource.value?.dataSourceUrl,
+      dataSourceId: datasource.value?.id,
+    });
+    if(code != 200) return ElMessage.error(msg);
+    ElMessage.success('上传成功');
+    handleClose();
+    emit('restData')
   }
 };
 
 defineExpose({
   initData,
-  path,
 });
 </script>
 <style scoped lang="scss">

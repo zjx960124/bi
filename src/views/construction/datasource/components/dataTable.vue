@@ -5,7 +5,7 @@
       v-if="datasource && Object.keys(datasource).length > 0"
     >
       <el-table
-        v-if="datasource?.accessType === 1 && tableData.length > 0"
+        v-if="datasource?.accessType === 1"
         :data="tableData"
         align="center"
         fit
@@ -15,16 +15,13 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="name"
+          prop="tableName"
           label="名称"
           min-width="120"
           align="center"
+          width="auto"
         />
-        <el-table-column
-          label="操作"
-          width="300"
-          align="center"
-        >
+        <el-table-column label="操作" width="300" align="center">
           <template #default="{ row }">
             <el-button
               class="el-button-edit"
@@ -32,7 +29,7 @@
               type="primary"
               size="small"
               icon="InfoFilled"
-              @click="openDetail(row)"
+              @click="openSQLdetail(row)"
             >
               详情
             </el-button>
@@ -40,7 +37,7 @@
         </el-table-column>
       </el-table>
       <el-table
-        v-else-if="datasource?.accessType === 2 && tableData.length > 0"
+        v-else-if="datasource?.accessType === 2"
         :data="tableData"
         align="center"
         fit
@@ -75,20 +72,26 @@
               type="primary"
               size="small"
               icon="Download"
-              @click="openDetail(row)"
             >
               下载
             </el-button>
-            <el-button
-              class="el-button-edit"
-              link
-              type="danger"
-              size="small"
-              icon="Delete"
-              @click="openDetail(row)"
+
+            <el-popconfirm
+              title="确定删除该数据？"
+              @confirm.stop="deleteRow(row)"
             >
-              删除
-            </el-button>
+              <template #reference>
+                <el-button
+                  class="el-button-edit"
+                  link
+                  type="danger"
+                  size="small"
+                  icon="Delete"
+                >
+                  删除
+                </el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -99,12 +102,6 @@
         :total="page.counts"
         v-if="tableData.length > 0"
       />
-      <el-empty
-        :image="imgUrl"
-        class="datasource-empty"
-        description="暂无数据"
-        v-else
-      />
     </div>
     <el-empty
       :image="imgUrl"
@@ -114,38 +111,27 @@
     />
   </div>
 
-  <el-drawer
-    v-model="drawInfo.drawer"
-    :direction="direction"
-    :size="getSize"
-  >
+  <el-drawer v-model="drawInfo.drawer" :direction="direction" :size="getSize">
     <template #title>
-      <h4
-        class="title"
-        v-if="drawInfo.type == 'detail'"
-      >表详情</h4>
-      <h4
-        class="title"
-        v-if="drawInfo.type == 'add' && !isShowType"
-      >
+      <h4 class="title" v-if="drawInfo.type == 'detail'">
+        {{ datasource.accessType == 2 ? "文件详情" : "表详情" }}
+      </h4>
+      <h4 class="title" v-if="drawInfo.type == 'add' && isShowType == 'none'">
         新建数据源
       </h4>
-      <h4
-        class="title"
-        v-if="isShowType == 'sql'"
-      >添加MySQL数据源</h4>
-      <h4
-        class="title"
-        v-if="isShowType == 'file'"
-      >上传文件</h4>
+      <h4 class="title" v-if="isShowType == 'sql'">添加MySQL数据源</h4>
+      <h4 class="title" v-if="isShowType == 'file'">上传文件</h4>
     </template>
     <template #default>
       <template v-if="drawInfo.type == 'detail'">
-        <div class="info-box">表名称：chart</div>
+        <div class="info-box" v-if="datasource.accessType == 2">
+          文件名称：{{ datasource.dataSourceShowName }}
+        </div>
+        <div class="info-box">表名称：{{ datasource.tableName }}</div>
         <div class="table-box">
           <div class="info-box">表描述:</div>
           <el-table
-            :data="drawData"
+            :data="drawDataList"
             align="center"
             fit
             :highlight-current-row="false"
@@ -154,19 +140,19 @@
             style="width: 100%"
           >
             <el-table-column
-              prop="fieldName"
+              prop="columnName"
               label="字段名称"
               min-width="120"
               align="center"
             />
             <el-table-column
-              prop="fieldType"
+              prop="columnType"
               label="字段类型"
               min-width="120"
               align="center"
             />
             <el-table-column
-              prop="fieldDesc"
+              prop="commentComment"
               label="字段描述"
               min-width="120"
               align="center"
@@ -175,10 +161,7 @@
         </div>
       </template>
       <template v-if="drawInfo.type == 'add'">
-        <div
-          class="datasource-action-content"
-          v-if="!isShowType"
-        >
+        <div class="datasource-action-content" v-if="isShowType == 'none'">
           <div
             class="item"
             v-for="(item, idx) in dataList"
@@ -193,10 +176,12 @@
           <setting
             v-if="isShowType == 'sql'"
             :isShowTitle="false"
+            @setIsShowType="setIsShowType"
           />
           <uploadfile
             v-if="isShowType == 'file'"
             :isShowTitle="false"
+            @setIsShowType="setIsShowType"
           />
         </template>
       </template>
@@ -205,7 +190,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed, watch } from "vue";
 import noData from "@/assets/data/noData.png";
 import setting from "./setting.vue";
 import uploadfile from "./uploadFile.vue";
@@ -216,35 +201,25 @@ import {
   checkDatasourceType,
   excelByIdType,
 } from "@/views/construction/types/index";
+import { ElMessage } from "element-plus";
 const imgUrl = ref(noData);
-const tableData = ref([]);
-const tableHeader = ref<Array<{ name: string; value: string }>>([]);
+
+const tableData = ref([]); //表格数据
+const tableHeader = ref<Array<{ name: string; value: string }>>([]); //表头
+//分页数据
 const page = ref<excelByIdType>({
   pageNum: 0,
   pageSize: 10,
   counts: 0,
 });
-const drawData = ref([]);
-const direction = ref("rtl");
-const isShowType = ref<string>("");
-let drawInfo = ref<drawerTypes>({
-  type: 'add',
-  drawer: false
-});
 
+//数据源信息
 let datasource = ref<checkDatasourceType>();
-
-//新建数据源
-const dataList = ref<Array<dataTypes>>([
-  { type: 'sql', title: 'MySQL' },
-  { type: 'file', title: '本地文件（.csv  .xlsx  .xls）' },
-  { type: 'api', title: 'API数据' }
-]);
 
 //监听数据
 const props = defineProps({
   drawData: {
-    type: Object
+    type: Object,
   },
   datasource: {
     type: Object,
@@ -253,29 +228,41 @@ const props = defineProps({
     },
   },
 });
-
-const getSize = computed(() => {
-  if (drawInfo.value.type == 'add') {
-    return '20%';
-  } else if (drawInfo.value.type == 'detail') {
-    return '30%';
-  }
+let drawInfo = ref<drawerTypes>({
+  type: "add",
+  drawer: false,
 });
-
-const openSetting = (item: dataTypes) => {
-  const { type } = item;
-  isShowType.value = type as string;
-};
-
-//详情
-const openDetail = (val: any) => {
-  drawInfo.value = { type: 'detail', drawer: true };
-};
-
-const { getAllExcelDataByDataSourceId, getDataSourceById } = DataSource;
+//监听数据变化
+watch(
+  () => props.drawData,
+  (val) => {
+    if (val) {
+      drawInfo.value = val;
+    }
+  }
+);
+watch(
+  () => props.datasource,
+  (val) => {
+    if (val && Object.keys(val).length > 0) {
+      datasource.value = val;
+      if (datasource.value.accessType == 1) {
+        getDataSourceByIdList();
+      } else {
+        getAllExcelDataById();
+      }
+    }
+  }
+);
+const {
+  getAllExcelDataByDataSourceId,
+  getColumnByTableId,
+  deleteFileDataByDataSourceIdAndDataId,
+  getTableByDataSourceId,
+} = DataSource;
 //根据数据源id获取excel数据
-const getAllExcelDataById = async (val: checkDatasourceType) => {
-  const { id } = val;
+const getAllExcelDataById = async () => {
+  const id = datasource.value?.id;
   tableData.value = [];
   tableHeader.value = [];
   const {
@@ -300,36 +287,78 @@ const getAllExcelDataById = async (val: checkDatasourceType) => {
 };
 
 //根据id获取数据源数据
-const getDataSourceByIdList = async (val: checkDatasourceType) => {
-  const { id } = val;
+const getDataSourceByIdList = async () => {
+  const id = datasource.value?.id;
   tableData.value = [];
-  const { data } = await getDataSourceById({ dataSourceId: id });
+  const { data } = await getTableByDataSourceId({ dataSourceId: id });
   if (data && data.length > 0) {
     tableData.value = data;
-    data.map((item: any, inx: number) => {
-      if (inx == 0) {
-        Object.keys(item).forEach((i) => {
-          let obj = { name: i, value: i };
-          tableHeader.value.push(obj);
-        });
-      }
-    });
   }
 };
 
-//监听数据变化
-watchEffect(() => {
-  if (props.drawData) {
-    drawInfo.value = props.drawData;
+//文件详情
+const openDetail = async (val: any) => {
+  const { data } = await getColumnByTableId({
+    tableName: datasource.value?.tableName,
+    dataSourceId: datasource.value?.id,
+  });
+  drawDataList.value = data;
+  drawInfo.value = { type: "detail", drawer: true };
+};
+
+//删除文件数据
+const deleteRow = async (val: any) => {
+  const { id } = val;
+  const { code, msg } = await deleteFileDataByDataSourceIdAndDataId({
+    dataSourceId: datasource.value?.id,
+    dataId: id,
+  });
+  if (code == 200) {
+    ElMessage.success("删除成功");
+    getAllExcelDataById();
+  } else {
+    ElMessage.error(msg);
   }
-  if (props.datasource && Object.keys(props.datasource).length > 0) {
-    datasource.value = props.datasource;
-    if (datasource.value.accessType == 1) {
-    } else {
-      getAllExcelDataById(datasource.value);
-    }
+};
+
+//sql详情
+const openSQLdetail = async (val: any) => {
+  const { data } = await getColumnByTableId({
+    tableName: val.tableName,
+    dataSourceId: datasource.value?.id,
+  });
+  drawDataList.value = data;
+  drawInfo.value = { type: "detail", drawer: true };
+};
+
+//抽屉框数据
+const drawDataList = ref([]);
+const direction = ref("rtl");
+const getSize = computed(() => {
+  if (drawInfo.value.type == "add") {
+    return "20%";
+  } else if (drawInfo.value.type == "detail") {
+    return "30%";
   }
 });
+
+//新建数据源
+const dataList = ref<Array<dataTypes>>([
+  { type: "sql", title: "MySQL" },
+  { type: "file", title: "本地文件（.csv  .xlsx  .xls）" },
+  // { type: "api", title: "API数据" },
+]);
+
+const openSetting = (item: dataTypes) => {
+  const { type } = item;
+  isShowType.value = type as string;
+};
+//MySQL数据源取消按钮
+const isShowType = ref<string>("none");
+const setIsShowType = (val: string) => {
+  drawInfo.value = { type: "add", drawer: false };
+  isShowType.value = "none";
+};
 </script>
 <style scoped lang="scss">
 .datatable-container-box {
@@ -352,7 +381,7 @@ h4.title {
   position: relative;
   padding-left: 15px;
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     left: 0;
@@ -402,7 +431,7 @@ h4.title {
     }
     .item-title {
       font-size: 14px;
-      font-family: 'PingFang SC';
+      font-family: "PingFang SC";
       font-weight: 400;
       color: #293270;
       text-align: left;

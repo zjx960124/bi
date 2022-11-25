@@ -55,6 +55,7 @@ import dataTable from "./components/dataTable.vue";
 import addDialog from "./components/addDialog.vue";
 import replaceDialog from "./components/replaceDialog.vue";
 import { drawerTypes, checkDatasourceType } from "../types/index";
+import { DataSource } from "@/api/dataSource";
 const searchValue = ref("");
 
 //新建数据源
@@ -63,19 +64,31 @@ const openDraw = () => {
   drawData.value = { drawer: true, type: "add" };
 };
 
-//获取数据源类型
-const datasource = ref<checkDatasourceType>();
-const getDatasourceType = (val: checkDatasourceType) => {
-  datasource.value = val;
-};
+//打开新增数据
 const addDialogs = ref();
 const openAddDialog = () => {
   addDialogs.value.initData();
 };
 
+//打开替换数据
 const replaceDialogs = ref();
 const openRelpaceDialog = () => {
   replaceDialogs.value.initData();
+};
+
+//获取数据源类型
+const { getTableByDataSourceId } = DataSource;
+const datasource = ref<checkDatasourceType>();
+const getDatasourceType = async (val: checkDatasourceType) => {
+  addDialogs.value.path = `${val.dataSourceUrl}${val.dataSourceName}`;
+  const { data } = await getTableByDataSourceId({
+    dataSourceId: val.id,
+  });
+  if (data && data.length > 0) {
+    let tableName = data[0].tableName;
+    datasource.value = val;
+    datasource.value["tableName"] = tableName;
+  }
 };
 </script>
 <style scoped lang="scss">

@@ -34,7 +34,7 @@ const router = useRouter();
 onMounted(async () => {
   const {
     data: { counts },
-  } = await getDatasourceList({ pageNum: 0, pageSize: 10 });
+  } = await getDatasourceList({ pageNum: 0, pageSize: 10, accessType: 0 });
   if (counts > 0) {
     router.push("/datasource/list");
   }

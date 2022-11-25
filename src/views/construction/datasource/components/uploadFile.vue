@@ -51,6 +51,7 @@
       />保&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;存</el-button
     >
     <el-button type="info"
+    @click="fileCancel"
       ><img
         src="@/assets/data/cancel.png"
       />取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</el-button
@@ -110,6 +111,11 @@ const saveUploadFile = async () => {
     statusForm.isOpen = true;
   }
 };
+const emit = defineEmits(["setIsShowType"]);
+const fileCancel=()=>{
+  emit("setIsShowType", "");
+}
+
 </script>
 <style scoped lang="scss">
 .datasource-set {

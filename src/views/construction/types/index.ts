@@ -17,6 +17,7 @@ interface checkDatasourceType {
   updater?: string
   creator?: string
   dataSourceId?: number
+  tableName?:string
 }
 
 
@@ -36,6 +37,7 @@ interface DataSourceListType {
   pageNum: number
   pageSize: number
   showName?: string
+  accessType?:number
 }
 
 //状态栏盒子

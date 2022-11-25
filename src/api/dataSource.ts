@@ -47,14 +47,14 @@ export class DataSource {
         return Request(`/rest/bi/getAllExcelDataByDataSourceId/${params.dataSourceId}`, {
             method: "get",
             responseType: "json",
-            params:{
-                pageNum:params.pageNum,
-                pageSize:params.pageSize
+            params: {
+                pageNum: params.pageNum,
+                pageSize: params.pageSize
             }
         });
     }
 
-    //Excel文件上传/rest/bi/template/file
+    //Excel文件上传
     static async uploadExcelFiles(data: any): Promise<any> {
         return Request("/rest/bi/template/file", {
             method: "post",
@@ -79,7 +79,7 @@ export class DataSource {
         return Request(`/rest/bi/updateDatasource`, {
             method: "put",
             responseType: "json",
-            data:params
+            data: params
         });
     }
     //根据id查询数据源
@@ -87,6 +87,37 @@ export class DataSource {
         return Request(`/rest/bi/getDataSourceById/${params.dataSourceId}`, {
             method: "get",
             responseType: "json",
+        });
+    }
+
+    //根据数据源信息查询表信息
+    static async getTableByDataSourceId(params: any): Promise<any> {
+        return Request(`/rest/bi/getTableByDataSourceId/${params.dataSourceId}`, {
+            method: "get",
+            responseType: "json",
+        });
+    }
+    //根据数据源id与表信息名称查询字段信息
+    static async getColumnByTableId(params: any): Promise<any> {
+        return Request(`/rest/bi/getColumnByTableId/${params.tableName}/${params.dataSourceId}`, {
+            method: "get",
+            responseType: "json",
+        });
+    }
+    //根据数据源信息删除数据
+    static async deleteFileDataByDataSourceIdAndDataId(params: any): Promise<any> {
+        return Request(`/rest/bi/deleteFileDataByDataSourceIdAndDataId/${params.dataSourceId}/${params.dataId}`, {
+            method: "DELETE",
+            responseType: "json",
+        });
+    }
+
+    //增加数据
+    static async addExcelData(params: any): Promise<any> {
+        return Request(`/rest/bi/addExcelData`, {
+            method: "get",
+            responseType: "json",
+            params
         });
     }
 }

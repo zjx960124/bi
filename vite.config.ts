@@ -21,15 +21,15 @@ export default defineConfig({
         }),
       ],
     }),
-    Components({
-      // 指定组件位置，默认是src/components
-      dirs: ['src/page/demo'],
-      // ui库解析器
-      resolvers: [],
-      extensions: ['vue'],
-      // 配置文件生成位置
-      dts: 'src/components.d.ts',
-    }),
+    // Components({
+    //   // 指定组件位置，默认是src/components
+    //   dirs: ['src/page/demo'],
+    //   // ui库解析器
+    //   resolvers: [],
+    //   extensions: ['vue'],
+    //   // 配置文件生成位置
+    //   dts: 'src/components.d.ts',
+    // }),
     createSvgIconsPlugin({
       // 要缓存的图标文件夹
       iconDirs: [path.resolve(__dirname, 'src/svg')],

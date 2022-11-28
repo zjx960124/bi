@@ -135,7 +135,7 @@ export interface PublicConfigType {
 export interface CreateComponentType extends PublicConfigType {
   key: string;
   chartConfig: ConfigType;
-  option: GlobalThemeJsonType;
+  option: { [P in keyof GlobalThemeJsonType]?: GlobalThemeJsonType[P] };
   themeColor?: { color: ChartColorsNameType } & any;
 }
 

@@ -4,6 +4,7 @@ import LineCommonSetting from './LineCommonSetting.vue';
 import PieCommonSetting from './PieCommonSetting.vue';
 import BaseSetting from './BaseSetting.vue';
 import MapCommonSetting from './MapCommonSetting.vue';
+import TableCommonSetting from './TableCommonSetting.vue';
 
 export {
   CommonSetting,
@@ -12,4 +13,5 @@ export {
   PieCommonSetting,
   BaseSetting,
   MapCommonSetting,
+  TableCommonSetting,
 };

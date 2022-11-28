@@ -6,7 +6,12 @@ import { EditCanvasTypeEnum } from '@/store/chartEditStore/chartEditStore.d';
 import { ReorderFour, AddCircle, RemoveCircle } from '@vicons/ionicons5';
 
 // 获取全部分类组件
-import { genreMenuOptions, genreMenuOptionsType } from '@/utils/hooks/useAside';
+import {
+  genreMenuOptions,
+  genreMenuOptionsType,
+  menuOptions,
+  MenuOptionsType,
+} from '@/utils/hooks/useAside';
 
 const chartEditStore = useChartEditStore();
 const { lockScale, scale } = toRefs(chartEditStore.getEditCanvas);
@@ -14,6 +19,9 @@ const { lockScale, scale } = toRefs(chartEditStore.getEditCanvas);
 const chartsItem = loadAsyncComponent(
   () => import('../../charts/components/chartsItem/index.vue')
 );
+
+console.log(menuOptions);
+console.log(genreMenuOptions);
 
 // 拖动
 const sliderValue = ref<number>(100);

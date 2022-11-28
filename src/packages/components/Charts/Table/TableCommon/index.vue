@@ -1,0 +1,157 @@
+<script setup lang="ts">
+import { PropType, toRefs, computed, ref, reactive, watch } from 'vue';
+import { CreateComponentType } from '@/packages/index.d';
+
+const props = defineProps({
+  chartConfig: {
+    type: Object as PropType<CreateComponentType>,
+    required: true,
+  },
+});
+
+let {
+  dataset,
+  columns,
+  data,
+  tableAlign,
+  stripe,
+  stripeColor,
+  border,
+  borderHeight,
+  borderColor,
+  backgroundColor,
+  splitLine,
+  splitLineHeight,
+  splitLineColor,
+  fontSize,
+  fontColor,
+  fontStyle,
+  fontWeight,
+  headerFlag,
+  headerFontSize,
+  headerFontColor,
+  headerBackgroundColor,
+  headerFontStyle,
+  headerFontWeight,
+  indexColumn,
+  indexColumnLabel,
+  indexColumnWidth,
+} = toRefs(props.chartConfig.option);
+
+const bottomBorderHeight = computed(() => {
+  const borderFlag = border.value;
+  return borderFlag ? `${borderHeight.value}px` : `0px`;
+});
+
+const splitLineConfig = computed(() => {
+  const splitLineFlag = props.chartConfig.option.splitLine;
+  return splitLineFlag
+    ? `${splitLineHeight.value}px solid ${splitLineColor.value}`
+    : '';
+});
+
+const borderLineConfig = computed(() => {
+  let borderFlag = props.chartConfig.option.splitLine;
+  return borderFlag ? `${borderHeight.value}px solid ${borderColor.value}` : '';
+});
+
+const tableFontSize = computed(() => {
+  const tableFontSize = fontSize.value;
+  return `${fontSize.value}px`;
+});
+
+const headerFontSizeComputed = computed(() => {
+  return `${headerFontSize.value}px`;
+});
+
+const headerType = computed(() => {
+  return headerFlag.value ? 'block' : 'none';
+});
+
+const indexMethod = (index: number) => {
+  return index + 1;
+};
+</script>
+<template>
+  <el-table
+    :data="dataset!.data"
+    :border="border"
+    :stripe="stripe"
+    style="width: 100%"
+    class="customize-table"
+  >
+    <template v-if="indexColumn">
+      <el-table-column
+        type="index"
+        :width="indexColumnWidth"
+        :label="indexColumnLabel"
+        :index="indexMethod"
+        :align="tableAlign"
+      />
+    </template>
+    <template v-for="(item, index) in dataset!.columns" :key="index">
+      <el-table-column
+        :prop="item.key"
+        :align="tableAlign"
+        :label="item.label"
+      />
+    </template>
+  </el-table>
+</template>
+<style lang="scss" scoped>
+.customize-table {
+  --el-table-bg-color: v-bind(backgroundColor);
+  --el-table-header-bg-color: v-bind(headerBackgroundColor);
+  --el-table-tr-bg-color: v-bind(backgroundColor);
+  --el-table-row-hover-bg-color: v-bind(backgroundColor);
+  --el-table-current-row-bg-color: v-bind(backgroundColor);
+  --el-fill-color-lighter: v-bind(stripeColor);
+  --el-table-border-color: v-bind(borderColor);
+  --el-table-border: v-bind(splitLineConfig);
+  --el-table-text-color: v-bind(fontColor);
+  --el-table-header-text-color: v-bind(headerFontColor);
+  --el-table-header-text-font-size: v-bind(headerFontSizeComputed);
+  font-size: v-bind(tableFontSize);
+  font-style: v-bind(fontStyle);
+  font-weight: v-bind(fontWeight);
+  ::v-deep .el-table__header {
+    width: 100% !important;
+  }
+  ::v-deep .el-table__body {
+    width: 100% !important;
+  }
+  ::v-deep .el-scrollbar__view {
+    width: 100%;
+  }
+
+  ::v-deep .el-table__header-wrapper {
+    display: v-bind(headerType);
+    font-size: v-bind(headerFontSizeComputed);
+    font-style: v-bind(headerFontStyle);
+    font-weight: v-bind(headerFontWeight);
+  }
+  ::v-deep .el-table__border-left-patch {
+    width: 0 !important;
+  }
+  ::v-deep .el-table__inner-wrapper::after {
+    height: v-bind(bottomBorderHeight);
+  }
+  // 下
+  ::v-deep .el-table__inner-wrapper::before {
+    height: v-bind(bottomBorderHeight);
+  }
+  ::v-deep .el-table--border::before {
+    width: v-bind(bottomBorderHeight);
+  }
+  ::v-deeo .el-table--border::after {
+    width: v-bind(bottomBorderHeight);
+  }
+  ::v-deep .el-table--border .el-table__cell {
+    border-right: 0px !important;
+  }
+
+  ::v-deep .cell {
+    line-height: 1;
+  }
+}
+</style>

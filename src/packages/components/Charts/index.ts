@@ -4,6 +4,7 @@ import Trend from './Trend';
 import Distribution from './Distribution';
 import Target from './Target';
 import Space from './Space';
+import Table from './Table';
 
 export const ChartList = [
   ...Compare,
@@ -11,6 +12,7 @@ export const ChartList = [
   ...Distribution,
   ...Target,
   ...Space,
+  ...Table,
 ];
 
 export const ChartGenreList = {
@@ -19,4 +21,5 @@ export const ChartGenreList = {
   [GenreEnum.DISTRIBUTION]: [...Distribution],
   [GenreEnum.TARGET]: [...Target],
   [GenreEnum.SPACE]: [...Space],
+  [GenreEnum.TABLE]: [...Table],
 };

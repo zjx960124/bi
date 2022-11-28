@@ -25,7 +25,7 @@ export default defineConfig({
       // 指定组件位置，默认是src/components
       dirs: ['src/page/demo'],
       // ui库解析器
-      resolvers: [ElementPlusResolver()],
+      resolvers: [],
       extensions: ['vue'],
       // 配置文件生成位置
       dts: 'src/components.d.ts',

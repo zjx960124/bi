@@ -186,6 +186,12 @@ export class PublicConfigClass implements PublicConfigType {
     this.attr.x = x;
     this.attr.y = y;
   }
+  // 设置请求数据
+  public requestConfig = {
+    DSID: '',
+    dimension: [],
+    measure: [],
+  };
 }
 
 /**

@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import {
-  AddCircleOutline,
-  ChevronUp,
   ChevronForward,
   ChevronBack,
   ColorPalette,
   DocumentText,
-} from "@vicons/ionicons5";
-import { useTargetData } from "@/utils/hooks/useTargetData";
-import { computed, ref } from "vue";
-import { LayoutData } from "../layoutData";
+} from '@vicons/ionicons5';
+import { useTargetData } from '@/utils/hooks/useTargetData';
+import { ref } from 'vue';
+import { LayoutData } from '../layoutData';
+import { Dimension } from './component/dimension';
+import { DSList } from '@/utils/hooks/useDSData';
 const { targetData, chartEditStore } = useTargetData();
 
-const activeTab = ref<string>("config");
+console.log(targetData);
+
+const activeTab = ref<string>('config');
 const handleActiveTab = (target: string): void => {
   activeTab.value = target;
 };
@@ -90,12 +92,14 @@ const hiddenConfiguration = () => {
     </div>
     <div class="information">
       <div class="information-titile">数据</div>
-      <div class="dimension"></div>
-      <div class="measure"></div>
+      <dimension
+        :DSList="DSList"
+        :request-config="targetData.requestConfig"
+      ></dimension>
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .component-configuration-view {
   display: flex;
   height: 100%;
@@ -135,7 +139,7 @@ const hiddenConfiguration = () => {
           border-radius: 15px;
           :deep .n-collapse-item__header {
             color: #293270;
-            font-family: "PingFang-SC-Bold";
+            font-family: 'PingFang-SC-Bold';
             font-weight: bold;
             font-size: 14px;
             height: 33px;
@@ -198,21 +202,6 @@ const hiddenConfiguration = () => {
       color: #293270;
       font-size: 14px;
       flex-shrink: 0;
-    }
-    .dimension {
-      width: 100%;
-      height: 0;
-      flex: 403;
-      margin: 17px 0;
-      background: #ffffff;
-      border-radius: 15px;
-    }
-    .measure {
-      width: 100%;
-      height: 0;
-      flex: 513;
-      background: #ffffff;
-      border-radius: 15px;
     }
   }
 }

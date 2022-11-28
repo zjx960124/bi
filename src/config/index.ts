@@ -7,20 +7,20 @@ export interface IConfig {
 }
 
 const dev: IConfig = {
-  env: "development",
+  env: 'development',
   mock: true,
-  title: "开发",
-  baseApi: "/", // 本地api请求地址,注意：如果你使用了代理，请设置成'/'
-  mockApi: "/gapi",
+  title: '开发',
+  baseApi: '/', // 本地api请求地址,注意：如果你使用了代理，请设置成'/'
+  mockApi: '/gapi',
 };
 
 const prod: IConfig = {
-  env: "production",
+  env: 'production',
   mock: false,
-  title: "生产",
-  baseApi: "http://192.168.1.101", // 正式api请求地址
-  mockApi: "xxx",
+  title: '生产',
+  baseApi: 'http://192.168.1.101', // 正式api请求地址
+  mockApi: 'xxx',
 };
 
 export const config: IConfig =
-  import.meta.env.MODE === "development" ? dev : prod;
+  import.meta.env.MODE === 'development' ? dev : prod;

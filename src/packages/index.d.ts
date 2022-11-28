@@ -115,6 +115,18 @@ export enum FilterEnum {
   SKEW_Y = 'skewY',
 }
 
+export interface PublicRequestType {
+  DSID: string | number;
+  dimension: string[];
+  measure: string[];
+}
+
+export interface DSResponseType {
+  id: number;
+  setDataType: number;
+  columnName: string;
+}
+
 // 组件实例类
 export interface PublicConfigType {
   id: string;
@@ -130,6 +142,7 @@ export interface PublicConfigType {
   };
   filter?: string;
   setPosition: Function;
+  requestConfig: PublicRequestType;
 }
 
 export interface CreateComponentType extends PublicConfigType {

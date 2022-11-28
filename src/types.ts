@@ -8,6 +8,10 @@ export interface HttpResponse {
   };
 }
 
+export interface ServeceClass {
+  
+}
+
 export enum PageEnum {
   // 登录
   BASE_LOGIN = '/login',

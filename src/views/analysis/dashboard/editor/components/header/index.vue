@@ -37,15 +37,28 @@ export default {
         </el-select>
       </div>
       <div class="btnGroup">
-        <svg-icon
-          class-name="btn active"
-          icon="backOff"
-        ></svg-icon>
-
-        <svg-icon
-          class-name="btn"
-          icon="forward"
-        ></svg-icon>
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="撤销"
+          placement="bottom"
+        >
+          <svg-icon
+            class-name="btn active"
+            icon="backOff"
+          ></svg-icon>
+        </el-tooltip>
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="重做"
+          placement="bottom"
+        >
+          <svg-icon
+            class-name="btn"
+            icon="forward"
+          ></svg-icon>
+        </el-tooltip>
       </div>
       <div class="operation">
         <div

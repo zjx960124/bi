@@ -18,8 +18,12 @@ export interface dataScreenParam {
 }
 
 export interface dataScreenListParam {
-  keyword?: string;
+  keyword: string;
   pageNum: number;
   pageSize: number;
 }
 
+export interface fileFoldParam {
+  id?: number; // 主键id
+  name?: string; // 名称
+}

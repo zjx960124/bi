@@ -31,6 +31,8 @@ import router from '@/router/index';
 // pinia
 import { createPinia } from 'pinia';
 
+import draggable from 'vuedraggable';
+
 //utils
 import directPlugin from '@/utils/directive/lazyPlugin';
 import registedBreadcrumb from '@/utils/directive/registedBreadcrumb';
@@ -48,6 +50,7 @@ for (const [key, component] of Object.entries(ElementIcons)) {
 app
   .component('JsLayout', JsLayout)
   .component('SvgIcon', SvgIcon)
+  .component('draggable', draggable)
   .use(createPinia())
   .use(router)
   .use(ElementPlus, {

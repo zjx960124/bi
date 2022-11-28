@@ -160,6 +160,7 @@ const getDataList = async () => {
     pageNum: 0,
     pageSize: 999,
     showName: searchValue.value,
+    accessType:0
   });
   datas.value = data;
 };

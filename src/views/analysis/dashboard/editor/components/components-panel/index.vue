@@ -7,41 +7,56 @@ export default {
   <div class='components-panel'>
     <div
       v-for="item in list"
-      :key="item.id"
+      :key="item.key"
       class="item"
     >
-      <!-- <img
-        class="item-img"
-        :src="item.imageUrl"
-      /> -->
       <el-image
         class="item-img"
-        :src="item.imageUrl"
+        :src="item.image"
         fit="contain"
       > </el-image>
-      <div class="item-name">{{item.name}}</div>
+      <div class="item-name">{{item.title}}</div>
     </div>
   </div>
 </template>
  
 <script setup lang='ts'>
-import { ref, reactive, toRefs } from 'vue';
+import { ref, reactive, toRefs, watch, PropType } from 'vue';
+
+interface ConfigType {
+  key: string;
+  chartKey: string;
+  conKey: string;
+  title: string;
+  category: string;
+  categoryName: string;
+  package: string;
+  image: string | (() => Promise<typeof import('*.png')>);
+}
+
+const props = defineProps({
+  data: {
+    type: Array as PropType<ConfigType[]>,
+    required: true
+  }
+});
+
 const state = reactive({
-  list: [
-    {
-      id: 0,
-      imageUrl: 'index',
-      name: '折线面积图'
-    },
-    {
-      id: 1,
-      imageUrl: 'table',
-      name: '折线图'
-    }
-  ]
+  list: [] as ConfigType[]
 });
 
 const { list } = toRefs(state);
+
+watch(
+  () => props.data,
+  (value) => {
+    state.list = value;
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+);
 </script>
  
 <style lang="scss" scoped>

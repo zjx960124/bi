@@ -4,7 +4,10 @@ export default {
 };
 </script>
 <template>
-  <div class='setting-panel'>
+  <div
+    class='setting-panel'
+    :class="{'isOpen':isOpen}"
+  >
 
     <!-- 标题与卡片 -->
     <div class="section">
@@ -12,6 +15,7 @@ export default {
         <img
           class="left"
           src="/src/assets/analysis/icon-arrowLeft.png"
+          @click="handleOpenAndClose"
         />
         <div class="right">
           <el-tooltip
@@ -53,139 +57,141 @@ export default {
         </el-collapse>
       </template>
       <template v-else>
-        <div class="field-header">
-          维度
-        </div>
-        <div
-          class="field-list"
-          @drop="dimensionDrop"
-          @dragover.prevent
-        >
-          <template v-if="dimensionList.length >0">
-            <draggable
-              :list="dimensionList"
-              item-key="id"
-              chosen-class="chosen"
-              ghost-class="ghost"
-              :force-fallback="true"
-              animation="300"
-              @start="onStartDimension"
-              @end="onEndDimension"
-            >
-              <template #item="{ element,index }">
-                <div class="field-item">
-                  <div
-                    class="field-item-in flex justify-space-between align-center"
-                    style="border: 1px dashed #7c87ff;"
-                  >
-                    <div class="left">
-                      <img
-                        src="/src/assets/analysis/icon-string.png" /><span>{{element.label}}</span>
+        <div class="fieldBox">
+          <div class="field-header">
+            维度
+          </div>
+          <div
+            class="field-list"
+            @drop="dimensionDrop"
+            @dragover.prevent
+          >
+            <template v-if="dimensionList.length >0">
+              <draggable
+                :list="dimensionList"
+                item-key="id"
+                chosen-class="chosen"
+                ghost-class="ghost"
+                :force-fallback="true"
+                animation="300"
+                @start="onStartDimension"
+                @end="onEndDimension"
+              >
+                <template #item="{ element,index }">
+                  <div class="field-item">
+                    <div
+                      class="field-item-in flex justify-space-between align-center"
+                      style="border: 1px dashed #7c87ff;"
+                    >
+                      <div class="left">
+                        <img
+                          src="/src/assets/analysis/icon-string.png" /><span>{{element.label}}</span>
+                      </div>
+                      <div
+                        class="right"
+                        style="color:#6D79FF;"
+                      >
+                        <el-icon
+                          :class="index === currentDimensionInfo? 'open':' '"
+                          class="icon"
+                          @click="handleDimensionInfo(element,index)"
+                        >
+                          <ArrowRight />
+                        </el-icon>
+                        <el-icon
+                          class="icon"
+                          @click="handleDelDimension(element,index)"
+                        >
+                          <Delete />
+                        </el-icon>
+                      </div>
                     </div>
                     <div
-                      class="right"
-                      style="color:#6D79FF;"
+                      v-if="index === currentDimensionInfo"
+                      class="field-info"
+                      style="background: #F3F5FF;"
                     >
-                      <el-icon
-                        :class="index === currentDimensionInfo? 'open':' '"
-                        class="icon"
-                        @click="handleDimensionInfo(element,index)"
-                      >
-                        <ArrowRight />
-                      </el-icon>
-                      <el-icon
-                        class="icon"
-                        @click="handleDelDimension(element,index)"
-                      >
-                        <Delete />
-                      </el-icon>
+                      <p>总和</p>
+                      <p>平均值</p>
+                      <p>计数</p>
+                      <p>去重计数</p>
                     </div>
                   </div>
-                  <div
-                    v-if="index === currentDimensionInfo"
-                    class="field-info"
-                    style="background: #F3F5FF;"
-                  >
-                    <p>总和</p>
-                    <p>平均值</p>
-                    <p>计数</p>
-                    <p>去重计数</p>
-                  </div>
-                </div>
-              </template>
-            </draggable>
-          </template>
+                </template>
+              </draggable>
+            </template>
+            <div
+              v-else
+              class="empty"
+            >选择数据字段至此处</div>
+          </div>
+          <div class="field-header">
+            度量
+          </div>
           <div
-            v-else
-            class="empty"
-          >选择数据字段至此处</div>
-        </div>
-        <div class="field-header">
-          度量
-        </div>
-
-        <div
-          class="field-list"
-          @drop="measureDrop"
-          @dragover.prevent
-        >
-          <template v-if="measureList.length >0">
-            <draggable
-              :list="measureList"
-              item-key="id"
-              chosen-class="chosen"
-              ghost-class="ghost"
-              :force-fallback="true"
-              animation="300"
-              @start="onStartDimension"
-              @end="onEndDimension"
-            >
-              <template #item="{ element,index }">
-                <div class="field-item">
-                  <div
-                    class="field-item-in flex justify-space-between align-center"
-                    style="border: 1px dashed #23d8c2;"
-                  >
-                    <div class="left">
-                      <img src="/src/assets/analysis/icon-num.png" /><span>{{element.label}}</span>
+            class="field-list"
+            @drop="measureDrop"
+            @dragover.prevent
+          >
+            <template v-if="measureList.length >0">
+              <draggable
+                :list="measureList"
+                item-key="id"
+                chosen-class="chosen"
+                ghost-class="ghost"
+                :force-fallback="true"
+                animation="300"
+                @start="onStartDimension"
+                @end="onEndDimension"
+              >
+                <template #item="{ element,index }">
+                  <div class="field-item">
+                    <div
+                      class="field-item-in flex justify-space-between align-center"
+                      style="border: 1px dashed #23d8c2;"
+                    >
+                      <div class="left">
+                        <img
+                          src="/src/assets/analysis/icon-num.png" /><span>{{element.label}}</span>
+                      </div>
+                      <div
+                        class="right"
+                        style="color: #23d8c2;"
+                      >
+                        <el-icon
+                          class="icon"
+                          :class="index === currentMeasureInfo? 'open':' '"
+                          @click="handleMeasureInfo(element,index)"
+                        >
+                          <ArrowRight />
+                        </el-icon>
+                        <el-icon
+                          class="icon"
+                          @click="handleDelMeasure(element,index)"
+                        >
+                          <Delete />
+                        </el-icon>
+                      </div>
                     </div>
                     <div
-                      class="right"
-                      style="color: #23d8c2;"
+                      v-if="index === currentMeasureInfo"
+                      class="field-info"
+                      style="background: #e7faf8;"
                     >
-                      <el-icon
-                        class="icon"
-                        :class="index === currentMeasureInfo? 'open':' '"
-                        @click="handleMeasureInfo(element,index)"
-                      >
-                        <ArrowRight />
-                      </el-icon>
-                      <el-icon
-                        class="icon"
-                        @click="handleDelMeasure(element,index)"
-                      >
-                        <Delete />
-                      </el-icon>
+                      <p>总和</p>
+                      <p>平均值</p>
+                      <p>计数</p>
+                      <p>去重计数</p>
                     </div>
                   </div>
-                  <div
-                    v-if="index === currentMeasureInfo"
-                    class="field-info"
-                    style="background: #e7faf8;"
-                  >
-                    <p>总和</p>
-                    <p>平均值</p>
-                    <p>计数</p>
-                    <p>去重计数</p>
-                  </div>
-                </div>
-              </template>
-            </draggable>
-          </template>
-          <div
-            v-else
-            class="empty"
-          >选择数据字段至此处</div>
+                </template>
+              </draggable>
+            </template>
+            <div
+              v-else
+              class="empty"
+            >选择数据字段至此处</div>
+          </div>
         </div>
       </template>
     </div>
@@ -199,6 +205,7 @@ export default {
         <img
           class="left"
           src="/src/assets/analysis/icon-arrowLeft.png"
+          @click="handleOpenAndClose"
         />
       </div>
       <el-collapse
@@ -215,12 +222,13 @@ export default {
 
     <div class="updateBtn">
       <img
-        class="icon-text"
+        class="icon-update"
         src="/src/assets/analysis/icon-update.png"
         style="width:22px;height:22px"
         width="22px"
         height="22px"
-      /><span class="ml10">更新</span>
+      />
+      <span class="icon-text ml10">更新</span>
     </div>
   </div>
 </template>
@@ -243,7 +251,8 @@ const state = reactive({
     { id: 1, label: '男生人数（总和）', value: 1 }
   ],
   currentDimensionInfo: -1,
-  currentMeasureInfo: -1
+  currentMeasureInfo: -1,
+  isOpen: true
 });
 
 const {
@@ -253,8 +262,13 @@ const {
   dimensionList,
   measureList,
   currentDimensionInfo,
-  currentMeasureInfo
+  currentMeasureInfo,
+  isOpen
 } = toRefs(state);
+
+const handleOpenAndClose = () => {
+  state.isOpen = !state.isOpen;
+};
 
 const handleTab = (tab: number) => {
   state.currentTab = tab;
@@ -317,6 +331,7 @@ const onEndDimension = (event: any) => {};
   margin: 0 10px;
   width: 260px;
   height: 100%;
+  transition: all 0.3s;
   .section {
     width: 100%;
     padding: 15px;
@@ -445,9 +460,43 @@ const onEndDimension = (event: any) => {};
     background: #6d79ff;
     border-radius: 15px;
     cursor: pointer;
+    .icon-update,
+    .icon-text {
+      display: inline-block;
+    }
   }
 }
 
+.isOpen {
+  width: 32px;
+  transition: all 0.3s;
+  .header {
+    .left {
+      transform: rotate(180deg);
+    }
+    .right {
+      visibility: hidden;
+    }
+  }
+  .fieldBox {
+    visibility: hidden;
+  }
+
+  .el-collapse {
+    visibility: hidden;
+  }
+
+  .updateBtn {
+    .icon-update,
+    .icon-text {
+      visibility: hidden;
+    }
+  }
+}
+
+.fieldBox {
+  width: 100%;
+}
 .field-list {
   margin-top: 14px;
   width: 100%;

@@ -46,6 +46,7 @@ export default {
           <svg-icon
             class-name="btn active"
             icon="backOff"
+            @click="handleBackOff"
           ></svg-icon>
         </el-tooltip>
         <el-tooltip
@@ -57,6 +58,7 @@ export default {
           <svg-icon
             class-name="btn"
             icon="forward"
+            @click="handleForward"
           ></svg-icon>
         </el-tooltip>
       </div>
@@ -99,6 +101,7 @@ export default {
  
 <script setup lang='ts'>
 import { ref, reactive, toRefs } from 'vue';
+import { ElMessage } from 'element-plus';
 import router from '@/router';
 
 const state = reactive({
@@ -128,9 +131,33 @@ const handleBack = () => {
   router.go(-1);
 };
 
-const handlePreview = () => {};
+const handlePreview = () => {
+  ElMessage({
+    type: 'success',
+    message: '预览成功'
+  });
+};
 
-const handleSave = () => {};
+const handleSave = () => {
+  ElMessage({
+    type: 'success',
+    message: '保存成功'
+  });
+};
+
+const handleBackOff = () => {
+  ElMessage({
+    type: 'success',
+    message: '撤销成功'
+  });
+};
+
+const handleForward = () => {
+  ElMessage({
+    type: 'success',
+    message: '重做成功'
+  });
+};
 </script>
  
 <style lang="scss" scoped>

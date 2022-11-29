@@ -5,88 +5,73 @@ export default {
 </script>
 
 <script setup lang='ts'>
-import { ref, reactive, toRefs } from 'vue';
+import { ref, reactive, toRefs, onMounted } from 'vue';
+import { genreMenuOptions, genreMenuOptionsType } from '@/utils/hooks/useAside';
 
-const state = reactive({
-  menuList: [
-    {
-      id: 0,
-      icon: 'index',
-      title: '指标'
-    },
-    {
-      id: 1,
-      icon: 'table',
-      title: '表格'
-    },
-    {
-      id: 2,
-      icon: 'trend',
-      title: '趋势'
-    },
-    {
-      id: 3,
-      icon: 'compare',
-      title: '比较'
-    },
-    {
-      id: 4,
-      icon: 'distribution',
-      title: '分布'
-    },
-    {
-      id: 5,
-      icon: 'space',
-      title: '空间'
-    },
-    {
-      id: 6,
-      icon: 'richText',
-      title: '富文本'
-    }
-  ]
-});
+const emit = defineEmits(['menuSelect']);
 
-const { menuList } = toRefs(state);
+const state = reactive({});
+
+const {} = toRefs(state);
 
 const activeName = ref();
+
+onMounted(() => {});
+
+const handleSelect = (key: string, keyPath: string[]) => {
+  let data = {};
+  genreMenuOptions.forEach((item: any) => {
+    if (item.key === keyPath[0]) {
+      data = item.list[keyPath[1]];
+    }
+  });
+  emit('menuSelect', data);
+};
 </script>
 
 <template>
-  <el-menu
-    default-active="0-0"
-    class="el-dashboard-menu"
-    :collapse="false"
-    active-text-color="#FFFFFF"
-    text-color="#8386A1"
-    background-color="#262f47"
-  >
-    <el-sub-menu index="0">
-      <template #title>
-        <svg-icon
-          class-name="icon"
-          icon="component"
-        ></svg-icon>
-        <span>组件</span>
-      </template>
-      <el-menu-item
-        v-for="(item,index) in menuList"
-        :key="item.id"
-        :index='`0-${index}`'
+  <el-scrollbar>
+    <el-menu
+      default-active=""
+      class="el-dashboard-menu"
+      :collapse="false"
+      active-text-color="#FFFFFF"
+      text-color="#8386A1"
+      background-color="#262f47"
+      @select="handleSelect"
+    >
+      <el-sub-menu
+        v-for="(item,index) in genreMenuOptions"
+        :key="item.key"
+        :index='item.key'
       >
-        <svg-icon
-          class-name="icon"
-          :icon="item.icon"
-        ></svg-icon>
-        <span>{{item.title}}</span>
-      </el-menu-item>
-    </el-sub-menu>
-  </el-menu>
+        <template #title>
+          <svg-icon
+            class-name="icon"
+            icon="component"
+          ></svg-icon>
+          <span>{{item.label}}</span>
+        </template>
+        <el-menu-item
+          v-for="sItem in item.list"
+          :key="sItem?.key"
+          :index='sItem?.key'
+        >
+          <svg-icon
+            class-name="icon"
+            :icon="sItem?.key"
+          ></svg-icon>
+          <span>{{sItem?.label}}</span>
+        </el-menu-item>
+
+      </el-sub-menu>
+    </el-menu>
+  </el-scrollbar>
 </template>
  
 <style lang="scss" scoped>
 .el-dashboard-menu {
-  width: 103px;
+  width: 110px;
   height: 100vh;
   padding: 70px 0;
   .el-sub-menu .el-sub-menu__title {

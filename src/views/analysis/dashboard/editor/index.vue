@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, reactive } from 'vue';
+import { ref, reactive, toRefs } from 'vue';
 import LeftAside from './components/left-aside/index.vue';
 import ComponentsPanel from './components/components-panel/index.vue';
 import Header from './components/header/index.vue';
@@ -9,11 +9,20 @@ import DataPanel from './components/data-panel/index.vue';
 import ThemePanel from './components/theme-panel/index.vue';
 const settingPanelRef = ref(SettingPanel);
 
+const state = reactive({
+  componentsList: []
+});
+
+const { componentsList } = toRefs(state);
+
 const dbClickDimension = (node: any, data: any) => {
   settingPanelRef.value.addDimension(node, data);
 };
 const dbClickMeasure = (node: any, data: any) => {
   settingPanelRef.value.addMeasure(node, data);
+};
+const handleMenuSelect = (data: any) => {
+  state.componentsList = data.list;
 };
 </script>
 
@@ -24,7 +33,7 @@ const dbClickMeasure = (node: any, data: any) => {
       width="103px"
     >
       <!-- 左侧组件-->
-      <left-aside />
+      <left-aside @menuSelect="handleMenuSelect" />
     </el-aside>
     <el-container>
       <!-- 顶部组件-->
@@ -34,7 +43,7 @@ const dbClickMeasure = (node: any, data: any) => {
       <!-- 主要区域组件-->
       <el-main class="pt0 pl10 pr10">
         <div class="main">
-          <components-panel />
+          <components-panel :data="componentsList" />
           <simulator-editor />
           <setting-panel ref="settingPanelRef" />
           <data-panel

@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
-import { loadAsyncComponent } from "@/utils";
-import { chartColors } from "@/settings/chartThemes/index";
+import { computed, onMounted } from 'vue';
+import { loadAsyncComponent } from '@/utils';
+import { chartColors } from '@/settings/chartThemes/index';
 import {
   dragHandle,
   dragoverHandle,
   mousedownHandleUnStop,
   useMouseHandle,
-} from "@/utils/hooks/useDrag";
-import { useAddKeyboard } from "@/utils/hooks/useKeyboard";
-import { useComponentStyle, useSizeStyle } from "@/utils/hooks/useStyle";
-import { useContextMenu } from "@/views/editor/charts/hooks/useContextMenu.hook";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-import { useLayout } from "@/utils/hooks/useLayout";
-import { useRouter } from "vue-router";
+} from '@/utils/hooks/useDrag';
+import { useAddKeyboard } from '@/utils/hooks/useKeyboard';
+import { useComponentStyle, useSizeStyle } from '@/utils/hooks/useStyle';
+import { useContextMenu } from '@/views/editor/charts/hooks/useContextMenu.hook';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { useLayout } from '@/utils/hooks/useLayout';
+import { useRouter } from 'vue-router';
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
@@ -35,11 +35,11 @@ const {
   mouseClickHandle,
 } = useMouseHandle();
 
-import { editorCanvas } from "./editorCanvas";
-import { EditShapeBox } from "./EditShapeBox";
-import { EditRange } from "./EditRange";
-import { editorToolbar } from "./editorToolbar";
-import { editorConfigurations } from "./editorConfigurations";
+import { editorCanvas } from './editorCanvas/index';
+import { EditShapeBox } from './EditShapeBox';
+import { EditRange } from './EditRange';
+import { editorToolbar } from './editorToolbar';
+import { editorConfigurations } from './editorConfigurations';
 
 // 主题色
 const themeSetting = computed(() => {
@@ -61,10 +61,10 @@ const rangeStyle = computed(() => {
   const background = chartEditStore.getEditCanvasConfig.background;
   const backgroundImage = chartEditStore.getEditCanvasConfig.backgroundImage;
   const backgroundColor =
-    backgroundType === "background" ? background : backgroundImage;
+    backgroundType === 'background' ? background : backgroundImage;
 
   const computedBackground =
-    backgroundType === "background"
+    backgroundType === 'background'
       ? { background: backgroundColor }
       : {
           background: backgroundImage
@@ -136,7 +136,7 @@ const rangeStyle = computed(() => {
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .editor-operation {
   display: flex;
   flex: auto;

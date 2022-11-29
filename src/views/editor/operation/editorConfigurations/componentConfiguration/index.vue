@@ -71,6 +71,7 @@ const hiddenConfiguration = () => {
         <layout-data
           v-show="activeTab === 'data'"
           :optionData="targetData.option"
+          :request-config="targetData.requestConfig"
         ></layout-data>
         <component
           v-show="activeTab === 'config'"

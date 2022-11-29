@@ -3,6 +3,7 @@ import { ref, PropType, onMounted, computed } from 'vue';
 import { PublicRequestType, DSResponseType } from '@/packages/index.d';
 import { HttpResponse } from '@/types';
 import { DSService } from '@/api/DS';
+import Draggable from 'vuedraggable';
 
 const props = defineProps({
   DSList: {
@@ -15,13 +16,12 @@ const props = defineProps({
   }
 })
 
-console.log(props);
 
 const dimensionList = ref<Array<DSResponseType>>([]);
 const measureList = ref<Array<DSResponseType>>([]);
 
 onMounted(() => {
-  getDSColumn();
+  props.requestConfig.DSID && getDSColumn();
 })
 
 const DSID = computed(() => {
@@ -46,21 +46,39 @@ const getDSColumn = (val?: number) => {
       :options="DSList"
       :on-update:value="getDSColumn"
     ></n-select>
+    <div class="content-title">维度</div>
     <div class="dimension-content">
-      <template v-for="(item, index) in dimensionList" :key="index">
-        <div class="item">
-          {{ item.columnName }}
-        </div>
-      </template>
+      <Draggable
+        item-key="id"
+        :sort="false"
+        v-model="dimensionList"
+        group="dimension"
+        class="draggable-view"
+      >
+        <template #item="{ element }">
+          <div class="item">
+            {{ element.columnName }}
+          </div>
+        </template>
+      </Draggable>
     </div>
   </div>
   <div class="measure">
+    <div class="content-title">度量</div>
     <div class="measure-content">
-      <template v-for="(item, index) in measureList" :key="index">
-        <div class="item">
-          {{ item.columnName }}
-        </div>
-      </template>
+      <Draggable
+        item-key="id"
+        :sort="false"
+        v-model="measureList"
+        group="measure"
+        class="draggable-view"
+      >
+        <template #item="{ element }">
+          <div class="item">
+            {{ element.columnName }}
+          </div>
+        </template>
+      </Draggable>
     </div>
   </div>
 </template>
@@ -88,6 +106,9 @@ const getDSColumn = (val?: number) => {
       text-align: left;
       width: 100%;
       margin-top: 18px;
+      font-size: 12px;
+      color: #6b797f;
+      cursor: pointer;
     }
   }
 }
@@ -97,6 +118,9 @@ const getDSColumn = (val?: number) => {
   flex: 513;
   background: #ffffff;
   border-radius: 15px;
+  padding: 0 7px 16px 10px;
+  display: flex;
+  flex-direction: column;
   .measure-content {
     flex: 1;
     overflow-y: auto;
@@ -109,7 +133,21 @@ const getDSColumn = (val?: number) => {
       text-align: left;
       width: 100%;
       margin-top: 18px;
+      color: #6b797f;
+      font-size: 12px;
+      cursor: pointer;
     }
   }
+}
+.content-title {
+  color: #293270;
+  font-family: 'PingFang-SC-Bold';
+  font-size: 14px;
+  margin-top: 18px;
+  text-align: left;
+  padding-left: 6px;
+}
+.draggable-view {
+  width: 100%;
 }
 </style>

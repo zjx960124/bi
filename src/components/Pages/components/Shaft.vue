@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { ChevronDown } from "@vicons/carbon";
+import { computed, ref } from 'vue';
+import { ChevronDown } from '@vicons/carbon';
 const props = defineProps({
   axis: {
     type: Object,
@@ -22,16 +22,21 @@ const axisLabelFontWeightFlag = ref({ type: false });
 const axisLabelFontStyleFlag = ref({ type: false });
 const lineTypeOptions = ref([
   {
-    label: "·········",
-    value: "dashed",
+    label: '·········',
+    value: 'dashed',
   },
   {
-    label: "——",
-    value: "solid",
+    label: '——',
+    value: 'solid',
   },
 ]);
 
-const switchCommon = (target: any, key: string, form: any, depend: {type: boolean}) => {
+const switchCommon = (
+  target: any,
+  key: string,
+  form: any,
+  depend: { type: boolean }
+) => {
   target[key] = form;
   depend.type = !depend.type;
 };
@@ -79,7 +84,7 @@ const switchCommon = (target: any, key: string, form: any, depend: {type: boolea
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ active: axisLabelFontStyleFlag.type }"
+      :class="{ commonActive: axisLabelFontStyleFlag.type }"
       @click="
         switchCommon(
           axis.axisLabel,
@@ -143,7 +148,7 @@ const switchCommon = (target: any, key: string, form: any, depend: {type: boolea
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ active: axisFontStyleFlag.type }"
+      :class="{ commonActive: axisFontStyleFlag.type }"
       @click="
         switchCommon(
           axis.nameTextStyle,
@@ -186,5 +191,4 @@ const switchCommon = (target: any, key: string, form: any, depend: {type: boolea
     </n-color-picker>
   </div>
 </template>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

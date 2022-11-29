@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from "vue";
-import Draggable from "vuedraggable";
-import cloneDeep from "lodash/cloneDeep";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-import { useContextMenu } from "@/views/editor/charts/hooks/useContextMenu.hook";
-import { MenuOptionsItemType } from "@/views/editor/charts/hooks/useContextMenu.hook.d";
-import { EllipsisHorizontal, GridOutline } from "@vicons/ionicons5";
-import { MouseEventButton } from "@/enums/editPageEnum";
+import { computed, ref, watch, nextTick } from 'vue';
+import Draggable from 'vuedraggable';
+import cloneDeep from 'lodash/cloneDeep';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { useContextMenu } from '@/views/editor/charts/hooks/useContextMenu.hook';
+import { MenuOptionsItemType } from '@/views/editor/charts/hooks/useContextMenu.hook.d';
+import { EllipsisHorizontal, GridOutline } from '@vicons/ionicons5';
+import { MouseEventButton } from '@/enums/editPageEnum';
+import { CreateComponentType } from '@/packages/index.d';
+import { WinKeyboard, MacKeyboard } from '@/types';
 
 const chartEditStore = useChartEditStore();
 const { menuOptions, defaultOptions, handleContextMenu, onClickOutSide } =
@@ -86,7 +88,7 @@ const mouseleaveHandle = (item: CreateComponentType) => {
 };
 
 // 点击事件
-const clickContextMenu = (e: Element, item: CreateComponentType) => {
+const clickContextMenu = (e: DragEvent, item: CreateComponentType) => {
   e.stopPropagation();
   e.preventDefault();
   chartEditStore.setRightMenuShow(false);
@@ -111,7 +113,7 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
             @mousedown="mousedownHandle($event, element)"
             @mouseenter="mouseenterHandle(element)"
             @mouseleave="mouseleaveHandle(element)"
-            @contextmenu="handleContextMenu($event, element, optionsHandle)"
+            @contextmenu="handleContextMenu($event, element)"
           >
             <div class="element-item">
               <n-icon
@@ -133,7 +135,7 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
     </Draggable>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .go-content-layer-box {
   .element-item {
     width: calc(100% - 20px);
@@ -159,4 +161,3 @@ const clickContextMenu = (e: Element, item: CreateComponentType) => {
   margin-top: 11px;
 }
 </style>
-

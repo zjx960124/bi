@@ -14,9 +14,17 @@ const state = reactive({});
 
 const {} = toRefs(state);
 
-const activeName = ref();
+const activeName = ref('Compare');
 
-onMounted(() => {});
+onMounted(() => {
+  let data = {};
+  genreMenuOptions.forEach((item: any) => {
+    if (item.key === 'Charts') {
+      data = item.list.Compare;
+    }
+  });
+  emit('menuSelect', data);
+});
 
 const handleSelect = (key: string, keyPath: string[]) => {
   let data = {};
@@ -32,7 +40,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 <template>
   <el-scrollbar>
     <el-menu
-      default-active=""
+      :default-active="activeName"
       class="el-dashboard-menu"
       :collapse="false"
       active-text-color="#FFFFFF"
@@ -41,7 +49,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
       @select="handleSelect"
     >
       <el-sub-menu
-        v-for="(item,index) in genreMenuOptions"
+        v-for="item in genreMenuOptions"
         :key="item.key"
         :index='item.key'
       >

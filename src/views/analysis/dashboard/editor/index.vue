@@ -45,12 +45,12 @@ const handleMenuSelect = (data: any) => {
         <div class="main">
           <components-panel :data="componentsList" />
           <simulator-editor />
-          <setting-panel ref="settingPanelRef" />
+          <!-- <setting-panel ref="settingPanelRef" />
           <data-panel
             @dbClickDimension="dbClickDimension"
             @dbClickMeasure="dbClickMeasure"
-          />
-          <!-- <theme-panel /> -->
+          /> -->
+          <theme-panel />
         </div>
       </el-main>
     </el-container>

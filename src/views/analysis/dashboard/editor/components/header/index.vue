@@ -44,7 +44,7 @@ export default {
           placement="bottom"
         >
           <svg-icon
-            class-name="btn active"
+            :class-name="`btn ${isBackOff? 'active':''}`"
             icon="backOff"
             @click="handleBackOff"
           ></svg-icon>
@@ -56,7 +56,7 @@ export default {
           placement="bottom"
         >
           <svg-icon
-            class-name="btn"
+            :class-name="`btn ${isForward? 'active':''}`"
             icon="forward"
             @click="handleForward"
           ></svg-icon>
@@ -86,7 +86,7 @@ export default {
         </div>
         <div
           class="el-button-primary margin-left-10"
-          @click="handleSave"
+          @click="handleMore"
         >
           <img
             width="14"
@@ -122,10 +122,12 @@ const state = reactive({
       label: '3840*2160',
       value: '3'
     }
-  ]
+  ],
+  isBackOff: false,
+  isForward: false
 });
 
-const { boardSize, boardSizeOptions } = toRefs(state);
+const { boardSize, boardSizeOptions, isBackOff, isForward } = toRefs(state);
 
 const handleBack = () => {
   router.go(-1);
@@ -146,6 +148,9 @@ const handleSave = () => {
 };
 
 const handleBackOff = () => {
+  if (!state.isBackOff) {
+    return;
+  }
   ElMessage({
     type: 'success',
     message: '撤销成功'
@@ -153,9 +158,19 @@ const handleBackOff = () => {
 };
 
 const handleForward = () => {
+  if (!state.isForward) {
+    return;
+  }
   ElMessage({
     type: 'success',
     message: '重做成功'
+  });
+};
+
+const handleMore = () => {
+  ElMessage({
+    type: 'success',
+    message: '点击了更多'
   });
 };
 </script>
@@ -235,6 +250,9 @@ const handleForward = () => {
       }
       .active {
         color: #6d79ff;
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
     .operation {

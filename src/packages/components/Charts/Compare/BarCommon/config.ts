@@ -21,7 +21,7 @@ export const seriesItem = {
     show: false,
     position: 'top',
     fontSize: 12,
-    color: '#333333',
+    color: '#ffffff',
     fontStyle: 'normal',
   },
 };
@@ -40,7 +40,7 @@ export const option = {
     top: '5%',
     legendPosition: 'top',
     textStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -52,7 +52,7 @@ export const option = {
     nameLocation: 'center',
     nameGap: 30,
     nameTextStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -78,7 +78,7 @@ export const option = {
     nameLocation: 'center',
     nameGap: 30,
     nameTextStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -98,6 +98,7 @@ export const option = {
       },
     },
   },
+  exhibition: 'vertical',
   dataset: { ...dataJson },
   series: seriesItem,
 };

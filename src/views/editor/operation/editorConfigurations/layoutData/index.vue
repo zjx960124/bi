@@ -112,7 +112,7 @@ const dragEnd = (e: DragEvent) => {
     display: flex;
     align-items: center;
     .measure-img {
-      width: 22px;
+      width: 17px;
       height: 11px;
       margin: 0 6px 0 13px;
     }

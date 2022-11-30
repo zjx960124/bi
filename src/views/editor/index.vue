@@ -1,24 +1,23 @@
 <script setup lang="ts">
-import headerPlugin from "./headerPlugin";
-import { loadAsyncComponent } from "@/utils";
-import Project from "@/store/pageEditStore/pageEditStore";
-import { setLocalStorage, getLocalStorage } from "@/utils";
-import { useContextMenu } from "./charts/hooks/useContextMenu.hook";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
-import { useRouter } from "vue-router";
+import headerPlugin from './headerPlugin';
+import { loadAsyncComponent } from '@/utils';
+import Project from '@/store/pageEditStore/pageEditStore';
+import { setLocalStorage, getLocalStorage } from '@/utils';
+import { useContextMenu } from './charts/hooks/useContextMenu.hook';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
+import { useRouter } from 'vue-router';
 import {
   ChevronBack,
   ArrowUndo,
   ArrowRedo,
   ImagesOutline,
-} from "@vicons/ionicons5";
-import { reactive, ref, computed, markRaw } from "vue";
-import { icon } from "@/plugins";
+} from '@vicons/ionicons5';
+import { reactive, ref, computed, markRaw } from 'vue';
 
-const charts = loadAsyncComponent(() => import("./charts/index.vue"));
-const pages = loadAsyncComponent(() => import("./pages/index.vue"));
-const operation = loadAsyncComponent(() => import("./operation/index.vue"));
+const charts = loadAsyncComponent(() => import('./charts/index.vue'));
+const pages = loadAsyncComponent(() => import('./pages/index.vue'));
+const operation = loadAsyncComponent(() => import('./operation/index.vue'));
 
 const chartHistoryStore = useChartHistoryStore();
 const chartEditStore = useChartEditStore();
@@ -37,11 +36,11 @@ const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
 const sizeValue = ref<number>(0);
 const sizeOptions = reactive([
   {
-    label: "1920*1080（默认）",
+    label: '1920*1080（默认）',
     value: 0,
   },
   {
-    label: "1600*900",
+    label: '1600*900',
     value: 1,
   },
 ]);
@@ -53,25 +52,25 @@ const isForwardStack = computed(
 );
 const historyList = reactive([
   {
-    key: "backStack",
+    key: 'backStack',
     select: isBackStack,
-    title: "后退",
+    title: '后退',
     icon: ArrowUndo,
   },
   {
-    key: "forward",
+    key: 'forward',
     select: isForwardStack,
-    title: "前进",
+    title: '前进',
     icon: ArrowRedo,
   },
 ]);
 // 历史记录处理
 const clickHistoryHandle = (key: string) => {
   switch (key) {
-    case "backStack":
+    case 'backStack':
       chartEditStore.setBack();
       break;
-    case "forward":
+    case 'forward':
       chartEditStore.setForward();
       break;
   }
@@ -82,12 +81,12 @@ const previewHandle = () => {
   const sessionStorageInfo = getLocalStorage(projectInfo.id) || {};
   setLocalStorage(projectInfo.id, projectInfo);
   const { href } = router.resolve({
-    path: "/preview",
+    path: '/preview',
     query: {
       id: projectInfo.id,
     },
   });
-  window.open(href, "_blank");
+  window.open(href, '_blank');
 };
 
 const changeProjectName = (e) => {
@@ -191,7 +190,7 @@ const projectName = computed(() => {
     @select="handleMenuSelect"
   ></n-dropdown>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .editor {
   width: 100vw;
   height: 100vh;
@@ -199,7 +198,7 @@ const projectName = computed(() => {
   background: #f3f5ff;
   .screen-name {
     font-size: 24px;
-    font-family: "PingFang SC";
+    font-family: 'PingFang SC';
     font-weight: bold;
     color: #293270;
     padding-left: 44px;
@@ -212,7 +211,7 @@ const projectName = computed(() => {
     white-space: nowrap;
   }
   .screen-name::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 27px;
     top: 50%;
@@ -229,7 +228,7 @@ const projectName = computed(() => {
     & > span {
       color: #6b797f;
       font-size: 14px;
-      font-family: "PingFang SC";
+      font-family: 'PingFang SC';
       margin-right: 9px;
     }
   }

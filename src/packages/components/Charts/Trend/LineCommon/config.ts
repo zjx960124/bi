@@ -25,7 +25,7 @@ export const seriesItem = {
     show: false,
     position: 'top',
     fontSize: 12,
-    color: '#333333',
+    color: '#ffffff',
     fontStyle: 'normal',
   },
   areaStyle: {
@@ -45,7 +45,7 @@ export const option = {
     show: true,
     top: '5%',
     textStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -57,7 +57,7 @@ export const option = {
     nameLocation: 'center',
     nameGap: 30,
     nameTextStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -74,7 +74,30 @@ export const option = {
   yAxis: {
     show: true,
     type: 'value',
+    nameLocation: 'center',
+    nameGap: 30,
+    nameTextStyle: {
+      color: '#FFFFFF',
+      fontSize: 12,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+    },
+    axisLabel: {
+      color: '#ffffff',
+      fontSize: 12,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+    },
+    axisLine: {
+      show: true,
+      lineStyle: {
+        color: '#6D79FF',
+        type: 'solid',
+        width: 1,
+      },
+    },
   },
+  exhibition: 'vertical',
   dataset: { ...dataJson },
   series: seriesItem,
 };

@@ -32,6 +32,7 @@ import router from '@/router/index';
 import { createPinia } from 'pinia';
 
 import draggable from 'vuedraggable';
+import VueGridLayout from 'vue-grid-layout';
 
 //utils
 import directPlugin from '@/utils/directive/lazyPlugin';
@@ -56,6 +57,7 @@ app
   .use(ElementPlus, {
     locale: zhCn,
   })
+  .use(VueGridLayout)
   .use(directPlugin)
   .use(registedBreadcrumb)
   .use(changeBreadcrumb)

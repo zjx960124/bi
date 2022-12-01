@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ref, PropType, computed, toRefs } from 'vue';
+import { PropType, ref, shallowRef, watch, toRaw, triggerRef } from 'vue';
 import Draggable from 'vuedraggable';
 import { PublicRequestType } from '@/packages/index.d';
+import { Refresh } from '@vicons/tabler';
+import { Delete } from '@vicons/carbon';
+import cloneDeep from 'lodash/cloneDeep';
 
 const props = defineProps({
   requestConfig: {
@@ -10,50 +13,95 @@ const props = defineProps({
   },
 });
 
-const dragEnd = (e: DragEvent) => {
-  console.log(props.requestConfig);
-  e.preventDefault();
+const dragDimensonAdd = (e: DragEvent) => {};
+
+const dragMeasureAdd = (e: DragEvent) => {};
+
+const dimensionList = shallowRef(props.requestConfig.dimension);
+const measureList = ref(cloneDeep(toRaw(props.requestConfig.measure)));
+const updateShallow = () => {
+  props.requestConfig.dimension = dimensionList.value;
+  props.requestConfig.measure = measureList.value;
 };
+const deleteDimension = () => {
+  dimensionList.value = [];
+};
+const deleteMeasure = (index: number) => {
+  measureList.value.splice(index, 1);
+  console.log(measureList);
+};
+watch(
+  () => props.requestConfig,
+  (newData) => {
+    dimensionList.value = props.requestConfig.dimension;
+    measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
+  },
+  { immediate: false }
+);
 </script>
 <template>
   <div class="layout-data-view">
     <div class="layout-data-title">维度</div>
     <Draggable
-      v-model="props.requestConfig.dimension"
+      v-model="dimensionList"
       item-key="id"
       :class="{
-        'dimension-drag-view': props.requestConfig.dimension.length === 0,
+        'dimension-drag-view': dimensionList.length === 0,
       }"
-      group="dimension"
-      @end="dragEnd"
-      @clone="dragEnd"
-      @drop="dragEnd"
-      @dragover="dragEnd"
-      @dragenter="dragEnd"
+      :group="{
+        name: 'dimension',
+        put: () => {
+          return dimensionList.length < 1;
+        },
+      }"
+      @add="dragDimensonAdd"
     >
       <template #item="{ element }">
         <div class="dimension-item">
-          <img src="@/assets/screen/string.png" class="dimension-img" alt="" />
-          {{ element.columnName }}
+          <div>
+            <img
+              src="@/assets/screen/string.png"
+              class="dimension-img"
+              alt=""
+            />
+            {{ element.columnName }}
+          </div>
+          <n-icon
+            :component="Delete"
+            size="14"
+            class="dimension-icon"
+            @click="deleteDimension"
+          ></n-icon>
         </div>
       </template>
     </Draggable>
     <div class="layout-data-title">度量</div>
     <Draggable
-      v-model="props.requestConfig.measure"
-      :class="{ 'measure-drag-view': props.requestConfig.measure.length === 0 }"
+      v-model="measureList"
+      :class="{ 'measure-drag-view': measureList.length === 0 }"
       item-key="id"
       group="measure"
-      @end="dragEnd"
-      @clone="dragEnd"
+      @add="dragMeasureAdd"
     >
-      <template #item="{ element }">
+      <template #item="{ element, index }">
         <div class="measure-item">
-          <img src="@/assets/screen/num.png" class="measure-img" alt="" />
-          {{ element.columnName }}
+          <div>
+            <img src="@/assets/screen/num.png" class="measure-img" alt="" />
+            {{ element.columnName }}
+          </div>
+          <n-icon
+            :component="Delete"
+            size="14"
+            class="measure-icon"
+            @click="deleteMeasure(index)"
+          ></n-icon>
         </div>
       </template>
     </Draggable>
+    <div class="update-btn" @click="updateShallow">
+      <n-icon :component="Refresh" size="22" style="margin-right: 8px"></n-icon>
+      更新
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -81,10 +129,17 @@ const dragEnd = (e: DragEvent) => {
     text-align: left;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    align-items: center;
+
     .dimension-img {
       width: 22px;
       height: 11px;
       margin: 0 6px 0 13px;
+    }
+    .dimension-icon {
+      margin-right: 10px;
+      cursor: pointer;
     }
   }
 
@@ -110,11 +165,16 @@ const dragEnd = (e: DragEvent) => {
     font-size: 12px;
     text-align: left;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     .measure-img {
       width: 17px;
       height: 11px;
       margin: 0 6px 0 13px;
+    }
+    .measure-icon {
+      margin-right: 10px;
+      cursor: pointer;
     }
   }
 
@@ -127,6 +187,20 @@ const dragEnd = (e: DragEvent) => {
     background: #e7faf8;
     border: 1px dashed #23d8c2;
     border-radius: 11px;
+  }
+  .update-btn {
+    width: 100%;
+    height: 43px;
+    background: #7c87ff;
+    border-radius: 15px;
+    margin-top: 30px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: 'PingFang-SC-Medium';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
 }
 </style>

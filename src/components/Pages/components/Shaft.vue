@@ -78,13 +78,13 @@ const switchCommon = (
           axisLabelFontWeightFlag
         )
       "
-      :class="{ commonActive: axisLabelFontWeightFlag.type }"
+      :class="{ commonActive: axis.axisLabel.fontWeight === 'bold' }"
     >
       B
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ commonActive: axisLabelFontStyleFlag.type }"
+      :class="{ commonActive: axis.axisLabel.fontStyle === 'oblique' }"
       @click="
         switchCommon(
           axis.axisLabel,
@@ -142,13 +142,13 @@ const switchCommon = (
           axisFontWeightFlag
         )
       "
-      :class="{ commonActive: axisFontWeightFlag.type }"
+      :class="{ commonActive: axis.nameTextStyle.fontWeight === 'bold' }"
     >
       B
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ commonActive: axisFontStyleFlag.type }"
+      :class="{ commonActive: axis.nameTextStyle.fontStyle === 'oblique' }"
       @click="
         switchCommon(
           axis.nameTextStyle,

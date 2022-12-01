@@ -153,13 +153,13 @@ const switchCommon = (
               tableFontWeightFlag
             )
           "
-          :class="{ commonActive: tableFontWeightFlag.type }"
+          :class="{ commonActive: optionData.fontWeight === 'bold' }"
         >
           B
         </div>
         <div
           class="commmon-switch-self"
-          :class="{ commonActive: tableFontStyleFlag.type }"
+          :class="{ commonActive: optionData.fontStyle === 'oblique' }"
           @click="
             switchCommon(
               optionData,
@@ -239,13 +239,13 @@ const switchCommon = (
               headerFontWeightFlag
             )
           "
-          :class="{ commonActive: headerFontWeightFlag.type }"
+          :class="{ commonActive: optionData.headerFontWeight === 'bold' }"
         >
           B
         </div>
         <div
           class="commmon-switch-self"
-          :class="{ commonActive: headerFontStyleFlag.type }"
+          :class="{ commonActive: optionData.headerFontStyle === 'oblique' }"
           @click="
             switchCommon(
               optionData,

@@ -34,3 +34,23 @@ export enum GenreEnumName {
   DISTRIBUTION = '分布',
   SPACE = '空间',
 }
+
+export enum fieldEnum {
+  columnName = 'columnName',
+  columnType = 'columnType',
+  dataSetColumnName = 'dataSetColumnName',
+  setDataType = 'setDataType',
+  originDataType = 'originDataType',
+  dataSetId = 'dataSetId',
+  commentComment = 'commentComment',
+}
+
+export enum fieldEnumName {
+  columnName = '原字段名称',
+  columnType = '原字段类型',
+  dataSetColumnName = '数据集字段别称',
+  setDataType = '字段类型',
+  originDataType = '原始字段类型',
+  dataSetId = '数据集字段ID',
+  commentComment = '字段备注信息',
+}

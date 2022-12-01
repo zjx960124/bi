@@ -32,9 +32,10 @@ const getDSColumn = (val?: number) => {
   val && (props.requestConfig.DSID = val);
   DSService.getDSColumn({ dataSetColumnId: val || props.requestConfig.DSID }).then((res: HttpResponse) => {
     dimensionList.value = res.data.filter((item: any) => item.setDataType === 1);
-    measureList.value = res.data.filter((item: any) => item.setDataType === 2);
+    measureList.value = res.data.filter((item: any) => item.setDataType === 0);
   });
 }
+
 </script>
 <template>
   <div class="dimension">
@@ -52,7 +53,7 @@ const getDSColumn = (val?: number) => {
         item-key="id"
         :sort="false"
         v-model="dimensionList"
-        group="dimension"
+        :group="{ name: 'dimension', pull: 'clone' }"
         class="draggable-view"
       >
         <template #item="{ element }">
@@ -70,7 +71,7 @@ const getDSColumn = (val?: number) => {
         item-key="id"
         :sort="false"
         v-model="measureList"
-        group="measure"
+        :group="{ name: 'measure', pull: 'clone' }"
         class="draggable-view"
       >
         <template #item="{ element }">

@@ -148,13 +148,13 @@ const switchCommon = (
           seriesItemFontWeightFlag
         )
       "
-      :class="{ commonActive: seriesItemFontWeightFlag.type }"
+      :class="{ commonActive: series.label.fontWeight === 'bold' }"
     >
       B
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ commonActive: seriesItemFontStyleFlag.type }"
+      :class="{ commonActive: series.label.fontStyle === 'oblique' }"
       @click="
         switchCommon(
           series.label,

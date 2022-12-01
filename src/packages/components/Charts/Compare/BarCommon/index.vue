@@ -4,6 +4,7 @@
     :theme="color"
     :option="option"
     :manual-update="isPreview()"
+    :requestConfig="requestConfig"
     :update-options="{
       replaceMerge: replaceMergeArr,
     }"
@@ -28,6 +29,8 @@ import {
   LegendComponent,
 } from 'echarts/components';
 import { chartColors, ChartColorsNameType } from '@/settings/chartThemes/index';
+import { fieldItem } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
 
 const props = defineProps({
   themeSetting: {
@@ -60,16 +63,51 @@ const option = computed(() => {
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
-const requestConfig = computed(() => {
-  return props.chartConfig.requestConfig;
-});
+console.log(option);
 
-const dimension = computed(() => {
-  return props.chartConfig.requestConfig.dimension;
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.dimension.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  requestConfig.measure.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  return [...requestConfig.dimension, ...requestConfig.measure];
 });
 
 const color = computed(() => {
   return chartColors[props.themeColor.color];
+});
+
+watch(requestConfig, (newData, oldData) => {
+  DSService.getComponentData(newData).then((res: any) => {
+    console.log(res);
+    nextTick(() => {
+      let option = vChartRef.value.getOption();
+      option.dataset = {
+        dimensions: ['product', 'a', 'b'],
+        source: [
+          {
+            product: 'Mon',
+            a: 120,
+            b: 130,
+          },
+          {
+            product: 'Tue',
+            a: 200,
+            b: 130,
+          },
+        ],
+      };
+      vChartRef.value.clear();
+      vChartRef.value.setOption(option);
+    });
+  });
 });
 
 // dataset 无法变更条数的补丁
@@ -94,5 +132,5 @@ watch(
 );
 
 // const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
-const vChartRef = reactive('cccccc');
+const vChartRef = ref<typeof VChart>('');
 </script>

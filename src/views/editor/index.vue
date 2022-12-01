@@ -36,7 +36,7 @@ const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
 const sizeValue = ref<number>(0);
 const sizeOptions = reactive([
   {
-    label: '1920*1080（默认）',
+    label: '1920*1080(默认)',
     value: 0,
   },
   {
@@ -169,6 +169,7 @@ const projectName = computed(() => {
           </template>
           预览
         </n-button>
+        <img class="preview-btn" src="@/assets/screen/save.png" />
       </template>
     </header-plugin>
     <main>
@@ -236,6 +237,8 @@ const projectName = computed(() => {
     width: 89px;
     height: 43px;
     padding: 0;
+    cursor: pointer;
+    margin-right: 19px;
   }
   main {
     overflow: hidden;

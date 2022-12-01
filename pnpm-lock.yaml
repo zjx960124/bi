@@ -9,6 +9,7 @@ specifiers:
   '@types/qs': ^6.9.7
   '@vicons/carbon': ^0.12.0
   '@vicons/ionicons5': ~0.11.0
+  '@vicons/tabler': ^0.12.0
   '@vitejs/plugin-vue': ^1.9.3
   '@vitejs/plugin-vue-jsx': ^1.3.10
   '@vueuse/core': ^8.7.5
@@ -53,6 +54,7 @@ dependencies:
   '@types/keymaster': registry.npmmirror.com/@types/keymaster/1.6.30
   '@types/lodash': 4.14.186
   '@types/nprogress': 0.2.0
+  '@vicons/tabler': registry.npmmirror.com/@vicons/tabler/0.12.0
   '@vueuse/core': 8.7.5_vue@3.2.37
   axios: 0.24.0
   element-plus: 2.2.20_vue@3.2.37
@@ -4771,6 +4773,12 @@ packages:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-17.0.45.tgz}
     name: '@types/node'
     version: 17.0.45
+
+  registry.npmmirror.com/@vicons/tabler/0.12.0:
+    resolution: {integrity: sha512-3+wUFuxb7e8OzZ8Wryct1pzfA2vyoF4lwW98O9s27ZrfCGaJGNmqG+q8A7vQ92Mf+COCgxpK+rhNPTtTvaU6qw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vicons/tabler/-/tabler-0.12.0.tgz}
+    name: '@vicons/tabler'
+    version: 0.12.0
+    dev: false
 
   registry.npmmirror.com/@webassemblyjs/ast/1.11.1:
     resolution: {integrity: sha512-ukBh14qFLjxTQNTXocdyksN5QdM28S1CxHt2rdskFyL+xFV7VremuBLVbmCePj+URalXBENx/9Lm7lnhihtCSw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@webassemblyjs/ast/-/ast-1.11.1.tgz}

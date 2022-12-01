@@ -121,13 +121,13 @@ const changeVisualMapType = (val: string) => {
               titleFontWeightFlag
             )
           "
-          :class="{ commonActive: titleFontWeightFlag.type }"
+          :class="{ commonActive: title.textStyle.fontWeight === 'bold' }"
         >
           B
         </div>
         <div
           class="commmon-switch-self"
-          :class="{ commonActive: titleFontStyleFlag.type }"
+          :class="{ commonActive: title.textStyle.fontStyle === 'oblique' }"
           @click="
             switchCommon(
               title.textStyle,

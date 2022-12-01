@@ -23,4 +23,14 @@ export class DSService {
       responseType: 'json',
     });
   }
+  /**
+   * 组件获取数据
+   */
+  static async getComponentData(data: any): Promise<HttpResponse> {
+    return Request('/rest/bi/getReturnData', {
+      method: 'post',
+      responseType: 'json',
+      data,
+    });
+  }
 }

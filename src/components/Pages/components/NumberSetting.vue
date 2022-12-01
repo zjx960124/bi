@@ -38,13 +38,13 @@
             numberFontWeightFlag
           )
         "
-        :class="{ commonActive: numberFontWeightFlag.type }"
+        :class="{ commonActive: optionData.numberFontWeight === 'bold' }"
       >
         B
       </div>
       <div
         class="commmon-switch-self"
-        :class="{ commonActive: numberFontStyleFlag.type }"
+        :class="{ commonActive: optionData.numberFontStyle === 'oblique' }"
         @click="
           switchCommon(
             optionData,
@@ -151,13 +151,13 @@
             slotFontWeightFlag
           )
         "
-        :class="{ commonActive: slotFontWeightFlag.type }"
+        :class="{ commonActive: optionData.slotFontWeight === 'bold' }"
       >
         B
       </div>
       <div
         class="commmon-switch-self"
-        :class="{ commonActive: slotFontStyleFlag.type }"
+        :class="{ commonActive: optionData.slotFontStyle === 'oblique' }"
         @click="
           switchCommon(
             optionData,

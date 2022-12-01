@@ -102,13 +102,13 @@ const switchCommon = (
             labelFontWeightFlag
           )
         "
-        :class="{ commonActive: labelFontWeightFlag.type }"
+        :class="{ commonActive: optionData.indicatorFontWeight === 'bold' }"
       >
         B
       </div>
       <div
         class="commmon-switch-self"
-        :class="{ commonActive: labelFontStyleFlag.type }"
+        :class="{ commonActive: optionData.indicatorFontStyle === 'oblique' }"
         @click="
           switchCommon(
             optionData,

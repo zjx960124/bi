@@ -1,4 +1,9 @@
-import { GenreEnum, GenreEnumName } from './components/Charts/index.d';
+import {
+  GenreEnum,
+  GenreEnumName,
+  fieldEnum,
+  fieldEnumName,
+} from './components/Charts/index.d';
 import type {
   GlobalThemeJsonType,
   ChartColorsNameType,
@@ -117,8 +122,20 @@ export enum FilterEnum {
 
 export interface PublicRequestType {
   DSID: string | number;
-  dimension: string[];
-  measure: string[];
+  dimension: fieldItem[];
+  measure: fieldItem[];
+}
+
+export interface fieldItem {
+  [fieldEnum.columnName]: string;
+  [fieldEnum.dataSetColumnName]: string;
+  [fieldEnum.setDataType]: number;
+  [fieldEnum.originDataType]: number;
+  [fieldEnum.dataSetId]: number;
+  [fieldEnum.commentComment]: string;
+  [fieldEnum.columnType]?: number;
+  dataReturnMethod?: number;
+  combinationMode?: number;
 }
 
 export interface DSResponseType {

@@ -7,6 +7,7 @@
     :requestConfig="requestConfig"
     :update-options="{
       replaceMerge: replaceMergeArr,
+      notMerge: true,
     }"
     autoresize
   ></v-chart>

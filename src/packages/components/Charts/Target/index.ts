@@ -1,4 +1,4 @@
-import { NumberConfig } from './Number/index';
+import { NumberConfig } from './Number';
 import { ProcessCircleConfig } from './ProcessCircle';
 import { ProcessCommonConfig } from './ProcessCommon';
 

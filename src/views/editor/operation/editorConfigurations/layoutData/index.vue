@@ -18,6 +18,7 @@ const dragDimensonAdd = (e: DragEvent) => {};
 const dragMeasureAdd = (e: DragEvent) => {};
 
 const dimensionList = shallowRef(props.requestConfig.dimension);
+// tool 这里没有响应式无法自动更改数据到视图
 const measureList = ref(cloneDeep(toRaw(props.requestConfig.measure)));
 const updateShallow = () => {
   props.requestConfig.dimension = dimensionList.value;
@@ -28,7 +29,6 @@ const deleteDimension = () => {
 };
 const deleteMeasure = (index: number) => {
   measureList.value.splice(index, 1);
-  console.log(measureList);
 };
 watch(
   () => props.requestConfig,

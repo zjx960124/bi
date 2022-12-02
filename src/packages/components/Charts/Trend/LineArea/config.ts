@@ -99,7 +99,7 @@ export const option = {
     },
   },
   exhibition: 'vertical',
-  dataset: { ...dataJson },
+  dataset: { source: dataJson },
   series: seriesItem,
 };
 

@@ -1,26 +1,36 @@
 <template>
-  <v-chart ref="vChartRef" :theme="color" :option="option" :manual-update="isPreview()" :update-options="{
-    replaceMerge: replaceMergeArr,
-  }" autoresize></v-chart>
+  <v-chart
+    ref="vChartRef"
+    :theme="color"
+    :option="option"
+    :manual-update="isPreview()"
+    :requestConfig="requestConfig"
+    :update-options="{
+      replaceMerge: replaceMergeArr,
+    }"
+    autoresize
+  ></v-chart>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed, watch, PropType, reactive } from "vue";
-import VChart from "vue-echarts";
-import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import { PieChart } from "echarts/charts";
-import config, { includes, seriesItem } from "./config";
-import { mergeTheme, handlePieSeries } from "@/packages/hook/chart";
-import { isPreview } from "@/utils";
-import cloneDeep from "lodash/cloneDeep";
+import { ref, nextTick, computed, watch, PropType, reactive } from 'vue';
+import VChart from 'vue-echarts';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { PieChart } from 'echarts/charts';
+import config, { includes, seriesItem } from './config';
+import { mergeTheme, handlePieSeries } from '@/packages/hook/chart';
+import { isPreview } from '@/utils';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   DatasetComponent,
   GridComponent,
   TooltipComponent,
   LegendComponent,
-} from "echarts/components";
-import { chartColors, ChartColorsNameType } from "@/settings/chartThemes/index";
+} from 'echarts/components';
+import { chartColors, ChartColorsNameType } from '@/settings/chartThemes/index';
+import { fieldItem } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
 
 const props = defineProps({
   themeSetting: {
@@ -49,8 +59,11 @@ use([
 const replaceMergeArr = ref<string[]>();
 
 const option = computed(() => {
+  replaceMergeArr.value = ['series'];
   let resultOption = handlePieSeries(cloneDeep(props.chartConfig.option));
-  console.log(resultOption);
+  nextTick(() => {
+    replaceMergeArr.value = [];
+  });
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
@@ -58,27 +71,31 @@ const color = computed(() => {
   return chartColors[props.themeColor.color];
 });
 
-// dataset 无法变更条数的补丁
-watch(
-  () => props.chartConfig.option.dataset,
-  (newData, oldData) => {
-    if (newData.dimensions.length !== oldData.dimensions.length) {
-      const seriesArr = [];
-      for (let i = 0; i < newData.dimensions.length - 1; i++) {
-        seriesArr.push(seriesItem);
-      }
-      replaceMergeArr.value = ["series"];
-      props.chartConfig.option.series = seriesArr;
-      nextTick(() => {
-        replaceMergeArr.value = [];
-      });
-    }
-  },
-  {
-    deep: false,
-  }
-);
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.dimension.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  requestConfig.measure.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  return [...requestConfig.dimension, ...requestConfig.measure];
+});
+
+watch(requestConfig, (newData, oldData) => {
+  DSService.getComponentData(newData).then((res: any) => {
+    nextTick(() => {
+      props.chartConfig.option.dataset = {
+        source: res.data[0],
+      };
+    });
+  });
+});
 
 // const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
-const vChartRef = reactive("pie");
+const vChartRef = ref<typeof VChart>('');
 </script>

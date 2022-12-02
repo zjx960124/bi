@@ -38,7 +38,7 @@ export const expendSeries = (
 ) => {
   // tool fill方法就连cloneDeep后的数据都指向最初的指针地址
   option.series = Array.from(
-    new Array(option.dataset.dimensions.length - 1),
+    new Array(Object.keys(option.dataset.source).length - 1),
     () => cloneDeep(option.series)
   );
   theme && handleGradient(option.series, theme);

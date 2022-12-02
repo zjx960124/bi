@@ -47,7 +47,9 @@ export const option = {
       fontStyle: 'normal',
     },
   },
-  dataset: { ...dataJson },
+  dataset: {
+    source: dataJson,
+  },
   series: seriesItem,
 };
 

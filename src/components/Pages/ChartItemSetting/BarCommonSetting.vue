@@ -2,6 +2,7 @@
 import { ref, computed, PropType } from 'vue';
 import { ChevronDown } from '@vicons/ionicons5';
 import { GlobalThemeJsonType } from '@/settings/chartThemes';
+import { isArray } from '@/utils';
 
 const props = defineProps({
   optionData: {
@@ -119,7 +120,7 @@ const switchCommon = (
           seriesItemFontWeightFlag
         )
       "
-      :class="{ commonActive:  series.label.fontWeight === 'bold' }"
+      :class="{ commonActive: series.label.fontWeight === 'bold' }"
     >
       B
     </div>

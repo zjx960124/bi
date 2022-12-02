@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed, watch, PropType, reactive } from 'vue';
+import { ref, nextTick, computed, watch, PropType } from 'vue';
 import VChart from 'vue-echarts';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -59,11 +59,17 @@ use([
 const replaceMergeArr = ref<string[]>();
 
 const option = computed(() => {
+  replaceMergeArr.value = ['series'];
   let resultOption = expendSeries(cloneDeep(props.chartConfig.option));
+  nextTick(() => {
+    replaceMergeArr.value = [];
+  });
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
-console.log(option);
+const color = computed(() => {
+  return chartColors[props.themeColor.color];
+});
 
 const requestConfig = computed(() => {
   let requestConfig = props.chartConfig.requestConfig;
@@ -80,56 +86,15 @@ const requestConfig = computed(() => {
   return [...requestConfig.dimension, ...requestConfig.measure];
 });
 
-const color = computed(() => {
-  return chartColors[props.themeColor.color];
-});
-
 watch(requestConfig, (newData, oldData) => {
   DSService.getComponentData(newData).then((res: any) => {
-    console.log(res);
     nextTick(() => {
-      let option = vChartRef.value.getOption();
-      option.dataset = {
-        dimensions: ['product', 'a', 'b'],
-        source: [
-          {
-            product: 'Mon',
-            a: 120,
-            b: 130,
-          },
-          {
-            product: 'Tue',
-            a: 200,
-            b: 130,
-          },
-        ],
+      props.chartConfig.option.dataset = {
+        source: res.data[0],
       };
-      vChartRef.value.clear();
-      vChartRef.value.setOption(option);
     });
   });
 });
-
-// dataset 无法变更条数的补丁
-watch(
-  () => props.chartConfig.option.dataset,
-  (newData, oldData) => {
-    if (newData.dimensions.length !== oldData.dimensions.length) {
-      const seriesArr = [];
-      for (let i = 0; i < newData.dimensions.length - 1; i++) {
-        seriesArr.push(seriesItem);
-      }
-      replaceMergeArr.value = ['series'];
-      props.chartConfig.option.series = seriesArr;
-      nextTick(() => {
-        replaceMergeArr.value = [];
-      });
-    }
-  },
-  {
-    deep: false,
-  }
-);
 
 // const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
 const vChartRef = ref<typeof VChart>('');

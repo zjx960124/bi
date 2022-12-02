@@ -50,7 +50,7 @@ const handleMenuSelect = (data: any) => {
             @dbClickDimension="dbClickDimension"
             @dbClickMeasure="dbClickMeasure"
           /> -->
-          <theme-panel />
+          <!-- <theme-panel /> -->
         </div>
       </el-main>
     </el-container>

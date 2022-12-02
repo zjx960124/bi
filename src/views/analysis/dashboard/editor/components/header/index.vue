@@ -100,9 +100,15 @@ export default {
 </template>
  
 <script setup lang='ts'>
-import { ref, reactive, toRefs } from 'vue';
+import { ref, reactive, toRefs, computed } from 'vue';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
+import Project from '@/store/pageEditStore/pageEditStore';
+import { setLocalStorage, getLocalStorage } from '@/utils';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
+const chartEditStore = useChartEditStore();
+const chartHistoryStore = useChartHistoryStore();
 
 const state = reactive({
   boardSize: '',
@@ -122,22 +128,30 @@ const state = reactive({
       label: '3840*2160',
       value: '3'
     }
-  ],
-  isBackOff: false,
-  isForward: false
+  ]
 });
 
-const { boardSize, boardSizeOptions, isBackOff, isForward } = toRefs(state);
+const { boardSize, boardSizeOptions } = toRefs(state);
+
+// 前进后退按钮
+const isBackOff = computed(() => chartHistoryStore.getBackStack.length > 1);
+const isForward = computed(() => chartHistoryStore.getForwardStack.length > 0);
 
 const handleBack = () => {
   router.go(-1);
 };
 
 const handlePreview = () => {
-  ElMessage({
-    type: 'success',
-    message: '预览成功'
+  const projectInfo = Project.value.getProjectInfo();
+  const sessionStorageInfo = getLocalStorage(projectInfo.id) || {};
+  setLocalStorage(projectInfo.id, projectInfo);
+  const { href } = router.resolve({
+    path: '/preview',
+    query: {
+      id: projectInfo.id
+    }
   });
+  window.open(href, '_blank');
 };
 
 const handleSave = () => {
@@ -147,24 +161,19 @@ const handleSave = () => {
   });
 };
 
+// 历史记录处理
 const handleBackOff = () => {
-  if (!state.isBackOff) {
+  if (!isBackOff) {
     return;
   }
-  ElMessage({
-    type: 'success',
-    message: '撤销成功'
-  });
+  chartEditStore.setBack();
 };
 
 const handleForward = () => {
-  if (!state.isForward) {
+  if (!isForward) {
     return;
   }
-  ElMessage({
-    type: 'success',
-    message: '重做成功'
-  });
+  chartEditStore.setForward();
 };
 
 const handleMore = () => {

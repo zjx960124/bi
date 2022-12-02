@@ -9,6 +9,10 @@ export default {
       v-for="item in list"
       :key="item.key"
       class="item"
+      draggable
+      @dragstart="dragStartHandle($event, item)"
+      @dragend="dragendHandle"
+      @dblclick="dblclickHandle(item)"
     >
       <el-image
         class="item-img"
@@ -21,18 +25,17 @@ export default {
 </template>
  
 <script setup lang='ts'>
-import { ref, reactive, toRefs, watch, PropType } from 'vue';
+import { ref, reactive, toRefs, watch, PropType, onMounted } from 'vue';
+import omit from 'lodash/omit';
+import { DragKeyEnum } from '@/types';
+import { createComponent } from '@/packages';
+import { ConfigType, CreateComponentType } from '@/packages/index.d';
+import { EditCanvasTypeEnum } from '@/store/chartEditStore/chartEditStore.d';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { componentInstall } from '@/utils';
+import { fetchConfigComponent, fetchChartComponent } from '@/packages/index';
 
-interface ConfigType {
-  key: string;
-  chartKey: string;
-  conKey: string;
-  title: string;
-  category: string;
-  categoryName: string;
-  package: string;
-  image: string | (() => Promise<typeof import('*.png')>);
-}
+const chartEditStore = useChartEditStore();
 
 const props = defineProps({
   data: {
@@ -57,6 +60,41 @@ watch(
     deep: true
   }
 );
+
+onMounted(() => {
+  document.body.ondrop = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+});
+
+const dragStartHandle = (e: DragEvent, item: ConfigType) => {
+  componentInstall(item.chartKey, fetchChartComponent(item));
+  componentInstall(item.conKey, fetchConfigComponent(item));
+  e!.dataTransfer!.setData(
+    DragKeyEnum.DRAG_KEY,
+    JSON.stringify(omit(item, ['image']))
+  );
+  chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, true);
+};
+const dragendHandle = () => {
+  chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, false);
+};
+const dblclickHandle = async (item: ConfigType) => {
+  try {
+    // 动态注册图表组件
+    componentInstall(item.chartKey, fetchChartComponent(item));
+    componentInstall(item.conKey, fetchConfigComponent(item));
+    // 创建新图表组件
+    let newComponent: CreateComponentType = await createComponent(item);
+    // 添加
+    chartEditStore.addComponentList(newComponent, false, true);
+    // 选中
+    chartEditStore.setTargetSelectChart(newComponent.id);
+  } catch (error) {
+    window['$message'].warning(`图表正在研发中, 敬请期待...`);
+  }
+};
 </script>
  
 <style lang="scss" scoped>

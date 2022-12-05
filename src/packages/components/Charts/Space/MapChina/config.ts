@@ -10,7 +10,6 @@ export const includes = [];
 const themeColor = { color: 'customed' };
 
 export const option = {
-  dataset: dataJson,
   title: {
     show: true,
     text: '',
@@ -31,6 +30,23 @@ export const option = {
     type: 'map',
     roam: false,
     map: 'china',
+    label: {
+      normal: {
+        show: false,
+      },
+      emphasis: {
+        show: false,
+      },
+    },
+    itemStyle: {
+      normal: {
+        areaColor: '#031525',
+        borderColor: '#3B5077',
+      },
+      emphasis: {
+        areaColor: '#2B91B7',
+      },
+    },
   },
   legend: {
     show: true,
@@ -46,27 +62,23 @@ export const option = {
   visualMapType: 'continuous',
   visualMap: {
     type: 'continuous',
+    splitNumber: 5,
+    show: true,
+    dimension: 0,
     min: 0,
-    max: 400,
+    max: 30000,
+    calculable: true,
     inRange: {
-      color: ['#121122', 'rgba(3,4,5,0.4)', 'red'],
+      color: ['#0217F9', '#FF0000'],
+    },
+    textStyle: {
+      color: '#ffffff',
     },
   },
+  dataset: {
+    source: dataJson,
+  },
   series: [
-    {
-      type: 'effectScatter',
-      coordinateSystem: 'geo',
-      symbolSize: 6,
-      zlevel: 1,
-      label: {
-        show: false,
-      },
-      itemStyle: {
-        shadowBlur: 10,
-        color: '#00ECC8',
-      },
-      data: [],
-    },
     {
       name: '地图',
       type: 'map',
@@ -94,7 +106,16 @@ export const option = {
         fontStyle: 'normal',
         fontWeight: 'normal',
       },
-      data: [],
+      // data: [
+      //   {
+      //     name: '福建省',
+      //     value: 30000,
+      //   },
+      //   {
+      //     name: '广东省',
+      //     value: 24000,
+      //   },
+      // ],
     },
   ],
 };

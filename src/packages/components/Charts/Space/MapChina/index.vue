@@ -75,6 +75,7 @@ registerMap('china', {
 
 const option = computed(() => {
   let resultOption = handleMapSeries(props.chartConfig.option);
+  console.log(resultOption);
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
@@ -97,7 +98,7 @@ const mapTypeHandle = (show: boolean) => {
 };
 
 watch(
-  () => props.chartConfig.option.series[1].itemStyle.showHainanIsLands,
+  () => props.chartConfig.option.series[0].itemStyle.showHainanIsLands,
   (newData) => {
     mapTypeHandle(newData);
   },

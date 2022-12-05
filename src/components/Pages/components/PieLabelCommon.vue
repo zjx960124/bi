@@ -33,8 +33,8 @@ const changePieArrange = () => {};
   <div class="common-item">
     <div class="common-double-space"></div>
     <n-checkbox-group v-model:value="series.label.formatterOption">
-      <n-checkbox value="seriesName" label="维度" />
-      <n-checkbox value="name" label="度量" />
+      <n-checkbox value="name" label="维度" />
+      <!-- <n-checkbox value="seriesName" label="度量" /> -->
       <n-checkbox value="percent" label="百分比" />
     </n-checkbox-group>
   </div>

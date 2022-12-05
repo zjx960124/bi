@@ -80,7 +80,12 @@ watch(
       v-model="measureList"
       :class="{ 'measure-drag-view': measureList.length === 0 }"
       item-key="id"
-      group="measure"
+      :group="{
+        name: 'measure',
+        put: () => {
+          return measureList.length < 10;
+        },
+      }"
       @add="dragMeasureAdd"
     >
       <template #item="{ element, index }">

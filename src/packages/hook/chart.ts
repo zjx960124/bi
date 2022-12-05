@@ -54,6 +54,7 @@ export const expendSeries = (
 export const formatterFunc = (option: string[], arrange: string) => {
   const options = option;
   return (params: any) => {
+    console.log(params);
     if (options.length < 1) {
       return '';
     } else {
@@ -117,17 +118,18 @@ export const mapFormatterFunc = (option: string[]) => {
  * @param option
  */
 export const handleMapSeries = (option: ChartConfigType) => {
-  option.series.forEach((item: any) => {
-    if (item.type === 'effectScatter' && option.dataset.point)
-      item.data = option.dataset.point;
-    else if (item.type === 'map' && option.dataset.point)
-      item.data = option.dataset.map;
-  });
-  if (option.series[1].label.show) {
-    option.series[1].label.formatter = mapFormatterFunc(
-      option.series[1].label.formatterOption
+  // option.series.forEach((item: any) => {
+  //   if (item.type === 'effectScatter' && option.dataset.point)
+  //     item.data = option.dataset.point;
+  //   else if (item.type === 'map' && option.dataset.point)
+  //     item.data = option.dataset.map;
+  // });
+  if (option.series[0]?.label?.show) {
+    option.series[0].label.formatter = mapFormatterFunc(
+      option.series[0].label.formatterOption
     );
   }
+  option.visualMap.type = option.visualMapType;
   console.log(option);
   return option;
 };

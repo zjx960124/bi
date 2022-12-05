@@ -91,5 +91,12 @@
       "color": "#B9B8CE",
       "fontSize": 12
     }
-  }
+  },
+  "visualMap": [
+    {
+      "textStyle": {
+        "color": "#ffffff"
+      }
+    }
+  ]
 }

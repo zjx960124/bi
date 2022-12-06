@@ -4,7 +4,7 @@ import { TableCommonConfig } from './index';
 import cloneDeep from 'lodash/cloneDeep';
 import dataset from './data.json';
 
-const option = {
+export const option = {
   dataset,
   columns: [],
   data: [],
@@ -41,4 +41,10 @@ export default class Config
   public key = TableCommonConfig.key;
   public chartConfig = cloneDeep(TableCommonConfig);
   public option = cloneDeep(option);
+
+  constructor() {
+    super();
+    this.requestConfig.measureLength = 0;
+    this.requestConfig.dimensionLength = 10;
+  }
 }

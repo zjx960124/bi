@@ -24,6 +24,10 @@ onMounted(() => {
   props.requestConfig.DSID && getDSColumn();
 })
 
+const onMove = (e: DragEvent, to: DragEvent) => {
+  console.log(e, to);
+}
+
 const DSID = computed(() => {
   return props.requestConfig.DSID;
 })
@@ -35,7 +39,6 @@ const getDSColumn = (val?: number) => {
     measureList.value = res.data.filter((item: any) => item.setDataType === 0);
   });
 }
-
 </script>
 <template>
   <div class="dimension">
@@ -54,6 +57,7 @@ const getDSColumn = (val?: number) => {
         :sort="false"
         v-model="dimensionList"
         :group="{ name: 'dimension', pull: 'clone' }"
+        :move="onMove"
         class="draggable-view"
       >
         <template #item="{ element }">
@@ -72,6 +76,7 @@ const getDSColumn = (val?: number) => {
         :sort="false"
         v-model="measureList"
         :group="{ name: 'measure', pull: 'clone' }"
+        :move="onMove"
         class="draggable-view"
       >
         <template #item="{ element }">

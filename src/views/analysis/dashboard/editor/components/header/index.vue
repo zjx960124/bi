@@ -27,6 +27,7 @@ export default {
           class="boardSizeBox-value"
           placeholder="1000*1000（默认）"
           size="default"
+          @change="handleBoardSizeChange"
         >
           <el-option
             v-for="item in boardSizeOptions"
@@ -100,7 +101,7 @@ export default {
 </template>
  
 <script setup lang='ts'>
-import { ref, reactive, toRefs, computed } from 'vue';
+import { ref, reactive, toRefs, computed, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
 import Project from '@/store/pageEditStore/pageEditStore';
@@ -109,29 +110,40 @@ import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
 import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
 const chartEditStore = useChartEditStore();
 const chartHistoryStore = useChartHistoryStore();
+const canvasConfig = chartEditStore.getEditCanvasConfig;
 
 const state = reactive({
-  boardSize: '',
+  boardSize: '1000*1000',
   boardSizeOptions: [
     {
       id: 0,
-      label: '1920*1080',
-      value: '0'
+      label: '1000*1000',
+      value: '1000*1000'
     },
     {
       id: 1,
-      label: '2560*1440',
-      value: '1'
+      label: '1920*1080',
+      value: '1920*1080'
     },
     {
       id: 2,
+      label: '2560*1440',
+      value: '2560*1440'
+    },
+    {
+      id: 3,
       label: '3840*2160',
-      value: '3'
+      value: '3840*2160'
     }
   ]
 });
 
 const { boardSize, boardSizeOptions } = toRefs(state);
+
+onMounted(() => {
+  canvasConfig.width = 1000;
+  canvasConfig.height = 1000;
+});
 
 // 前进后退按钮
 const isBackOff = computed(() => chartHistoryStore.getBackStack.length > 1);
@@ -139,6 +151,12 @@ const isForward = computed(() => chartHistoryStore.getForwardStack.length > 0);
 
 const handleBack = () => {
   router.go(-1);
+};
+
+const handleBoardSizeChange = (value: any) => {
+  let sizes = value.split('*');
+  canvasConfig.width = sizes[0];
+  canvasConfig.height = sizes[1];
 };
 
 const handlePreview = () => {

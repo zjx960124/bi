@@ -70,7 +70,6 @@ const rangeStyle = computed(() => {
             ? `url(${backgroundImage}) no-repeat center center / cover !important`
             : background
         };
-
   // @ts-ignore
   return {
     ...computedBackground
@@ -94,38 +93,45 @@ const rangeStyle = computed(() => {
           class="editor-content"
           @contextmenu="handleContextMenu"
           @mousedown="mousedownHandleUnStop"
-          :style="{ ...rangeStyle }"
         >
-          <edit-range>
-            <div
-              v-for="(item, index) in chartEditStore.getComponentList"
-              :key="item.id"
-            >
-              <!-- 单组件 -->
-              <edit-shape-box
-                :data-id="item.id"
-                :index="index"
-                :style="useComponentStyle(item.attr, index)"
-                :item="item"
-                @click="mouseClickHandle($event, item)"
-                @mousedown="mousedownHandle($event, item)"
-                @mouseenter="mouseenterHandle($event, item)"
-                @mouseleave="mouseleaveHandle($event, item)"
-                @contextmenu="handleContextMenu($event, item)"
+          <div>
+            <edit-range>
+              <!-- 滤镜预览 -->
+              <div
+                class="range-content"
+                :style="{ ...rangeStyle}"
               >
-                <component
-                  class="edit-content-chart"
-                  :is="item.chartConfig.chartKey"
-                  :chartConfig="item"
-                  :themeSetting="themeSetting"
-                  :themeColor="item.themeColor"
-                  :style="{
-                    ...useSizeStyle(item.attr),
-                  }"
-                ></component>
-              </edit-shape-box>
-            </div>
-          </edit-range>
+                <div
+                  v-for="(item, index) in chartEditStore.getComponentList"
+                  :key="item.id"
+                >
+                  <!-- 单组件 -->
+                  <edit-shape-box
+                    :data-id="item.id"
+                    :index="index"
+                    :style="useComponentStyle(item.attr, index)"
+                    :item="item"
+                    @click="mouseClickHandle($event, item)"
+                    @mousedown="mousedownHandle($event, item)"
+                    @mouseenter="mouseenterHandle($event, item)"
+                    @mouseleave="mouseleaveHandle($event, item)"
+                    @contextmenu="handleContextMenu($event, item)"
+                  >
+                    <component
+                      class="edit-content-chart"
+                      :is="item.chartConfig.chartKey"
+                      :chartConfig="item"
+                      :themeSetting="themeSetting"
+                      :themeColor="item.themeColor"
+                      :style="{
+                      ...useSizeStyle(item.attr),
+                    }"
+                    ></component>
+                  </edit-shape-box>
+                </div>
+              </div>
+            </edit-range>
+          </div>
         </div>
       </div>
     </editor-canvas>
@@ -162,6 +168,10 @@ const rangeStyle = computed(() => {
       .editor-content {
         position: relative;
         box-sizing: border-box;
+        .range-content {
+          width: inherit;
+          height: inherit;
+        }
       }
     }
   }

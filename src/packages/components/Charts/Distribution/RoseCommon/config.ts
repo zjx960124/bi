@@ -62,4 +62,9 @@ export default class Config
   public chartConfig = cloneDeep(RoseCommonConfig);
   public option = echartOptionProfixHandle(option, includes);
   public themeColor = cloneDeep(markRaw(themeColor));
+
+  constructor() {
+    super();
+    this.requestConfig.measureLength = 1;
+  }
 }

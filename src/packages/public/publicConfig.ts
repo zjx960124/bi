@@ -1,3 +1,4 @@
+import { PublicRequestType } from './../index.d';
 import { getUUID } from '@/utils';
 import {
   ChartFrameEnum,
@@ -84,10 +85,12 @@ export class PublicConfigClass implements PublicConfigType {
     this.attr.x = x;
     this.attr.y = y;
   }
-  public requestConfig = {
+  public requestConfig: PublicRequestType = {
     DSID: '',
     dimension: [],
     measure: [],
+    measureLength: 5,
+    dimensionLength: 1,
   };
 }
 

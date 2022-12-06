@@ -5,6 +5,7 @@ import { PublicRequestType } from '@/packages/index.d';
 import { Refresh } from '@vicons/tabler';
 import { Delete } from '@vicons/carbon';
 import cloneDeep from 'lodash/cloneDeep';
+import { fieldItem } from '@/packages/index.d';
 
 const props = defineProps({
   requestConfig: {
@@ -24,8 +25,11 @@ const updateShallow = () => {
   props.requestConfig.dimension = dimensionList.value;
   props.requestConfig.measure = measureList.value;
 };
-const deleteDimension = () => {
-  dimensionList.value = [];
+const deleteDimension = (element: fieldItem, index: number) => {
+  console.log(element);
+  if (element.columnName === '中国地图') return false;
+  dimensionList.value.splice(index, 1);
+  triggerRef(dimensionList);
 };
 const deleteMeasure = (index: number) => {
   measureList.value.splice(index, 1);
@@ -51,7 +55,7 @@ watch(
       :group="{
         name: 'dimension',
         put: () => {
-          return dimensionList.length < 1;
+          return dimensionList.length < requestConfig.dimensionLength;
         },
       }"
       @add="dragDimensonAdd"
@@ -70,7 +74,7 @@ watch(
             :component="Delete"
             size="14"
             class="dimension-icon"
-            @click="deleteDimension"
+            @click="deleteDimension(element, index)"
           ></n-icon>
         </div>
       </template>
@@ -83,7 +87,7 @@ watch(
       :group="{
         name: 'measure',
         put: () => {
-          return measureList.length < 10;
+          return measureList.length < requestConfig.measureLength;
         },
       }"
       @add="dragMeasureAdd"

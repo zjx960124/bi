@@ -3,6 +3,7 @@
     ref="vChartRef"
     :theme="themeColor"
     :option="option"
+    :requestConfig="requestConfig"
     :manual-update="isPreview()"
     autoresize
   >
@@ -10,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, reactive, watch, computed } from 'vue';
+import { PropType, nextTick, watch, computed } from 'vue';
 import config, { includes } from './config';
 import VChart from 'vue-echarts';
 import { use, registerMap } from 'echarts/core';
@@ -31,6 +32,8 @@ import {
   TitleComponent,
   VisualMapComponent,
 } from 'echarts/components';
+import { fieldItem } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
 
 const props = defineProps({
   themeSetting: {
@@ -75,7 +78,6 @@ registerMap('china', {
 
 const option = computed(() => {
   let resultOption = handleMapSeries(props.chartConfig.option);
-  console.log(resultOption);
   return mergeTheme(resultOption, props.themeSetting, includes);
 });
 
@@ -107,6 +109,26 @@ watch(
     immediate: true,
   }
 );
+
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.measure.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 3;
+    requestConfig.dimension[0]['dataSetId'] = element.dataSetId;
+    delete element.columnType;
+  });
+  return [...requestConfig.dimension, ...requestConfig.measure];
+});
+
+watch(requestConfig, (newData, oldData) => {
+  DSService.getComponentData(newData).then((res: any) => {
+    nextTick(() => {
+      props.chartConfig.option.series[0].name = res.data.product[0];
+      props.chartConfig.option.series[0].data = res.data.data;
+    });
+  });
+});
 
 // watch(
 //   () => props.chartConfig.option.dataset,

@@ -92,11 +92,10 @@
       "fontSize": 12
     }
   },
-  "visualMap": [
-    {
-      "textStyle": {
-        "color": "#ffffff"
-      }
+  "visualMap": {
+    "type": "",
+    "textStyle": {
+      "color": "#ffffff"
     }
-  ]
+  }
 }

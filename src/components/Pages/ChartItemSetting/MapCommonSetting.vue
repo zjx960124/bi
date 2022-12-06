@@ -43,7 +43,6 @@ const piecewiseColorOption = computed(() => {
   for (let i = 0; i < props.optionData.visualMap.splitNumber; i++) {
     result.push({ label: i + 1, value: i });
   }
-  console.log(result);
   return result;
 });
 const visualColorOption = ref([
@@ -55,10 +54,6 @@ const visualColorOption = ref([
     label: '最小值',
     value: 0,
   },
-  // {
-  //   label: '中间值',
-  //   value: 1,
-  // },
 ]);
 
 const switchCommon = (
@@ -73,8 +68,9 @@ const switchCommon = (
 const selectVisualColor = (val: number) => {
   visualColor.value = val;
 };
-const changeVisualMapType = (val: string) => {
+const changeVisualType = (val: string) => {
   visualMapType.value = val;
+  props.optionData.visualMapType = val;
 };
 </script>
 <template>
@@ -210,6 +206,7 @@ const changeVisualMapType = (val: string) => {
           class="common-radio-group"
           v-model:value="props.optionData.visualMapType"
           name="radiogroup"
+          :on-update:value="changeVisualType"
         >
           <n-radio key="1" value="continuous"> 连续型区间 </n-radio>
           <n-radio key="2" value="piecewise"> 分段型区间 </n-radio>

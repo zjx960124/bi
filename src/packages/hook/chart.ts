@@ -106,7 +106,7 @@ export const mapFormatterFunc = (option: string[]) => {
       let result = '';
       options.forEach((item: string, index: number) => {
         index < options.length - 1 && index !== 0 && (result += ',');
-        result += params[item];
+        result += params[item] || '';
       });
       return result;
     }
@@ -130,7 +130,6 @@ export const handleMapSeries = (option: ChartConfigType) => {
     );
   }
   option.visualMap.type = option.visualMapType;
-  console.log(option);
   return option;
 };
 
@@ -193,6 +192,8 @@ export class PublicConfigClass implements PublicConfigType {
     DSID: '',
     dimension: [],
     measure: [],
+    measureLength: 5,
+    dimensionLength: 1,
   };
 }
 

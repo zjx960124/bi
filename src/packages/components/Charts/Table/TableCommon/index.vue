@@ -1,10 +1,21 @@
 <script setup lang="ts">
-import { PropType, toRefs, computed, ref, reactive, watch } from 'vue';
+import {
+  PropType,
+  toRefs,
+  computed,
+  ref,
+  reactive,
+  watch,
+  nextTick,
+} from 'vue';
 import { CreateComponentType } from '@/packages/index.d';
+import { fieldItem } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
+import Config from './config';
 
 const props = defineProps({
   chartConfig: {
-    type: Object as PropType<CreateComponentType>,
+    type: Object,
     required: true,
   },
 });
@@ -71,6 +82,27 @@ const headerType = computed(() => {
 const indexMethod = (index: number) => {
   return index + 1;
 };
+
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.dimension.forEach((element: fieldItem) => {
+    element.combinationMode = 0;
+    element.dataReturnMethod = 2;
+    delete element.columnType;
+  });
+  return [...requestConfig.dimension, ...requestConfig.measure];
+});
+
+watch(requestConfig, (newData, oldData) => {
+  DSService.getComponentData(newData).then((res: any) => {
+    nextTick(() => {
+      console.log(res.data);
+      dataset.value.columns = res.data.columns;
+      dataset.value.data = res.data.data;
+      console.log(dataset);
+    });
+  });
+});
 </script>
 <template>
   <el-table
@@ -90,11 +122,8 @@ const indexMethod = (index: number) => {
       />
     </template>
     <template v-for="(item, index) in dataset!.columns" :key="index">
-      <el-table-column
-        :prop="item.key"
-        :align="tableAlign"
-        :label="item.label"
-      />
+      <el-table-column :prop="item.key" :align="tableAlign" :label="item.label">
+      </el-table-column>
     </template>
   </el-table>
 </template>

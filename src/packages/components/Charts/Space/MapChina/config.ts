@@ -26,7 +26,7 @@ export const option = {
     trigger: 'item',
   },
   geo: {
-    show: false,
+    show: true,
     type: 'map',
     roam: false,
     map: 'china',
@@ -53,7 +53,7 @@ export const option = {
     top: '5%',
     legendPosition: 'top',
     textStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -75,14 +75,14 @@ export const option = {
       color: '#ffffff',
     },
   },
-  dataset: {
-    source: dataJson,
-  },
+  // dataset: {
+  //   source: dataJson,
+  // },
   series: [
     {
-      name: '地图',
       type: 'map',
       map: 'china',
+      name: '2022',
       zoom: 1, //缩放
       itemStyle: {
         // 背景色
@@ -106,16 +106,16 @@ export const option = {
         fontStyle: 'normal',
         fontWeight: 'normal',
       },
-      // data: [
-      //   {
-      //     name: '福建省',
-      //     value: 30000,
-      //   },
-      //   {
-      //     name: '广东省',
-      //     value: 24000,
-      //   },
-      // ],
+      data: [
+        {
+          name: '福建省',
+          value: 10000,
+        },
+        {
+          name: '广东省',
+          value: 15000,
+        },
+      ],
     },
   ],
 };
@@ -129,4 +129,21 @@ export default class Config
   public chartConfig = MapChinaConfig;
   public option = echartOptionProfixHandle(option, includes);
   public themeColor = cloneDeep(markRaw(themeColor));
+
+  constructor() {
+    super();
+    this.requestConfig.dimension = [
+      {
+        columnName: '中国地图',
+        dataSetColumnName: '中国地图',
+        setDataType: 1,
+        originDataType: 1,
+        dataSetId: 21,
+        commentComment: '',
+        dataReturnMethod: 3,
+        combinationMode: 1,
+      },
+    ];
+    this.requestConfig.measureLength = 1;
+  }
 }

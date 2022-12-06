@@ -120,13 +120,15 @@ export enum FilterEnum {
   SKEW_Y = 'skewY',
 }
 
-export interface PublicRequestType {
+export type PublicRequestType = {
   DSID: string | number;
   dimension: fieldItem[];
   measure: fieldItem[];
-}
+  measureLength: number;
+  dimensionLength: number;
+};
 
-export interface fieldItem {
+export type fieldItem = {
   [fieldEnum.columnName]: string;
   [fieldEnum.dataSetColumnName]: string;
   [fieldEnum.setDataType]: number;
@@ -136,7 +138,8 @@ export interface fieldItem {
   [fieldEnum.columnType]?: number;
   dataReturnMethod?: number;
   combinationMode?: number;
-}
+  customize?: string | number;
+};
 
 export interface DSResponseType {
   id: number;

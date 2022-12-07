@@ -73,6 +73,7 @@ const color = computed(() => {
 });
 
 const requestConfig = computed(() => {
+  console.log(props.chartConfig);
   let requestConfig = props.chartConfig.requestConfig;
   requestConfig.dimension.forEach((element: fieldItem) => {
     element.combinationMode = 1;

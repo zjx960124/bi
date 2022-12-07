@@ -29,7 +29,7 @@ const onMove = (e: DragEvent, to: DragEvent) => {
 }
 
 const DSID = computed(() => {
-  return props.requestConfig.DSID;
+  return props.requestConfig.DSID || '';
 })
 
 const getDSColumn = (val?: number) => {

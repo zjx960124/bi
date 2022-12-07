@@ -9,6 +9,7 @@ import {
 
 const configModules = import.meta.globEager('./components/**/config.vue');
 const indexModules = import.meta.globEager('./components/**/index.vue');
+const dataModules = import.meta.globEager('./components/**/data.vue');
 
 // * 所有图表
 export let packagesList: PackagesType = {
@@ -44,7 +45,12 @@ export const createComponent = async (targetData: ConfigType) => {
  * @param {FetchComFlagType} flag 标识 0为展示组件, 1为配置组件
  */
 const fetchComponent = (chartName: string, flag: FetchComFlagType) => {
-  const module = flag === FetchComFlagType.VIEW ? indexModules : configModules;
+  const module =
+    flag === FetchComFlagType.VIEW
+      ? indexModules
+      : flag === FetchComFlagType.CONFIG
+      ? configModules
+      : dataModules;
   for (const key in module) {
     const urlSplit = key.split('/');
     if (urlSplit[urlSplit.length - 2] === chartName) {
@@ -69,4 +75,13 @@ export const fetchChartComponent = (dropData: ConfigType) => {
 export const fetchConfigComponent = (dropData: ConfigType) => {
   const { key } = dropData;
   return fetchComponent(key, FetchComFlagType.CONFIG)?.default;
+};
+
+/**
+ * 获取数据组件
+ * * @param {ConfigType} dropData 配置项
+ */
+export const fetchDataComponent = (dropData: ConfigType) => {
+  const { key } = dropData;
+  return fetchComponent(key, FetchComFlagType.DATA)?.default;
 };

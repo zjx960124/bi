@@ -14,6 +14,11 @@ import { useContextMenu } from '@/views/editor/charts/hooks/useContextMenu.hook'
 import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
 import { useLayout } from '@/utils/hooks/useLayout';
 import { useRouter } from 'vue-router';
+import { editorCanvas } from './editorCanvas/index';
+import { EditShapeBox } from './EditShapeBox';
+import { EditRange } from './EditRange';
+import { editorToolbar } from './editorToolbar';
+import { editorConfigurations } from './editorConfigurations';
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
@@ -34,12 +39,6 @@ const {
   mousedownHandle,
   mouseClickHandle,
 } = useMouseHandle();
-
-import { editorCanvas } from './editorCanvas/index';
-import { EditShapeBox } from './EditShapeBox';
-import { EditRange } from './EditRange';
-import { editorToolbar } from './editorToolbar';
-import { editorConfigurations } from './editorConfigurations';
 
 // 主题色
 const themeSetting = computed(() => {

@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { PropType, ref, shallowRef, watch, toRaw, triggerRef } from 'vue';
+import {
+  PropType,
+  ref,
+  shallowRef,
+  watch,
+  toRaw,
+  triggerRef,
+  reactive,
+  effectScope,
+} from 'vue';
 import Draggable from 'vuedraggable';
 import { PublicRequestType } from '@/packages/index.d';
 import { Refresh } from '@vicons/tabler';
@@ -13,23 +22,28 @@ const props = defineProps({
     required: true,
   },
 });
+const dragDimensonAdd = (e: DragEvent) => {
+  triggerRef(dimensionList);
+  console.log(props.requestConfig);
+};
 
-const dragDimensonAdd = (e: DragEvent) => {};
+const dragMeasureAdd = (e: DragEvent) => {
+  triggerRef(measureList);
+};
 
-const dragMeasureAdd = (e: DragEvent) => {};
-
-const dimensionList = shallowRef(props.requestConfig.dimension);
+const dimensionList = ref(props.requestConfig.dimension);
 // tool 这里没有响应式无法自动更改数据到视图
-const measureList = ref(cloneDeep(toRaw(props.requestConfig.measure)));
+const measureList = ref(props.requestConfig.measure);
+
 const updateShallow = () => {
+  console.log(props.requestConfig);
   props.requestConfig.dimension = dimensionList.value;
   props.requestConfig.measure = measureList.value;
 };
+
 const deleteDimension = (element: fieldItem, index: number) => {
-  console.log(element);
   if (element.columnName === '中国地图') return false;
   dimensionList.value.splice(index, 1);
-  triggerRef(dimensionList);
 };
 const deleteMeasure = (index: number) => {
   measureList.value.splice(index, 1);
@@ -37,8 +51,10 @@ const deleteMeasure = (index: number) => {
 watch(
   () => props.requestConfig,
   (newData) => {
+    console.log('watch');
     dimensionList.value = props.requestConfig.dimension;
-    measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
+    measureList.value = props.requestConfig.dimension;
+    // measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
   },
   { immediate: false }
 );
@@ -52,7 +68,7 @@ watch(
       >
     </div>
     <Draggable
-      v-model="dimensionList"
+      :list="dimensionList"
       item-key="id"
       :class="{
         'dimension-drag-view': dimensionList.length === 0,
@@ -80,37 +96,6 @@ watch(
             size="14"
             class="dimension-icon"
             @click="deleteDimension(element, index)"
-          ></n-icon>
-        </div>
-      </template>
-    </Draggable>
-    <div class="layout-data-title">
-      <span>度量</span>
-      <span>{{ measureList.length }}/{{ requestConfig.measureLength }}</span>
-    </div>
-    <Draggable
-      v-model="measureList"
-      :class="{ 'measure-drag-view': measureList.length === 0 }"
-      item-key="id"
-      :group="{
-        name: 'measure',
-        put: () => {
-          return measureList.length < requestConfig.measureLength;
-        },
-      }"
-      @add="dragMeasureAdd"
-    >
-      <template #item="{ element, index }">
-        <div class="measure-item">
-          <div>
-            <img src="@/assets/screen/num.png" class="measure-img" alt="" />
-            {{ element.columnName }}
-          </div>
-          <n-icon
-            :component="Delete"
-            size="14"
-            class="measure-icon"
-            @click="deleteMeasure(index)"
           ></n-icon>
         </div>
       </template>

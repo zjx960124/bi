@@ -6,6 +6,7 @@ export const TableCommonConfig: ConfigType = {
   key: 'TableCommon',
   chartKey: 'VTableCommon',
   conKey: 'VCTableCommon',
+  dataKey: 'VDTableCommon',
   title: '表格',
   category: GenreEnum.TABLE,
   categoryName: GenreEnumName.TABLE,

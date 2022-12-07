@@ -33,4 +33,5 @@ export default class Config
   public key = NumberConfig.key;
   public chartConfig = cloneDeep(NumberConfig);
   public option = cloneDeep(option);
+
 }

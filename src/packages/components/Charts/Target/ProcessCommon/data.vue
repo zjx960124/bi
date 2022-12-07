@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { PropType, ref, shallowRef, watch, toRaw, triggerRef } from 'vue';
+import {
+  PropType,
+  ref,
+  shallowRef,
+  watch,
+  toRaw,
+  triggerRef,
+  reactive,
+  effectScope,
+} from 'vue';
 import Draggable from 'vuedraggable';
 import { PublicRequestType } from '@/packages/index.d';
 import { Refresh } from '@vicons/tabler';
@@ -13,23 +22,27 @@ const props = defineProps({
     required: true,
   },
 });
+const dragDimensonAdd = (e: DragEvent) => {
+  triggerRef(dimensionList);
+};
 
-const dragDimensonAdd = (e: DragEvent) => {};
+const dragMeasureAdd = (e: DragEvent) => {
+  triggerRef(measureList);
+};
 
-const dragMeasureAdd = (e: DragEvent) => {};
-
-const dimensionList = shallowRef(props.requestConfig.dimension);
+const dimensionList = ref(props.requestConfig.dimension);
 // tool 这里没有响应式无法自动更改数据到视图
-const measureList = ref(cloneDeep(toRaw(props.requestConfig.measure)));
+const measureList = ref(props.requestConfig.measure);
+
 const updateShallow = () => {
+  console.log(props.requestConfig);
   props.requestConfig.dimension = dimensionList.value;
   props.requestConfig.measure = measureList.value;
 };
+
 const deleteDimension = (element: fieldItem, index: number) => {
-  console.log(element);
   if (element.columnName === '中国地图') return false;
   dimensionList.value.splice(index, 1);
-  triggerRef(dimensionList);
 };
 const deleteMeasure = (index: number) => {
   measureList.value.splice(index, 1);
@@ -37,8 +50,10 @@ const deleteMeasure = (index: number) => {
 watch(
   () => props.requestConfig,
   (newData) => {
+    console.log('watch');
     dimensionList.value = props.requestConfig.dimension;
-    measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
+    measureList.value = props.requestConfig.dimension;
+    // measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
   },
   { immediate: false }
 );
@@ -46,13 +61,13 @@ watch(
 <template>
   <div class="layout-data-view">
     <div class="layout-data-title">
-      <span>维度</span>
+      <span>进度值/度量</span>
       <span
         >{{ dimensionList.length }}/{{ requestConfig.dimensionLength }}</span
       >
     </div>
     <Draggable
-      v-model="dimensionList"
+      :list="dimensionList"
       item-key="id"
       :class="{
         'dimension-drag-view': dimensionList.length === 0,
@@ -85,11 +100,32 @@ watch(
       </template>
     </Draggable>
     <div class="layout-data-title">
-      <span>度量</span>
+      <span>目标值/度量</span>
       <span>{{ measureList.length }}/{{ requestConfig.measureLength }}</span>
     </div>
+    <div class="layout-data-other">
+      <n-radio-group
+        class="common-radio-group"
+        v-model:value="requestConfig.dataType"
+        name="radiogroup"
+      >
+        <n-space>
+          <n-radio key="1" :value="1"> 动态字段 </n-radio>
+          <n-radio key="2" :value="2"> 手动输入 </n-radio>
+        </n-space>
+      </n-radio-group>
+    </div>
+    <div v-show="requestConfig.dataType === 2">
+      <el-input-number
+        v-model="requestConfig.data"
+        class="common-number-input"
+        controls-position="right"
+        size="small"
+      />
+    </div>
     <Draggable
-      v-model="measureList"
+      v-show="requestConfig.dataType === 1"
+      :list="measureList"
       :class="{ 'measure-drag-view': measureList.length === 0 }"
       item-key="id"
       :group="{
@@ -136,6 +172,12 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .layout-data-other {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
   }
   .dimension-item {
     width: 100%;

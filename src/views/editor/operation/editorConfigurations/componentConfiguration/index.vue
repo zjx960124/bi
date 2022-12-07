@@ -9,8 +9,9 @@ import { useTargetData } from '@/utils/hooks/useTargetData';
 import { ref } from 'vue';
 import { LayoutData } from '../layoutData';
 import { Dimension } from './component/dimension';
-import { DSList } from '@/utils/hooks/useDSData';
+import { useDSData } from '@/utils/hooks/useDSData';
 const { targetData, chartEditStore } = useTargetData();
+const { DSList, targetRequestConfig } = useDSData();
 
 console.log(targetData);
 
@@ -68,17 +69,27 @@ const hiddenConfiguration = () => {
         </n-button-group>
       </div>
       <div class="configuration-view">
-        <layout-data
+        <!-- <layout-data
           v-show="activeTab === 'data'"
           :optionData="targetData.option"
           :request-config="targetData.requestConfig"
-        ></layout-data>
+        ></layout-data> -->
+        <!-- <component
+          v-show="activeTab === 'data'"
+          :is="targetData.chartConfig.dataKey"
+          :optionData="targetData.option"
+          :request-config="targetRequestConfig"
+        ></component> -->
         <component
-          v-show="activeTab === 'config'"
-          :is="targetData.chartConfig.conKey"
+          :is="
+            activeTab === 'config'
+              ? targetData.chartConfig.conKey
+              : targetData.chartConfig.dataKey
+          "
           :attr="targetData.attr"
           :optionData="targetData.option"
           :themeColor="targetData.themeColor"
+          :request-config="targetRequestConfig"
         ></component>
       </div>
       <div class="update-btn">更新</div>
@@ -95,7 +106,7 @@ const hiddenConfiguration = () => {
       <div class="information-titile">数据</div>
       <dimension
         :DSList="DSList"
-        :request-config="targetData.requestConfig"
+        :request-config="targetRequestConfig"
       ></dimension>
     </div>
   </div>

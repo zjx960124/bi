@@ -14,6 +14,7 @@ export type ConfigType = {
   key: string;
   chartKey: string;
   conKey: string;
+  dataKey: string;
   title: string;
   category: string;
   categoryName: string;
@@ -81,6 +82,7 @@ export type PackagesGenreType = {
 export enum FetchComFlagType {
   VIEW,
   CONFIG,
+  DATA,
 }
 
 export enum ChartFrameEnum {
@@ -126,6 +128,8 @@ export type PublicRequestType = {
   measure: fieldItem[];
   measureLength: number;
   dimensionLength: number;
+  dataType?: number;
+  data?: number | string;
 };
 
 export type fieldItem = {

@@ -6,6 +6,7 @@ export const NumberConfig: ConfigType = {
   key: 'Number',
   chartKey: 'VNumber',
   conKey: 'VCNumber',
+  dataKey: 'VDNumber',
   title: '数字翻牌',
   category: GenreEnum.TARGET,
   categoryName: GenreEnumName.TARGET,

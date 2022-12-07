@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { PropType, ref, shallowRef, watch, toRaw, triggerRef } from 'vue';
+import {
+  PropType,
+  ref,
+  shallowRef,
+  watch,
+  toRaw,
+  triggerRef,
+  reactive,
+  effectScope,
+} from 'vue';
 import Draggable from 'vuedraggable';
 import { PublicRequestType } from '@/packages/index.d';
 import { Refresh } from '@vicons/tabler';
@@ -13,23 +22,23 @@ const props = defineProps({
     required: true,
   },
 });
-
 const dragDimensonAdd = (e: DragEvent) => {};
 
 const dragMeasureAdd = (e: DragEvent) => {};
 
-const dimensionList = shallowRef(props.requestConfig.dimension);
+const dimensionList = ref(props.requestConfig.dimension);
 // tool 这里没有响应式无法自动更改数据到视图
-const measureList = ref(cloneDeep(toRaw(props.requestConfig.measure)));
+const measureList = ref(props.requestConfig.measure);
+
 const updateShallow = () => {
+  console.log(props.requestConfig);
   props.requestConfig.dimension = dimensionList.value;
   props.requestConfig.measure = measureList.value;
 };
+
 const deleteDimension = (element: fieldItem, index: number) => {
-  console.log(element);
   if (element.columnName === '中国地图') return false;
   dimensionList.value.splice(index, 1);
-  triggerRef(dimensionList);
 };
 const deleteMeasure = (index: number) => {
   measureList.value.splice(index, 1);
@@ -37,8 +46,10 @@ const deleteMeasure = (index: number) => {
 watch(
   () => props.requestConfig,
   (newData) => {
+    console.log('watch');
     dimensionList.value = props.requestConfig.dimension;
-    measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
+    measureList.value = props.requestConfig.dimension;
+    // measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
   },
   { immediate: false }
 );
@@ -52,7 +63,7 @@ watch(
       >
     </div>
     <Draggable
-      v-model="dimensionList"
+      :list="dimensionList"
       item-key="id"
       :class="{
         'dimension-drag-view': dimensionList.length === 0,
@@ -89,7 +100,7 @@ watch(
       <span>{{ measureList.length }}/{{ requestConfig.measureLength }}</span>
     </div>
     <Draggable
-      v-model="measureList"
+      :list="measureList"
       :class="{ 'measure-drag-view': measureList.length === 0 }"
       item-key="id"
       :group="{

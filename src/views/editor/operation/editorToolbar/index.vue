@@ -20,9 +20,6 @@ const chartsItem = loadAsyncComponent(
   () => import('../../charts/components/chartsItem/index.vue')
 );
 
-console.log(menuOptions);
-console.log(genreMenuOptions);
-
 // 拖动
 const sliderValue = ref<number>(100);
 // 监听 scale 变化

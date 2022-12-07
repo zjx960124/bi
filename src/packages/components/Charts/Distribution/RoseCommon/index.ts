@@ -10,6 +10,7 @@ export const RoseCommonConfig: ConfigType = {
   key: 'RoseCommon',
   chartKey: 'VRoseCommon',
   conKey: 'VCRoseCommon',
+  dataKey: 'VDRoseCommon',
   title: '玫瑰图',
   category: GenreEnum.DISTRIBUTION,
   categoryName: GenreEnumName.DISTRIBUTION,

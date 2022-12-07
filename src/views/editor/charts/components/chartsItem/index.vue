@@ -12,7 +12,11 @@ import {
   loadingFinish,
   loadingError,
 } from '@/utils';
-import { fetchConfigComponent, fetchChartComponent } from '@/packages/index';
+import {
+  fetchConfigComponent,
+  fetchChartComponent,
+  fetchDataComponent,
+} from '@/packages/index';
 const chartEditStore = useChartEditStore();
 const props = defineProps({
   menuOptions: {
@@ -23,6 +27,7 @@ const props = defineProps({
 const dragStartHandle = (e: DragEvent, item: ConfigType) => {
   componentInstall(item.chartKey, fetchChartComponent(item));
   componentInstall(item.conKey, fetchConfigComponent(item));
+  componentInstall(item.dataKey, fetchDataComponent(item));
   e!.dataTransfer!.setData(
     DragKeyEnum.DRAG_KEY,
     JSON.stringify(omit(item, ['image']))
@@ -38,6 +43,7 @@ const dblclickHandle = async (item: ConfigType) => {
     // 动态注册图表组件
     componentInstall(item.chartKey, fetchChartComponent(item));
     componentInstall(item.conKey, fetchConfigComponent(item));
+    componentInstall(item.dataKey, fetchDataComponent(item));
     // 创建新图表组件
     let newComponent: CreateComponentType = await createComponent(item);
     // 添加

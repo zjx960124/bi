@@ -64,4 +64,10 @@ export default class Config
   public attr = { ...chartInitConfig, h: 500, zIndex: -1 };
   public chartConfig = cloneDeep(ProcessCircleConfig);
   public option = cloneDeep(option);
+
+  constructor() {
+    super();
+    this.requestConfig.dataType = 1;
+    this.requestConfig.data = '';
+  }
 }

@@ -89,6 +89,7 @@ const requestConfig = computed(() => {
 });
 
 watch(requestConfig, (newData, oldData) => {
+  console.log(newData);
   DSService.getComponentData(newData).then((res: any) => {
     nextTick(() => {
       props.chartConfig.option.dataset = {
@@ -96,6 +97,10 @@ watch(requestConfig, (newData, oldData) => {
       };
     });
   });
+});
+
+watch(props.chartConfig.requestConfig, (newData) => {
+  console.log(newData);
 });
 
 // const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);

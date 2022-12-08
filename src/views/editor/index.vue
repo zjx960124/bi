@@ -89,7 +89,13 @@ const previewHandle = () => {
   window.open(href, '_blank');
 };
 
-const changeProjectName = (e) => {
+const saveHandle = () => {
+  const request = {
+    
+  };
+};
+
+const changeProjectName = (e: any) => {
   if (e.target.innerHTML.length > 10) {
     let result = e.target.innerHTML.substr(0, 10);
     Project.value.setProjectName(result);
@@ -169,7 +175,11 @@ const projectName = computed(() => {
           </template>
           预览
         </n-button>
-        <img class="preview-btn" src="@/assets/screen/save.png" />
+        <img
+          class="preview-btn"
+          @click="saveHandle"
+          src="@/assets/screen/save.png"
+        />
       </template>
     </header-plugin>
     <main>

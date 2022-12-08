@@ -60,7 +60,7 @@ const option = reactive({
   from: 0,
   dataset: 0,
 });
-const { w, h } = toRefs(props.chartConfig.attr);
+
 let {
   dur,
   showSeparator,
@@ -106,32 +106,16 @@ watch(
   }
 );
 
-const requestConfig = computed(() => {
-  let requestConfig = props.chartConfig.requestConfig;
-  requestConfig.dimension.forEach((element: fieldItem) => {
+watch(props.chartConfig.requestConfig, (newData, oldData) => {
+  console.log(newData);
+  newData.dimension.forEach((element: fieldItem) => {
     element.combinationMode = 1;
     element.dataReturnMethod = 1;
     delete element.columnType;
   });
-  requestConfig.measure.forEach((element: fieldItem) => {
-    element.combinationMode = 1;
-    element.dataReturnMethod = 1;
-    delete element.columnType;
-  });
-  if (requestConfig.dataType === 1) {
-    return [...requestConfig.dimension, ...requestConfig.measure];
-  }
-  if (requestConfig.dataType === 2) {
-    return requestConfig.dimension;
-  }
-});
-
-watch(requestConfig, (newData, oldData) => {
-  DSService.getComponentData(newData).then((res: any) => {
+  DSService.getComponentData(newData.dimension).then((res: any) => {
     nextTick(() => {
-      props.chartConfig.option.dataset = {
-        source: res.data[0],
-      };
+      props.chartConfig.option.dataset = res.data[0]['1'];
     });
   });
 });

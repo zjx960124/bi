@@ -4,7 +4,7 @@
       :type="type"
       :height="height"
       :processing="animationFlag"
-      :percentage="option.dataset"
+      :percentage="resultData"
       :indicator-placement="indicatorPlacement"
       :color="color"
       :rail-color="railColor"
@@ -20,7 +20,7 @@
           indicatorFontWeight,
         }"
       >
-        {{ option.dataset }} {{ unit }}
+        {{ resultData }} {{ unit }}
       </n-text>
     </n-progress>
     <div>目标值{{ targetData }}</div>
@@ -73,6 +73,7 @@ const option = shallowReactive({
 });
 
 const targetData = ref(0);
+const resultData = ref(0);
 
 // 手动更新
 watch(
@@ -106,22 +107,39 @@ const requestConfig = computed(() => {
 });
 
 watch(requestConfig, (newData, oldData) => {
-  DSService.getComponentData(newData).then((res: any) => {
-    nextTick(() => {
-      if (props.chartConfig.requestConfig.dataType === 1) {
-        option.dataset = res.data[0]['1'];
-        targetData.value = res.data[0]['2'] || 0;
-      }
-      if (props.chartConfig.requestConfig.dataType === 2) {
-        option.dataset = res.data[0]['1'];
-        targetData.value = props.chartConfig.requestConfig.data as number;
-      }
+  if (
+    requestConfig.value?.length === 2 ||
+    (requestConfig.value?.length === 1 &&
+      props.chartConfig.requestConfig.dataType === 2)
+  ) {
+    DSService.getComponentData(newData).then((res: any) => {
+      nextTick(() => {
+        if (props.chartConfig.requestConfig.dataType === 1) {
+          option.dataset = res.data[0]['1'];
+          targetData.value = res.data[0]['2'] || 0;
+          resultData.value =
+            Math.round((option.dataset / targetData.value) * 10000) / 100;
+        }
+        if (props.chartConfig.requestConfig.dataType === 2) {
+          option.dataset = res.data[0]['1'];
+          targetData.value = props.chartConfig.requestConfig.data as number;
+          resultData.value =
+            Math.round((option.dataset / targetData.value) * 10000) / 100;
+        }
+      });
     });
-  });
+  }
 });
 
 watch(props.chartConfig.requestConfig, (newData, oldData) => {
-  console.log(newData);
+  if (
+    requestConfig.value?.length === 1 &&
+    props.chartConfig.requestConfig.dataType === 2
+  ) {
+    targetData.value = props.chartConfig.requestConfig.data as number;
+    resultData.value =
+      Math.round((option.dataset / targetData.value) * 10000) / 100;
+  }
 });
 // 预览更新
 // useChartDataFetch(props.chartConfig, useChartEditStore, (newData: number) => {

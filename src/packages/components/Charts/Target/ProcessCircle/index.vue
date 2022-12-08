@@ -3,7 +3,7 @@
     :type="type"
     :height="height"
     :processing="animationFlag"
-    :percentage="option.dataset"
+    :percentage="resultData"
     :indicator-placement="indicatorPlacement"
     :color="color"
     :rail-color="railColor"
@@ -19,17 +19,29 @@
         indicatorFontWeight,
       }"
     >
-      {{ option.dataset }} {{ unit }}
+      {{ resultData }} {{ unit }}
     </n-text>
+    <br />
+    <div>目标值{{ targetData }}</div>
   </n-progress>
 </template>
 
 <script setup lang="ts">
-import { PropType, toRefs, watch, shallowReactive } from 'vue';
+import {
+  PropType,
+  toRefs,
+  watch,
+  shallowReactive,
+  computed,
+  nextTick,
+  ref,
+} from 'vue';
 // import { useChartDataFetch } from '@/hooks'
 // import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore'
 import config, { option as configOption } from './config';
 import { toNumber } from '@/utils';
+import { fieldItem } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
 
 const props = defineProps({
   chartConfig: {
@@ -59,6 +71,9 @@ const option = shallowReactive({
   dataset: configOption.dataset,
 });
 
+const targetData = ref(0);
+const resultData = ref(0);
+
 // 手动更新
 watch(
   () => props.chartConfig.option.dataset,
@@ -69,6 +84,62 @@ watch(
     deep: false,
   }
 );
+
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.dimension.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  requestConfig.measure.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  if (requestConfig.dataType === 1) {
+    return [...requestConfig.dimension, ...requestConfig.measure];
+  }
+  if (requestConfig.dataType === 2) {
+    return requestConfig.dimension;
+  }
+});
+
+watch(requestConfig, (newData, oldData) => {
+  if (
+    requestConfig.value?.length === 2 ||
+    (requestConfig.value?.length === 1 &&
+      props.chartConfig.requestConfig.dataType === 2)
+  ) {
+    DSService.getComponentData(newData).then((res: any) => {
+      nextTick(() => {
+        if (props.chartConfig.requestConfig.dataType === 1) {
+          option.dataset = res.data[0]['1'];
+          targetData.value = res.data[0]['2'] || 0;
+          resultData.value =
+            Math.round((option.dataset / targetData.value) * 10000) / 100;
+        }
+        if (props.chartConfig.requestConfig.dataType === 2) {
+          option.dataset = res.data[0]['1'];
+          targetData.value = props.chartConfig.requestConfig.data as number;
+          resultData.value =
+            Math.round((option.dataset / targetData.value) * 10000) / 100;
+        }
+      });
+    });
+  }
+});
+
+watch(props.chartConfig.requestConfig, (newData, oldData) => {
+  if (
+    requestConfig.value?.length === 1 &&
+    props.chartConfig.requestConfig.dataType === 2
+  ) {
+    targetData.value = props.chartConfig.requestConfig.data as number;
+    resultData.value =
+      Math.round((option.dataset / targetData.value) * 10000) / 100;
+  }
+});
 // 预览更新
 // useChartDataFetch(props.chartConfig, useChartEditStore, (newData: number) => {
 //   option.dataset = toNumber(newData, 2)

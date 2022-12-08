@@ -99,58 +99,6 @@ watch(
         </div>
       </template>
     </Draggable>
-    <div class="layout-data-title">
-      <span>目标值/度量</span>
-      <span>{{ measureList.length }}/{{ requestConfig.measureLength }}</span>
-    </div>
-    <div class="layout-data-other">
-      <n-radio-group
-        class="common-radio-group"
-        v-model:value="requestConfig.dataType"
-        name="radiogroup"
-      >
-        <n-space>
-          <n-radio key="1" :value="1"> 动态字段 </n-radio>
-          <n-radio key="2" :value="2"> 手动输入 </n-radio>
-        </n-space>
-      </n-radio-group>
-    </div>
-    <div v-show="requestConfig.dataType === 2">
-      <el-input-number
-        v-model="requestConfig.data"
-        class="common-number-input"
-        controls-position="right"
-        size="small"
-      />
-    </div>
-    <Draggable
-      v-show="requestConfig.dataType === 1"
-      :list="measureList"
-      :class="{ 'measure-drag-view': measureList.length === 0 }"
-      item-key="id"
-      :group="{
-        name: 'measure',
-        put: () => {
-          return measureList.length < requestConfig.measureLength;
-        },
-      }"
-      @add="dragMeasureAdd"
-    >
-      <template #item="{ element, index }">
-        <div class="measure-item">
-          <div>
-            <img src="@/assets/screen/num.png" class="measure-img" alt="" />
-            {{ element.columnName }}
-          </div>
-          <n-icon
-            :component="Delete"
-            size="14"
-            class="measure-icon"
-            @click="deleteMeasure(index)"
-          ></n-icon>
-        </div>
-      </template>
-    </Draggable>
     <div class="update-btn" @click="updateShallow">
       <n-icon :component="Refresh" size="22" style="margin-right: 8px"></n-icon>
       更新

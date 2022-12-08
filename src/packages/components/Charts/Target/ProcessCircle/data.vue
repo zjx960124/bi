@@ -6,10 +6,8 @@ import {
   watch,
   toRaw,
   triggerRef,
-  nextTick,
   reactive,
   effectScope,
-  computed,
 } from 'vue';
 import Draggable from 'vuedraggable';
 import { PublicRequestType } from '@/packages/index.d';
@@ -32,49 +30,52 @@ const dragMeasureAdd = (e: DragEvent) => {
   triggerRef(measureList);
 };
 
-const dimensionList = shallowRef({ list: props.requestConfig.dimension });
+const dimensionList = ref(props.requestConfig.dimension);
 // tool 这里没有响应式无法自动更改数据到视图
-const measureList = shallowRef({ list: props.requestConfig.measure });
+const measureList = ref(props.requestConfig.measure);
 
 const updateShallow = () => {
-  props.requestConfig.dimension = dimensionList.value.list;
-  props.requestConfig.measure = measureList.value.list;
+  console.log(props.requestConfig);
+  props.requestConfig.dimension = dimensionList.value;
+  props.requestConfig.measure = measureList.value;
 };
 
 const deleteDimension = (element: fieldItem, index: number) => {
   if (element.columnName === '中国地图') return false;
-  dimensionList.value.list = dimensionList.value.list.filter(
-    (item, indexs) => indexs !== index
-  );
-  triggerRef(measureList);
+  dimensionList.value.splice(index, 1);
 };
 const deleteMeasure = (index: number) => {
-  measureList.value.list = measureList.value.list.filter(
-    (item, indexs) => indexs !== index
-  );
-  triggerRef(measureList);
+  measureList.value.splice(index, 1);
 };
+watch(
+  () => props.requestConfig,
+  (newData) => {
+    console.log('watch');
+    dimensionList.value = props.requestConfig.dimension;
+    measureList.value = props.requestConfig.dimension;
+    // measureList.value = cloneDeep(toRaw(props.requestConfig.measure));
+  },
+  { immediate: false }
+);
 </script>
 <template>
   <div class="layout-data-view">
     <div class="layout-data-title">
-      <span>维度</span>
+      <span>进度值/度量</span>
       <span
-        >{{ dimensionList.list.length }}/{{
-          requestConfig.dimensionLength
-        }}</span
+        >{{ dimensionList.length }}/{{ requestConfig.dimensionLength }}</span
       >
     </div>
     <Draggable
-      v-model="dimensionList.list"
+      :list="dimensionList"
       item-key="id"
       :class="{
-        'dimension-drag-view': dimensionList.list.length === 0,
+        'dimension-drag-view': dimensionList.length === 0,
       }"
       :group="{
         name: 'dimension',
         put: () => {
-          return dimensionList.list.length < requestConfig.dimensionLength;
+          return dimensionList.length < requestConfig.dimensionLength;
         },
       }"
       @add="dragDimensonAdd"
@@ -99,19 +100,38 @@ const deleteMeasure = (index: number) => {
       </template>
     </Draggable>
     <div class="layout-data-title">
-      <span>度量</span>
-      <span
-        >{{ measureList.list.length }}/{{ requestConfig.measureLength }}</span
+      <span>目标值/度量</span>
+      <span>{{ measureList.length }}/{{ requestConfig.measureLength }}</span>
+    </div>
+    <div class="layout-data-other">
+      <n-radio-group
+        class="common-radio-group"
+        v-model:value="requestConfig.dataType"
+        name="radiogroup"
       >
+        <n-space>
+          <n-radio key="1" :value="1"> 动态字段 </n-radio>
+          <n-radio key="2" :value="2"> 手动输入 </n-radio>
+        </n-space>
+      </n-radio-group>
+    </div>
+    <div v-show="requestConfig.dataType === 2">
+      <el-input-number
+        v-model="requestConfig.data"
+        class="common-number-input"
+        controls-position="right"
+        size="small"
+      />
     </div>
     <Draggable
-      v-model="measureList.list"
-      :class="{ 'measure-drag-view': measureList.list.length === 0 }"
+      v-show="requestConfig.dataType === 1"
+      :list="measureList"
+      :class="{ 'measure-drag-view': measureList.length === 0 }"
       item-key="id"
       :group="{
         name: 'measure',
         put: () => {
-          return measureList.list.length < requestConfig.measureLength;
+          return measureList.length < requestConfig.measureLength;
         },
       }"
       @add="dragMeasureAdd"
@@ -152,6 +172,12 @@ const deleteMeasure = (index: number) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .layout-data-other {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
   }
   .dimension-item {
     width: 100%;

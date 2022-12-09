@@ -29,27 +29,40 @@ const dragMeasureAdd = (e: DragEvent) => {
   triggerRef(measureList);
 };
 
-const dimensionList = shallowRef(props.requestConfig.dimension);
+const dimensionList = shallowRef({ list: props.requestConfig.dimension });
 // tool 这里没有响应式无法自动更改数据到视图
-const measureList = shallowRef(props.requestConfig.measure);
+const measureList = shallowRef({ list: props.requestConfig.measure });
 
 const updateShallow = () => {
-  props.requestConfig.dimension = dimensionList.value;
-  props.requestConfig.measure = measureList.value;
+  props.requestConfig.dimension = dimensionList.value.list;
+  props.requestConfig.measure = measureList.value.list;
 };
 
 const deleteDimension = (element: fieldItem, index: number) => {
   if (element.columnName === '中国地图') return false;
-  dimensionList.value = dimensionList.value.filter(
+  dimensionList.value.list = dimensionList.value.list.filter(
     (item, indexs) => indexs !== index
   );
   triggerRef(dimensionList);
 };
 const deleteMeasure = (index: number) => {
-  measureList.value = measureList.value.filter(
+  measureList.value.list = measureList.value.list.filter(
     (item, indexs) => indexs !== index
   );
   triggerRef(measureList);
+};
+
+const measurePutFunc = (e: any, data: any) => {
+  return (
+    measureList.value.list.length < props.requestConfig.measureLength &&
+    e.options.group.name === data.options.group.name
+  );
+};
+const dimensionPutFunc = (e: any, data: any) => {
+  return (
+    dimensionList.value.list.length < props.requestConfig.dimensionLength &&
+    e.options.group.name === data.options.group.name
+  );
 };
 </script>
 <template>
@@ -57,20 +70,20 @@ const deleteMeasure = (index: number) => {
     <div class="layout-data-title">
       <span>维度</span>
       <span
-        >{{ dimensionList.length }}/{{ requestConfig.dimensionLength }}</span
+        >{{ dimensionList.list.length }}/{{
+          requestConfig.dimensionLength
+        }}</span
       >
     </div>
     <Draggable
-      v-model="dimensionList"
+      v-model="dimensionList.list"
       item-key="id"
       :class="{
-        'dimension-drag-view': dimensionList.length === 0,
+        'dimension-drag-view': dimensionList.list.length === 0,
       }"
       :group="{
         name: 'dimension',
-        put: () => {
-          return dimensionList.length < requestConfig.dimensionLength;
-        },
+        put: dimensionPutFunc,
       }"
       @add="dragDimensonAdd"
     >
@@ -95,17 +108,17 @@ const deleteMeasure = (index: number) => {
     </Draggable>
     <div class="layout-data-title">
       <span>度量</span>
-      <span>{{ measureList.length }}/{{ requestConfig.measureLength }}</span>
+      <span
+        >{{ measureList.list.length }}/{{ requestConfig.measureLength }}</span
+      >
     </div>
     <Draggable
-      v-model="measureList"
-      :class="{ 'measure-drag-view': measureList.length === 0 }"
+      v-model="measureList.list"
+      :class="{ 'measure-drag-view': measureList.list.length === 0 }"
       item-key="id"
       :group="{
         name: 'measure',
-        put: () => {
-          return measureList.length < requestConfig.measureLength;
-        },
+        put: measurePutFunc,
       }"
       @add="dragMeasureAdd"
     >
@@ -131,105 +144,5 @@ const deleteMeasure = (index: number) => {
   </div>
 </template>
 <style lang="scss" scoped>
-.layout-data-view {
-  height: 100%;
-  box-sizing: border-box;
-  padding: 0 23px;
-  font-family: 'PingFang-SC-Regular';
-  .layout-data-title {
-    height: 40px;
-    line-height: 40px;
-    box-sizing: border-box;
-    text-align: left;
-    color: #293270;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .dimension-item {
-    width: 100%;
-    height: 21px;
-    background: #f3f5ff;
-    border: 1px dashed #7c87ff;
-    border-radius: 11px;
-    font-family: 'PingFang-SC-Regular';
-    color: #293270;
-    font-size: 12px;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    align-items: center;
-
-    .dimension-img {
-      width: 22px;
-      height: 11px;
-      margin: 0 6px 0 13px;
-    }
-    .dimension-icon {
-      margin-right: 10px;
-      cursor: pointer;
-    }
-  }
-
-  .dimension-item + .dimension-item {
-    margin-top: 8px;
-  }
-  .dimension-drag-view {
-    width: 100%;
-    min-height: 21px;
-    background: #f3f5ff;
-    border: 1px dashed #7c87ff;
-    border-radius: 11px;
-  }
-
-  .measure-item {
-    width: 100%;
-    height: 21px;
-    background: #e7faf8;
-    border: 1px dashed #23d8c2;
-    border-radius: 11px;
-    font-family: 'PingFang-SC-Regular';
-    color: #293270;
-    font-size: 12px;
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .measure-img {
-      width: 17px;
-      height: 11px;
-      margin: 0 6px 0 13px;
-    }
-    .measure-icon {
-      margin-right: 10px;
-      cursor: pointer;
-    }
-  }
-
-  .measure-item + .measure-item {
-    margin-top: 8px;
-  }
-  .measure-drag-view {
-    width: 100%;
-    min-height: 21px;
-    background: #e7faf8;
-    border: 1px dashed #23d8c2;
-    border-radius: 11px;
-  }
-  .update-btn {
-    width: 100%;
-    height: 43px;
-    background: #7c87ff;
-    border-radius: 15px;
-    margin-top: 30px;
-    color: #ffffff;
-    font-size: 14px;
-    font-family: 'PingFang-SC-Medium';
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-}
+@import '@/style/styles/pages/data.scss';
 </style>

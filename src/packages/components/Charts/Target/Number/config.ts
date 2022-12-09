@@ -34,4 +34,8 @@ export default class Config
   public chartConfig = cloneDeep(NumberConfig);
   public option = cloneDeep(option);
 
+  constructor() {
+    super();
+    this.requestConfig.measureLength = 1;
+  }
 }

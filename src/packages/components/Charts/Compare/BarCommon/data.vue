@@ -1,21 +1,9 @@
 <script setup lang="ts">
-import {
-  PropType,
-  ref,
-  shallowRef,
-  watch,
-  toRaw,
-  triggerRef,
-  nextTick,
-  reactive,
-  effectScope,
-  computed,
-} from 'vue';
+import { PropType, shallowRef, triggerRef } from 'vue';
 import Draggable from 'vuedraggable';
 import { PublicRequestType } from '@/packages/index.d';
 import { Refresh } from '@vicons/tabler';
 import { Delete } from '@vicons/carbon';
-import cloneDeep from 'lodash/cloneDeep';
 import { fieldItem } from '@/packages/index.d';
 
 const props = defineProps({
@@ -46,13 +34,26 @@ const deleteDimension = (element: fieldItem, index: number) => {
   dimensionList.value.list = dimensionList.value.list.filter(
     (item, indexs) => indexs !== index
   );
-  triggerRef(measureList);
+  triggerRef(dimensionList);
 };
 const deleteMeasure = (index: number) => {
   measureList.value.list = measureList.value.list.filter(
     (item, indexs) => indexs !== index
   );
   triggerRef(measureList);
+};
+
+const measurePutFunc = (e: any, data: any) => {
+  return (
+    measureList.value.list.length < props.requestConfig.measureLength &&
+    e.options.group.name === data.options.group.name
+  );
+};
+const dimensionPutFunc = (e: any, data: any) => {
+  return (
+    dimensionList.value.list.length < props.requestConfig.dimensionLength &&
+    e.options.group.name === data.options.group.name
+  );
 };
 </script>
 <template>
@@ -73,9 +74,7 @@ const deleteMeasure = (index: number) => {
       }"
       :group="{
         name: 'dimension',
-        put: () => {
-          return dimensionList.list.length < requestConfig.dimensionLength;
-        },
+        put: dimensionPutFunc,
       }"
       @add="dragDimensonAdd"
     >
@@ -110,9 +109,7 @@ const deleteMeasure = (index: number) => {
       item-key="id"
       :group="{
         name: 'measure',
-        put: () => {
-          return measureList.list.length < requestConfig.measureLength;
-        },
+        put: measurePutFunc,
       }"
       @add="dragMeasureAdd"
     >
@@ -137,106 +134,7 @@ const deleteMeasure = (index: number) => {
     </div>
   </div>
 </template>
+
 <style lang="scss" scoped>
-.layout-data-view {
-  height: 100%;
-  box-sizing: border-box;
-  padding: 0 23px;
-  font-family: 'PingFang-SC-Regular';
-  .layout-data-title {
-    height: 40px;
-    line-height: 40px;
-    box-sizing: border-box;
-    text-align: left;
-    color: #293270;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .dimension-item {
-    width: 100%;
-    height: 21px;
-    background: #f3f5ff;
-    border: 1px dashed #7c87ff;
-    border-radius: 11px;
-    font-family: 'PingFang-SC-Regular';
-    color: #293270;
-    font-size: 12px;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    align-items: center;
-
-    .dimension-img {
-      width: 22px;
-      height: 11px;
-      margin: 0 6px 0 13px;
-    }
-    .dimension-icon {
-      margin-right: 10px;
-      cursor: pointer;
-    }
-  }
-
-  .dimension-item + .dimension-item {
-    margin-top: 8px;
-  }
-  .dimension-drag-view {
-    width: 100%;
-    min-height: 21px;
-    background: #f3f5ff;
-    border: 1px dashed #7c87ff;
-    border-radius: 11px;
-  }
-
-  .measure-item {
-    width: 100%;
-    height: 21px;
-    background: #e7faf8;
-    border: 1px dashed #23d8c2;
-    border-radius: 11px;
-    font-family: 'PingFang-SC-Regular';
-    color: #293270;
-    font-size: 12px;
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .measure-img {
-      width: 17px;
-      height: 11px;
-      margin: 0 6px 0 13px;
-    }
-    .measure-icon {
-      margin-right: 10px;
-      cursor: pointer;
-    }
-  }
-
-  .measure-item + .measure-item {
-    margin-top: 8px;
-  }
-  .measure-drag-view {
-    width: 100%;
-    min-height: 21px;
-    background: #e7faf8;
-    border: 1px dashed #23d8c2;
-    border-radius: 11px;
-  }
-  .update-btn {
-    width: 100%;
-    height: 43px;
-    background: #7c87ff;
-    border-radius: 15px;
-    margin-top: 30px;
-    color: #ffffff;
-    font-size: 14px;
-    font-family: 'PingFang-SC-Medium';
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-}
+@import '@/style/styles/pages/data.scss';
 </style>

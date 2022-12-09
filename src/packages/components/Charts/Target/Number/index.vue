@@ -106,14 +106,18 @@ watch(
   }
 );
 
-watch(props.chartConfig.requestConfig, (newData, oldData) => {
-  console.log(newData);
-  newData.dimension.forEach((element: fieldItem) => {
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.measure.forEach((element: fieldItem) => {
     element.combinationMode = 1;
     element.dataReturnMethod = 1;
     delete element.columnType;
   });
-  DSService.getComponentData(newData.dimension).then((res: any) => {
+  return requestConfig.measure;
+});
+
+watch(requestConfig, (newData) => {
+  DSService.getComponentData(newData).then((res: any) => {
     nextTick(() => {
       props.chartConfig.option.dataset = res.data[0]['1'];
     });

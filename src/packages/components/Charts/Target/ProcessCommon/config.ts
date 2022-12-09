@@ -69,5 +69,6 @@ export default class Config
     super();
     this.requestConfig.dataType = 1;
     this.requestConfig.data = '';
+    this.requestConfig.measureLength = 1;
   }
 }

@@ -89,7 +89,6 @@ const requestConfig = computed(() => {
 });
 
 watch(requestConfig, (newData, oldData) => {
-  console.log(newData);
   DSService.getComponentData(newData).then((res: any) => {
     nextTick(() => {
       props.chartConfig.option.dataset = {

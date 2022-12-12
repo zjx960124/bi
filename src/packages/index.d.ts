@@ -26,7 +26,7 @@ export type ConfigType = {
 // 包分类枚举
 export enum PackagesCategoryEnum {
   CHARTS = 'Charts',
-  TEXT = 'Text',
+  TEXT = 'Texts',
   MEDIA = 'Media',
   MATERIAL = 'Material',
 }
@@ -72,10 +72,10 @@ export type GenreType = {
 };
 
 export type PackagesGenreType = {
-  [PackagesCategoryEnum.CHARTS]?: GenreType;
-  [PackagesCategoryEnum.TEXT]?: GenreType;
-  [PackagesCategoryEnum.MEDIA]?: GenreType;
-  [PackagesCategoryEnum.MATERIAL]?: GenreType;
+  [PackagesCategoryEnum.CHARTS]?: GenreType[];
+  [PackagesCategoryEnum.TEXT]?: GenreType[];
+  [PackagesCategoryEnum.MEDIA]?: GenreType[];
+  [PackagesCategoryEnum.MATERIAL]?: GenreType[];
 };
 
 // 获取组件
@@ -174,6 +174,7 @@ export interface CreateComponentType extends PublicConfigType {
   chartConfig: ConfigType;
   option: { [P in keyof GlobalThemeJsonType]?: GlobalThemeJsonType[P] };
   themeColor?: { color: ChartColorsNameType } & any;
+  requestConfig: PublicRequestType;
 }
 
 // 组件成组实例类

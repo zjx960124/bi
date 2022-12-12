@@ -13,11 +13,17 @@ import {
   ArrowRedo,
   ImagesOutline,
 } from '@vicons/ionicons5';
-import { reactive, ref, computed, markRaw } from 'vue';
+import { reactive, ref, computed, nextTick } from 'vue';
+import { DSService } from '@/api/DS';
+import createImage, { generateImage } from '@/utils/hooks/usePreview';
 
 const charts = loadAsyncComponent(() => import('./charts/index.vue'));
 const pages = loadAsyncComponent(() => import('./pages/index.vue'));
 const operation = loadAsyncComponent(() => import('./operation/index.vue'));
+const Preview = loadAsyncComponent(() => import('@/views/preview/index.vue'));
+const showPreview = ref(false);
+const previewId = ref('');
+const previews = ref(null);
 
 const chartHistoryStore = useChartHistoryStore();
 const chartEditStore = useChartEditStore();
@@ -78,7 +84,6 @@ const clickHistoryHandle = (key: string) => {
 
 const previewHandle = () => {
   const projectInfo = Project.value.getProjectInfo();
-  const sessionStorageInfo = getLocalStorage(projectInfo.id) || {};
   setLocalStorage(projectInfo.id, projectInfo);
   const { href } = router.resolve({
     path: '/preview',
@@ -90,9 +95,24 @@ const previewHandle = () => {
 };
 
 const saveHandle = () => {
-  const request = {
-    
-  };
+  const projectInfo = Project.value.getProjectInfo();
+  setLocalStorage(projectInfo.id, projectInfo);
+  previewId.value = projectInfo.id;
+  showPreview.value = true;
+  nextTick(() => {
+    setTimeout(() => {
+      generateImage(previews);
+    }, 1500);
+  });
+  // createImage();
+  // const request = {
+  //   category: 1,
+  //   name: Project.value.getProjectName(),
+  //   dataFileFoldId: '',
+  //   code: JSON.stringify(Project.value.getProjectInfo()),
+  //   image: '111',
+  // };
+  // DSService.saveScreen(request).then((res) => {});
 };
 
 const changeProjectName = (e: any) => {
@@ -200,8 +220,24 @@ const projectName = computed(() => {
     :on-clickoutside="onClickOutSide"
     @select="handleMenuSelect"
   ></n-dropdown>
+
+  <!-- createVnode遇到未知问题,暂时用此办法 -->
+  <template v-if="showPreview">
+    <div class="preview-views" ref="previews">
+      <Preview :previewId="previewId"></Preview>
+    </div>
+  </template>
 </template>
 <style lang="scss" scoped>
+.preview-views {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+}
+
 .editor {
   width: 100vw;
   height: 100vh;

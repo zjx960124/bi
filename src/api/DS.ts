@@ -33,4 +33,14 @@ export class DSService {
       data,
     });
   }
+  /**
+   * 保存数据大屏
+   */
+  static async saveScreen(data: any): Promise<HttpResponse> {
+    return Request('/rest/bi/saveOrUpdateDataScreen', {
+      method: 'post',
+      responseType: 'json',
+      data,
+    });
+  }
 }

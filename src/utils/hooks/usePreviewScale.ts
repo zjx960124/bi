@@ -1,4 +1,9 @@
 import throttle from 'lodash/throttle';
+import { isPreview } from '@/utils';
+import { ref, toRefs, nextTick } from 'vue';
+import type VChart from 'vue-echarts';
+import { CreateComponentType, ChartFrameEnum } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
 
 // 拆出来是为了更好的分离单独复用
 
@@ -210,4 +215,35 @@ export const usePreviewFullScale = (
     windowResize,
     unWindowResize,
   };
+};
+
+export const usePreviewRequest = (
+  targetComponent: CreateComponentType,
+  updateCallback?: (...args: any) => any
+) => {
+  const vChartRef = ref<typeof VChart | null>(null);
+  let fetchInterval: any = 0;
+
+  const { requestConfig } = toRefs(targetComponent);
+
+  const requestIntervalFn = () => {
+    DSService.getComponentData([
+      ...requestConfig.value.dimension,
+      ...requestConfig.value.measure,
+    ]).then((res: any) => {
+      nextTick(() => {
+        if (vChartRef.value) {
+          console.log('更新接口数据');
+          vChartRef.value.setOption({
+            dataset: {
+              source: res.data[0],
+            },
+          });
+        }
+      });
+    });
+  };
+
+  isPreview() && requestIntervalFn();
+  return { vChartRef };
 };

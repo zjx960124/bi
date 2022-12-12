@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
-import { chartColors } from "@/settings/chartThemes/index";
-import { getSizeStyle, getComponentAttrStyle } from "@/utils/hooks/useStyle";
-import { componentInstall } from "@/utils";
+import { computed, watch } from 'vue';
+import { chartColors } from '@/settings/chartThemes/index';
+import { getSizeStyle, getComponentAttrStyle } from '@/utils/hooks/useStyle';
 
 const props = defineProps({
   componentList: {
@@ -25,24 +24,25 @@ const themeColor = computed(() => {
 });
 </script>
 <template>
-  <div
-    class="chart-item"
-    v-for="(item, index) in componentList.componentList"
-    :key="item.id"
-    :style="{
-      ...getComponentAttrStyle(item.attr, index),
-    }"
-  >
-    <component
-      :is="item.chartConfig.chartKey"
-      :chartConfig="item"
-      :themeSetting="themeSetting"
-      :themeColor="item.themeColor"
-      :style="{ ...getSizeStyle(item.attr) }"
-    ></component>
-  </div>
+  <template v-for="(item, index) in componentList.componentList" :key="item.id">
+    <div
+      class="chart-item"
+      :style="{
+        ...getComponentAttrStyle(item.attr, index),
+      }"
+    >
+      <component
+        v-show="item.chartConfig.chartKey"
+        :is="item.chartConfig.chartKey"
+        :chartConfig="item"
+        :themeSetting="themeSetting"
+        :themeColor="item.themeColor"
+        :style="{ ...getSizeStyle(item.attr) }"
+      ></component>
+    </div>
+  </template>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .chart-item {
   position: absolute;
 }

@@ -50,7 +50,6 @@ const measurePutFunc = (e: any, data: any) => {
     e.options.group.name === data.options.group.name
   );
 };
-
 </script>
 <template>
   <div class="layout-data-view">
@@ -102,6 +101,7 @@ const measurePutFunc = (e: any, data: any) => {
     <div class="layout-data-other">
       <n-radio-group
         class="common-radio-group"
+        style="margin-bottom: 10px"
         v-model:value="requestConfig.dataType"
         name="radiogroup"
       >

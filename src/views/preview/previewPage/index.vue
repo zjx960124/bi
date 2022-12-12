@@ -20,7 +20,7 @@ const { entityRef, previewRef } = useScale(props.componentInfo.component);
 </script>
 <template>
   <div class="preview-view">
-    <div ref="previewRef" class="scale-view">
+    <div ref="previewRef" class="scale-view" id="scaleView">
       <!-- 渲染层 -->
       <div :style="previewRefStyle">
         <preview-render

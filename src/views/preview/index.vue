@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch } from 'vue';
 import {
   getLocalStorage,
   getSessionStorageInfo,
   animationsClass,
-} from "@/utils";
-import { PreviewPage } from "./previewPage";
-const projectInfo = getSessionStorageInfo();
+} from '@/utils';
+import { PreviewPage } from './previewPage';
+const props = defineProps({
+  previewId: {
+    type: String,
+    required: true,
+  },
+});
+const projectInfo = getSessionStorageInfo() || getLocalStorage(props.previewId);
 const currentPageIndex = ref(0);
 
-const indexModules = import.meta.globEager(
-  "@/packages/components/**/index.vue"
-);
+console.log(projectInfo);
 
+const indexModules = import.meta.globEager(
+  '@/packages/components/**/index.vue'
+);
 for (const key in indexModules) {
-  const url = key.split("/");
-  window["$vue"].component(
-    "V" + url[url.length - 2],
+  const url = key.split('/');
+  window['$vue'].component(
+    'V' + url[url.length - 2],
     indexModules[key].default
   );
 }
 
-watch(
-  () => projectInfo.pageConfig.onShuffing,
-  (val) => {
-    console.log(val);
-  }
-);
-
-const onPageShuffing = (projectInfo) => {
+const onPageShuffing = (projectInfo: any) => {
   if (projectInfo.pageConfig.onShuffing) {
     setInterval(() => {
       if (currentPageIndex.value === projectInfo.list.length - 1) {
@@ -54,5 +54,4 @@ onPageShuffing(projectInfo);
     </keep-alive>
   </template>
 </template>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

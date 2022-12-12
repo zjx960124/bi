@@ -6,6 +6,8 @@ import {
 } from './packagesStore.d';
 import { packagesList, packagesGenreList } from '@/packages/index';
 
+console.log(packagesGenreList);
+
 // 组件 pakages
 export const usePackagesStore = defineStore({
   id: 'usePackagesStore',

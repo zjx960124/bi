@@ -32,6 +32,7 @@ import {
 import { chartColors, ChartColorsNameType } from '@/settings/chartThemes/index';
 import { fieldItem } from '@/packages/index.d';
 import { DSService } from '@/api/DS';
+import { usePreviewRequest } from '@/utils/hooks/usePreviewScale';
 
 const props = defineProps({
   themeSetting: {
@@ -73,7 +74,6 @@ const color = computed(() => {
 });
 
 const requestConfig = computed(() => {
-  console.log(props.chartConfig);
   let requestConfig = props.chartConfig.requestConfig;
   requestConfig.dimension.forEach((element: fieldItem) => {
     element.combinationMode = 1;
@@ -98,10 +98,5 @@ watch(requestConfig, (newData, oldData) => {
   });
 });
 
-watch(props.chartConfig.requestConfig, (newData) => {
-  console.log(newData);
-});
-
-// const { vChartRef } = useChartDataFetch(props.chartConfig, useChartEditStore);
-const vChartRef = ref<typeof VChart>('');
+const { vChartRef } = usePreviewRequest(props.chartConfig);
 </script>

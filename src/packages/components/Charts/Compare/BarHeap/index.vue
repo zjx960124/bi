@@ -32,6 +32,7 @@ import {
 import { chartColors, ChartColorsNameType } from '@/settings/chartThemes/index';
 import { fieldItem } from '@/packages/index.d';
 import { DSService } from '@/api/DS';
+import { usePreviewRequest } from '@/utils/hooks/usePreviewScale';
 
 const props = defineProps({
   themeSetting: {
@@ -96,5 +97,5 @@ watch(requestConfig, (newData, oldData) => {
   });
 });
 
-const vChartRef = ref<typeof VChart>('');
+const { vChartRef } = usePreviewRequest(props.chartConfig);
 </script>

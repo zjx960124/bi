@@ -1,4 +1,6 @@
 import { ChartList, ChartGenreList } from '@/packages/components/Charts/index';
+import { TextList, TextGenreList } from '@/packages/components/Texts/index';
+import { MediaList, MediaGenreList } from '@/packages/components/Media/index';
 import {
   PackagesCategoryEnum,
   PackagesType,
@@ -14,16 +16,16 @@ const dataModules = import.meta.globEager('./components/**/data.vue');
 // * 所有图表
 export let packagesList: PackagesType = {
   [PackagesCategoryEnum.CHARTS]: ChartList,
-  [PackagesCategoryEnum.TEXT]: [],
-  [PackagesCategoryEnum.MEDIA]: [],
+  [PackagesCategoryEnum.TEXT]: TextList,
+  [PackagesCategoryEnum.MEDIA]: MediaList,
   [PackagesCategoryEnum.MATERIAL]: [],
 };
 
 // * 所有图表(分类)
 export let packagesGenreList: PackagesGenreType = {
   [PackagesCategoryEnum.CHARTS]: ChartGenreList,
-  [PackagesCategoryEnum.TEXT]: {},
-  [PackagesCategoryEnum.MEDIA]: {},
+  [PackagesCategoryEnum.TEXT]: TextGenreList,
+  [PackagesCategoryEnum.MEDIA]: MediaGenreList,
   [PackagesCategoryEnum.MATERIAL]: {},
 };
 

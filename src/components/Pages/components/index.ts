@@ -10,6 +10,10 @@ import ProcessSetting from './ProcessSetting.vue';
 import ConfigItem from './ConfigItem.vue';
 import LabelSetting from './LabelSetting.vue';
 import AnimationSetting from './AnimationSetting.vue';
+import TextSetting from './TextSetting.vue';
+import ImageSetting from './ImageSetting.vue';
+import VideoSetting from './VideoSetting.vue';
+import ClockSetting from './ClockSetting.vue';
 
 export {
   ConfigItem,
@@ -24,4 +28,8 @@ export {
   ProcessSetting,
   LabelSetting,
   AnimationSetting,
+  TextSetting,
+  ImageSetting,
+  VideoSetting,
+  ClockSetting,
 };

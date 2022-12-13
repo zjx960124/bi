@@ -43,4 +43,15 @@ export class DSService {
       data,
     });
   }
+  /**
+   * 附件上传
+   */
+  static async uploadImage(data: any): Promise<HttpResponse> {
+    return Request('/rest/bi/template/image', {
+      method: 'post',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      responseType: 'json',
+      data,
+    });
+  }
 }

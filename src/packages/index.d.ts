@@ -63,19 +63,23 @@ export type GenreConfigType = {
 // };
 
 export type GenreType = {
-  [GenreEnum.COMPARE]?: GenreConfigType;
-  [GenreEnum.TREND]?: GenreConfigType;
-  [GenreEnum.TABLE]?: GenreConfigType;
-  [GenreEnum.TARGET]?: GenreConfigType;
-  [GenreEnum.DISTRIBUTION]?: GenreConfigType;
-  [GenreEnum.SPACE]?: GenreConfigType;
+  [GenreEnum.COMPARE]?: ConfigType[];
+  [GenreEnum.TREND]?: ConfigType[];
+  [GenreEnum.TABLE]?: ConfigType[];
+  [GenreEnum.TARGET]?: ConfigType[];
+  [GenreEnum.DISTRIBUTION]?: ConfigType[];
+  [GenreEnum.SPACE]?: ConfigType[];
+  [GenreEnum.TEXT]?: ConfigType[];
+  [GenreEnum.CLOCK]?: ConfigType[];
+  [GenreEnum.IMAGE]?: ConfigType[];
+  [GenreEnum.VIDEO]?: ConfigType[];
 };
 
 export type PackagesGenreType = {
-  [PackagesCategoryEnum.CHARTS]?: GenreType[];
-  [PackagesCategoryEnum.TEXT]?: GenreType[];
-  [PackagesCategoryEnum.MEDIA]?: GenreType[];
-  [PackagesCategoryEnum.MATERIAL]?: GenreType[];
+  [PackagesCategoryEnum.CHARTS]?: GenreType;
+  [PackagesCategoryEnum.TEXT]?: GenreType;
+  [PackagesCategoryEnum.MEDIA]?: GenreType;
+  [PackagesCategoryEnum.MATERIAL]?: GenreType;
 };
 
 // 获取组件

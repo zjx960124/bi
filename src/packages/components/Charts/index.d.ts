@@ -24,6 +24,10 @@ export enum GenreEnum {
   TARGET = 'Target',
   DISTRIBUTION = 'Distribution',
   SPACE = 'Space',
+  TEXT = 'Text',
+  CLOCK = 'Clock',
+  IMAGE = 'Image',
+  VIDEO = 'Video',
 }
 
 export enum GenreEnumName {

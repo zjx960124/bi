@@ -30,28 +30,28 @@ export default () => {
   document.getElementById('app')!.appendChild(mountNode);
 };
 
-export const generateImage = (previews: any) => {
-  let scaleBy = window.devicePixelRatio;
+export const generateImage = async (previews: any) => {
   document.body.scrollTop = document.documentElement.scrollTop = 0;
-  let dom = document.getElementById('scaleView')!;
-  html2canvas(document.querySelector('#scaleView')!, {
-    width: 1920, // canvas宽度
+  let result = '';
+  await html2canvas(document.querySelector('#scaleView')!, {
+    width: 1920,
     height: 969,
-    backgroundColor: null, //画出来的图片有白色的边框,不要可设置背景为透明色（null）
-    useCORS: true, //支持图片跨域
-    scale: 2, //设置放大的倍数
-    x: 0, //x坐标
-    y: 0, //y坐标
+    backgroundColor: null,
+    useCORS: true,
+    scale: 2,
+    x: 0,
+    y: 0,
   }).then((canvas) => {
     let img = new Image();
-    let res = canvas.toDataURL('image/jpeg', 1.0); // toDataURL :图片格base64
+    let res = canvas.toDataURL('image/jpeg', 1.0);
     let canvased = document.createElement('canvas');
     let context = canvased.getContext('2d')!;
-    canvased.width = 1920;
-    canvased.height = 969;
+    canvased.width = 380;
+    canvased.height = 212;
     // 核心JS就这个
-    context.drawImage(canvas, 0, 0, 1920, 969);
-    let resd = canvased.toDataURL('image/jpeg', 1.0);
-    console.log(resd);
+    context.drawImage(canvas, 0, 0, 380, 212);
+    let resd = canvased.toDataURL('image/jpeg', 5);
+    result = resd;
   });
+  return result;
 };

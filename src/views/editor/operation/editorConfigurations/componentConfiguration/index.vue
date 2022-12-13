@@ -23,7 +23,7 @@ const handleActiveTab = (target: string): void => {
 const configurationFlag = ref<boolean>(true);
 const hiddenConfiguration = () => {
   configurationFlag.value = !configurationFlag.value;
-  chartEditStore.computedScale();
+  // chartEditStore.computedScale();
 };
 </script>
 <template>

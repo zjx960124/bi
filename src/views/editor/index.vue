@@ -101,18 +101,36 @@ const saveHandle = () => {
   showPreview.value = true;
   nextTick(() => {
     setTimeout(() => {
-      generateImage(previews);
-    }, 1500);
+      generateImage(previews)
+        .then((res) => {
+          console.log(res);
+          var blob = new Blob([res], {
+            type: 'image/jpeg',
+          });
+          const param = new FormData(); // 创建form对象
+          param.append('files', blob); // 通过append向form对象添加数据
+          DSService.uploadImage(param).then((res1: any) => {
+            console.log(res1);
+            if (res1.code === '200') {
+              const request = {
+                category: 1,
+                name: Project.value.getProjectName(),
+                dataFileFoldId: '',
+                code: JSON.stringify(Project.value.getProjectInfo()),
+                image: res1.data,
+              };
+              DSService.saveScreen(request).then((res2) => {
+                console.log(res2);
+                showPreview.value = false;
+              });
+            }
+          });
+        })
+        .catch((err) => {
+          showPreview.value = false;
+        });
+    }, 1000);
   });
-  // createImage();
-  // const request = {
-  //   category: 1,
-  //   name: Project.value.getProjectName(),
-  //   dataFileFoldId: '',
-  //   code: JSON.stringify(Project.value.getProjectInfo()),
-  //   image: '111',
-  // };
-  // DSService.saveScreen(request).then((res) => {});
 };
 
 const changeProjectName = (e: any) => {
@@ -231,8 +249,8 @@ const projectName = computed(() => {
 <style lang="scss" scoped>
 .preview-views {
   position: fixed;
-  left: 0;
-  top: 0;
+  left: -100vw;
+  top: -100vh;
   width: 100vw;
   height: 100vh;
   z-index: 999;

@@ -20,6 +20,9 @@ console.log(projectInfo);
 const indexModules = import.meta.globEager(
   '@/packages/components/**/index.vue'
 );
+
+console.log(indexModules);
+
 for (const key in indexModules) {
   const url = key.split('/');
   window['$vue'].component(

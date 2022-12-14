@@ -42,7 +42,7 @@ export const dragHandle = async (e: DragEvent) => {
     // 创建新图表组件
     let newComponent: CreateComponentType = await createComponent(dropData);
 
-    console.log(newComponent);
+    dropData.images && (newComponent.option.url = dropData.images);
 
     newComponent.setPosition(
       e.offsetX - newComponent.attr.w / 2,

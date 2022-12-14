@@ -77,8 +77,14 @@ const packagesGenreListObj = {
     },
   },
   [PackagesCategoryEnum.MATERIAL]: {
-    Material: {
-      label: '素材',
+    Header: {
+      label: '头部装饰',
+    },
+    Border: {
+      label: '区块边框',
+    },
+    Curoffline: {
+      label: '分割线',
     },
   },
   [PackagesCategoryEnum.MEDIA]: {
@@ -119,6 +125,8 @@ const handlePackagesList = () => {
     });
     // @ts-ignore
     for (const vals in getPackagesGenreList[val]) {
+      console.log(val, vals);
+
       // @ts-ignore
       genreMenuOptions[genreMenuOptions.length - 1].list[vals] =
         // @ts-ignore

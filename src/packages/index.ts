@@ -7,11 +7,93 @@ import {
   PackagesGenreType,
   ConfigType,
   FetchComFlagType,
+  ChartFrameEnum,
 } from '@/packages/index.d';
 
 const configModules = import.meta.globEager('./components/**/config.vue');
 const indexModules = import.meta.globEager('./components/**/index.vue');
 const dataModules = import.meta.globEager('./components/**/data.vue');
+
+/**
+ * 获取素材图片
+ */
+const getImage = (packages: string, name: string): string => {
+  return new URL(`/src/assets/img/${packages}/${name}.png`, import.meta.url)
+    .href;
+};
+
+const headerModules = Object.keys(
+  import.meta.globEager('/src/assets/img/header/*.png')
+);
+const borderModules = Object.keys(
+  import.meta.globEager('/src/assets/img/border/*.png')
+);
+const curofflineModules = Object.keys(
+  import.meta.globEager('/src/assets/img/curoffline/*.png')
+);
+
+class BasicMaterial implements ConfigType {
+  public key: string;
+  public chartKey: string;
+  public conKey: string;
+  public dataKey: string;
+  public title: string;
+  public category: string;
+  public categoryName: string;
+  public package: string;
+  public chartFrame?: ChartFrameEnum | undefined;
+  public image: string | (() => Promise<typeof import('*.png')>);
+  public images?: string | (() => Promise<typeof import('*.png')>) | undefined;
+  constructor(image: string | (() => Promise<typeof import('*.png')>)) {
+    this.key = 'MaterialCommon';
+    this.chartKey = 'VMaterialCommon';
+    this.conKey = 'VCMaterialCommon';
+    this.dataKey = 'VDMaterialCommon';
+    this.title = '素材';
+    this.category = 'Common';
+    this.categoryName = '素材';
+    this.package = 'Material';
+    this.chartFrame = ChartFrameEnum.COMMON;
+    this.image = image;
+    this.images = image;
+  }
+}
+
+function collect() {
+  let result = {
+    Header: [] as ConfigType[],
+    Border: [] as ConfigType[],
+    Curoffline: [] as ConfigType[],
+  };
+
+  headerModules.forEach((item, index) => {
+    const urlSplit = item.split('/');
+    result.Header.push(
+      new BasicMaterial(
+        getImage('header', urlSplit[urlSplit.length - 2] + (index + 1))
+      )
+    );
+  });
+  borderModules.forEach((item, index) => {
+    const urlSplit = item.split('/');
+    result.Border.push(
+      new BasicMaterial(
+        getImage('border', urlSplit[urlSplit.length - 2] + (index + 1))
+      )
+    );
+  });
+  curofflineModules.forEach((item, index) => {
+    const urlSplit = item.split('/');
+    result.Curoffline.push(
+      new BasicMaterial(
+        getImage('curoffline', urlSplit[urlSplit.length - 2] + (index + 1))
+      )
+    );
+  });
+  return result;
+}
+
+const BaseMaterial = collect();
 
 // * 所有图表
 export let packagesList: PackagesType = {
@@ -26,7 +108,7 @@ export let packagesGenreList: PackagesGenreType = {
   [PackagesCategoryEnum.CHARTS]: ChartGenreList,
   [PackagesCategoryEnum.TEXT]: TextGenreList,
   [PackagesCategoryEnum.MEDIA]: MediaGenreList,
-  [PackagesCategoryEnum.MATERIAL]: {},
+  [PackagesCategoryEnum.MATERIAL]: BaseMaterial,
 };
 
 /**

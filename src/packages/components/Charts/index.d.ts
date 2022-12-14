@@ -28,6 +28,9 @@ export enum GenreEnum {
   CLOCK = 'Clock',
   IMAGE = 'Image',
   VIDEO = 'Video',
+  HEADER = 'Header',
+  BORDER = 'Border',
+  CUROFFLINE = 'Curoffline',
 }
 
 export enum GenreEnumName {

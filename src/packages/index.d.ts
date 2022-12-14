@@ -21,6 +21,7 @@ export type ConfigType = {
   package: string;
   chartFrame?: ChartFrameEnum;
   image: string | (() => Promise<typeof import('*.png')>);
+  images?: string | (() => Promise<typeof import('*.png')>);
 };
 
 // 包分类枚举
@@ -73,6 +74,9 @@ export type GenreType = {
   [GenreEnum.CLOCK]?: ConfigType[];
   [GenreEnum.IMAGE]?: ConfigType[];
   [GenreEnum.VIDEO]?: ConfigType[];
+  [GenreEnum.HEADER]?: ConfigType[];
+  [GenreEnum.BORDER]?: ConfigType[];
+  [GenreEnum.CUROFFLINE]?: ConfigType[];
 };
 
 export type PackagesGenreType = {

@@ -39,6 +39,7 @@ const dragendHandle = () => {
 };
 const dblclickHandle = async (item: ConfigType) => {
   try {
+    console.log(item);
     // loadingStart();
     // 动态注册图表组件
     componentInstall(item.chartKey, fetchChartComponent(item));
@@ -92,7 +93,6 @@ const dblclickHandle = async (item: ConfigType) => {
     .item-img {
       width: 120px;
       height: 75px;
-      background: red;
       & > img {
         width: 100%;
         height: 100%;

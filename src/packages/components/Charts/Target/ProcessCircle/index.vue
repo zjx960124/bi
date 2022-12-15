@@ -1,5 +1,6 @@
 <template>
   <n-progress
+    ref="vChartRef"
     :type="type"
     :height="height"
     :processing="animationFlag"
@@ -36,12 +37,11 @@ import {
   nextTick,
   ref,
 } from 'vue';
-// import { useChartDataFetch } from '@/hooks'
-// import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore'
 import config, { option as configOption } from './config';
 import { toNumber } from '@/utils';
 import { fieldItem } from '@/packages/index.d';
 import { DSService } from '@/api/DS';
+import { useTargetPreviewRequest } from '@/utils/hooks/usePreviewScale';
 
 const props = defineProps({
   chartConfig: {
@@ -130,18 +130,23 @@ watch(requestConfig, (newData, oldData) => {
   }
 });
 
-watch(props.chartConfig.requestConfig, (newData, oldData) => {
-  if (
-    requestConfig.value?.length === 1 &&
-    props.chartConfig.requestConfig.dataType === 2
-  ) {
-    targetData.value = props.chartConfig.requestConfig.data as number;
-    resultData.value =
-      Math.round((option.dataset / targetData.value) * 10000) / 100;
+watch(
+  () => props.chartConfig.requestConfig.data,
+  (newData, oldData) => {
+    if (
+      props.chartConfig.requestConfig.dimension.length === 1 &&
+      props.chartConfig.requestConfig.dataType === 2
+    ) {
+      targetData.value = props.chartConfig.requestConfig.data as number;
+      resultData.value =
+        Math.round((option.dataset / targetData.value) * 10000) / 100;
+    }
   }
-});
-// 预览更新
-// useChartDataFetch(props.chartConfig, useChartEditStore, (newData: number) => {
-//   option.dataset = toNumber(newData, 2)
-// })
+);
+
+const { vChartRef } = useTargetPreviewRequest(
+  props.chartConfig,
+  resultData,
+  targetData
+);
 </script>

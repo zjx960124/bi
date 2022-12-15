@@ -145,12 +145,16 @@ const changeProjectName = (e: any) => {
 const projectName = computed(() => {
   return Project.value.getProjectName();
 });
+
+const returnHome = () => {
+  router.push('/screenManage');
+};
 </script>
 <template>
   <div class="editor">
     <header-plugin>
       <template #left>
-        <n-button round color="#6D79FF" class="return-btn">
+        <n-button round color="#6D79FF" @click="returnHome" class="return-btn">
           <template #icon>
             <n-icon :component="ChevronBack"></n-icon>
           </template>

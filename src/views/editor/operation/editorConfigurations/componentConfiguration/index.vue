@@ -13,8 +13,6 @@ import { useDSData } from '@/utils/hooks/useDSData';
 const { targetData, chartEditStore } = useTargetData();
 const { DSList, targetRequestConfig } = useDSData();
 
-console.log(targetData);
-
 const activeTab = ref<string>('config');
 const handleActiveTab = (target: string): void => {
   activeTab.value = target;

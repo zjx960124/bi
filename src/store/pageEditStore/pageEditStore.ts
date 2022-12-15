@@ -138,49 +138,101 @@ class pageEditClass implements BaseProductType {
   }
 
   public increasePage() {
-    let backStack: Array<HistoryItemType> = chartHistoryStore.getBackStack;
-    let forwardStack: Array<HistoryItemType> =
-      chartHistoryStore.getForwardStack;
-    chartHistoryStore.cleanStack();
-    this.currentPage.backStack = backStack;
-    this.currentPage.forwardStack = forwardStack;
-    let component = chartEditStore.getStorageInfo;
-    this.currentPage.component = component;
-    chartEditStore.cleanStorageInfo();
-    this.pageList[this.pageList.length - 1] = cloneDeep(this.currentPage);
+    this.trackData(this.pageList.length - 1);
     this.pageList.push(createBasePage());
     this.currentPage = createBasePage();
     this.currentIndex = this.pageList.length - 1;
+    // this.currentPage = this.pageList[this.currentIndex];
   }
 
   public checkPage(index: number) {
     if (index === this.currentIndex) return false;
-    this.currentPage = this.pageList[index];
-    chartEditStore.cleanStorageInfo();
-    chartEditStore.setStorageInfo(this.currentPage.component);
-    chartHistoryStore.setStack(
-      this.currentPage.backStack,
-      this.currentPage.forwardStack
-    );
-    this.currentIndex = index;
+    // 收集数据
+    this.trackData(this.currentIndex);
+    // 设置数据
+    this.settingData(index);
   }
 
+  /**
+   * 删除页面
+   * @param index 索引
+   * @returns
+   */
   public deletePage(index: number) {
     if (index === 0 && this.pageList.length === 1) {
       this.resetPage(index);
       return;
     }
+
+    // 删除当前所在页
     if (index === this.currentIndex) {
+      // 是否最后一页
+      const isEnd = index === this.pageList.length - 1;
       this.pageList.splice(index, 1);
-      this.checkPage(index - 1);
+      this.settingData(isEnd ? index - 1 : index);
+      return;
+    }
+
+    // 删除页在当前页之前
+    if (index < this.currentIndex) {
+      this.pageList.splice(index, 1);
+      this.currentIndex -= 1;
+      this.settingData(this.currentIndex);
+      return;
+    }
+
+    // 删除页在当前页之后
+    if (index > this.currentIndex) {
+      this.pageList.splice(index, 1);
       return;
     }
   }
 
+  /**
+   * 重置页面
+   * @param index
+   */
   public resetPage(index: number) {
     this.pageList.splice(index, 1, createBasePage());
     chartEditStore.cleanStorageInfo();
     chartHistoryStore.cleanStack();
+  }
+
+  /**
+   * 收集页面数据
+   * @param index
+   */
+  public trackData(index: number) {
+    // 获取后退栈
+    let backStack: Array<HistoryItemType> = chartHistoryStore.getBackStack;
+    // 获取前进栈
+    let forwardStack: Array<HistoryItemType> =
+      chartHistoryStore.getForwardStack;
+    // 清空当前页面栈
+    chartHistoryStore.cleanStack();
+    // 记录栈
+    this.currentPage.backStack = backStack;
+    this.currentPage.forwardStack = forwardStack;
+    // 记录组件
+    let component = chartEditStore.getStorageInfo;
+    this.currentPage.component = component;
+    chartEditStore.cleanStorageInfo();
+    this.pageList[index] = cloneDeep(this.currentPage);
+  }
+
+  /**
+   * 设置当前页面数据
+   * @param index
+   */
+  settingData(index: number) {
+    this.currentPage = this.pageList[index];
+    chartEditStore.cleanStorageInfo();
+    chartEditStore.setStorageInfo(this.currentPage.component || {});
+    chartHistoryStore.setStack(
+      this.currentPage.backStack,
+      this.currentPage.forwardStack
+    );
+    this.currentIndex = index;
   }
 }
 

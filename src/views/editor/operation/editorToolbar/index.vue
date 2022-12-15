@@ -35,6 +35,8 @@ const sliderMaks = reactive({
   100: '',
 });
 
+const type = ref<string>('');
+
 // 加减Scale
 const handleReduceScale = () => {
   chartEditStore.setScale((sliderValue.value - 10) / 100);
@@ -58,6 +60,7 @@ const handleClick = (item: genreMenuOptionsType, index: number) => {
   } else {
     showPopover.value = true;
   }
+  type.value = currentMenuOptions.value!.key!;
   currenIndex.value = index;
 };
 
@@ -106,7 +109,7 @@ const y = ref(0);
       </div>
       <div class="component">
         <template v-for="(item, index) in genreMenuOptions" :key="index">
-          <n-popover placement="bottom" trigger="click">
+          <n-popover :type="type" placement="bottom" trigger="click">
             <template #trigger>
               <n-button
                 quaternary
@@ -123,7 +126,7 @@ const y = ref(0);
             <div class="popover-menu-btn-view">
               <template v-for="items in currentMenuOptions!.list">
                 <div class="menu-btn" @click="intoView(items!.key)">
-                  <n-button type="text">{{ items!.label }}</n-button>
+                  {{ items!.label }}
                 </div>
               </template>
             </div>
@@ -172,10 +175,6 @@ const y = ref(0);
     }
     .component {
       margin-right: 113px;
-      :deep .popover-menu-btn-view {
-        background: #f6f7f9;
-        border-radius: 11px;
-      }
     }
   }
   .popover-view {

@@ -82,29 +82,39 @@ const dblclickHandle = async (item: ConfigType) => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0 40px;
-  width: calc(100% - 80px);
+  justify-content: center;
+  width: 100%;
   box-sizing: border-box;
-  flex: 1;
+  flex-wrap: wrap;
+  height: 250px;
   .charts-item {
     width: 120px;
     cursor: pointer;
-    height: 100px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
     .item-img {
       width: 120px;
       height: 75px;
+      padding: 5px;
+      box-sizing: border-box;
+      border: 1px solid rgba($color: #000000, $alpha: 0);
       & > img {
         width: 100%;
         height: 100%;
       }
     }
+    .item-img:hover {
+      border: 1px solid #6d79ff;
+    }
     .item-label {
       text-align: center;
       font-size: 12px;
       user-select: none;
+      color: #8386a1;
+      margin-top: 10px;
     }
   }
-  .charts-item + .charts-item {
+  .charts-item:nth-child(2n) {
     margin-left: 20px;
   }
 }

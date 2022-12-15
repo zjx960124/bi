@@ -125,8 +125,6 @@ const handlePackagesList = () => {
     });
     // @ts-ignore
     for (const vals in getPackagesGenreList[val]) {
-      console.log(val, vals);
-
       // @ts-ignore
       genreMenuOptions[genreMenuOptions.length - 1].list[vals] =
         // @ts-ignore

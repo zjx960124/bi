@@ -6,9 +6,6 @@
     <template #label>
       <LabelSetting :optionData="optionData"></LabelSetting>
     </template>
-    <template #default>
-      <AnimationSetting :optionData="optionData"></AnimationSetting>
-    </template>
   </BaseSetting>
 </template>
 

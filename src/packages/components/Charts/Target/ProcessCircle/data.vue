@@ -64,7 +64,7 @@ const measurePutFunc = (e: any, data: any) => {
       v-model="dimensionList.list"
       item-key="id"
       :class="{
-        'dimension-drag-view': dimensionList.list.length === 0,
+        'measure-drag-view': dimensionList.list.length === 0,
       }"
       :group="{
         name: 'measure',
@@ -115,6 +115,7 @@ const measurePutFunc = (e: any, data: any) => {
         v-model="requestConfig.data"
         class="common-number-input"
         controls-position="right"
+        :min="1"
         size="small"
       />
     </div>

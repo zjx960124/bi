@@ -15,13 +15,9 @@ const props = defineProps({
 const projectInfo = getSessionStorageInfo() || getLocalStorage(props.previewId);
 const currentPageIndex = ref(0);
 
-console.log(projectInfo);
-
 const indexModules = import.meta.globEager(
   '@/packages/components/**/index.vue'
 );
-
-console.log(indexModules);
 
 for (const key in indexModules) {
   const url = key.split('/');

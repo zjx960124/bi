@@ -68,7 +68,7 @@ export default class Config
   constructor() {
     super();
     this.requestConfig.dataType = 1;
-    this.requestConfig.data = '';
+    this.requestConfig.data = 10;
     this.requestConfig.measureLength = 1;
   }
 }

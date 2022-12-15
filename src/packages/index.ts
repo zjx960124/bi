@@ -44,13 +44,17 @@ class BasicMaterial implements ConfigType {
   public chartFrame?: ChartFrameEnum | undefined;
   public image: string | (() => Promise<typeof import('*.png')>);
   public images?: string | (() => Promise<typeof import('*.png')>) | undefined;
-  constructor(image: string | (() => Promise<typeof import('*.png')>)) {
+  constructor(
+    image: string | (() => Promise<typeof import('*.png')>),
+    category: string,
+    title: string
+  ) {
     this.key = 'MaterialCommon';
     this.chartKey = 'VMaterialCommon';
     this.conKey = 'VCMaterialCommon';
     this.dataKey = 'VDMaterialCommon';
-    this.title = '素材';
-    this.category = 'Common';
+    this.title = title;
+    this.category = category;
     this.categoryName = '素材';
     this.package = 'Material';
     this.chartFrame = ChartFrameEnum.COMMON;
@@ -70,7 +74,9 @@ function collect() {
     const urlSplit = item.split('/');
     result.Header.push(
       new BasicMaterial(
-        getImage('header', urlSplit[urlSplit.length - 2] + (index + 1))
+        getImage('header', urlSplit[urlSplit.length - 2] + (index + 1)),
+        'Header',
+        `头部装饰${index + 1}`
       )
     );
   });
@@ -78,7 +84,9 @@ function collect() {
     const urlSplit = item.split('/');
     result.Border.push(
       new BasicMaterial(
-        getImage('border', urlSplit[urlSplit.length - 2] + (index + 1))
+        getImage('border', urlSplit[urlSplit.length - 2] + (index + 1)),
+        'Border',
+        `区块边框${index + 1}`
       )
     );
   });
@@ -86,7 +94,9 @@ function collect() {
     const urlSplit = item.split('/');
     result.Curoffline.push(
       new BasicMaterial(
-        getImage('curoffline', urlSplit[urlSplit.length - 2] + (index + 1))
+        getImage('curoffline', urlSplit[urlSplit.length - 2] + (index + 1)),
+        'Curoffline',
+        `分割线${index + 1}`
       )
     );
   });

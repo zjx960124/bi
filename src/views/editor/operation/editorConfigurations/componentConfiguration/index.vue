@@ -90,7 +90,7 @@ const hiddenConfiguration = () => {
           :request-config="targetRequestConfig"
         ></component>
       </div>
-      <div class="update-btn">更新</div>
+      <!-- <div class="update-btn">更新</div> -->
     </div>
     <div class="configuration-arrow" v-show="!configurationFlag">
       <n-icon

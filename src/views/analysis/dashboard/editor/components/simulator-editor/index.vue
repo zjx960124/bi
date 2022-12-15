@@ -6,7 +6,7 @@ import {
   dragHandle,
   dragoverHandle,
   mousedownHandleUnStop,
-  useMouseHandle
+  useMouseHandle,
 } from '@/utils/hooks/useDrag';
 import { useAddKeyboard } from '@/utils/hooks/useKeyboard';
 import { useComponentStyle, useSizeStyle } from '@/utils/hooks/useStyle';
@@ -14,6 +14,10 @@ import { useContextMenu } from '@/views/editor/charts/hooks/useContextMenu.hook'
 import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
 import { useLayout } from '@/utils/hooks/useLayout';
 import { useRouter } from 'vue-router';
+import { editorCanvas } from '@/views/editor/operation/editorCanvas/index';
+import { EditShapeBox } from '@/views/editor/operation/EditShapeBox';
+import { EditRange } from '@/views/editor/operation/EditRange';
+import { editorConfigurations } from '@/views/editor/operation/editorConfigurations';
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
@@ -32,13 +36,8 @@ const {
   mouseenterHandle,
   mouseleaveHandle,
   mousedownHandle,
-  mouseClickHandle
+  mouseClickHandle,
 } = useMouseHandle();
-
-import { editorCanvas } from '@/views/editor/operation/editorCanvas/index';
-import { EditShapeBox } from '@/views/editor/operation/EditShapeBox';
-import { EditRange } from '@/views/editor/operation/EditRange';
-import { editorConfigurations } from '@/views/editor/operation/editorConfigurations';
 
 // 主题色
 const themeSetting = computed(() => {
@@ -68,70 +67,63 @@ const rangeStyle = computed(() => {
       : {
           background: backgroundImage
             ? `url(${backgroundImage}) no-repeat center center / cover !important`
-            : background
+            : background,
         };
   // @ts-ignore
   return {
-    ...computedBackground
+    ...computedBackground,
   };
+});
+
+const layout = computed(() => {
+  const data = chartEditStore.getComponentList;
+  console.log(data);
+  return data.map((item) => item.layout);
+});
+
+const componentLists = computed(() => {
+  return chartEditStore.getComponentList;
 });
 </script>
 
 <template>
   <div class="editor-operation">
     <editor-canvas
-      id="go-chart-edit-layout"
       class="editor-canvas"
       :class="{ 'no-padding': currentRoute === 'dashboardEditor' }"
-      @drop="dragHandle"
-      @dragover="dragoverHandle"
-      @dragenter="dragoverHandle"
     >
       <div class="editor-content-view">
-        <div
-          id="go-chart-edit-content"
-          class="editor-content"
-          @contextmenu="handleContextMenu"
-          @mousedown="mousedownHandleUnStop"
-        >
-          <div>
-            <edit-range>
-              <!-- 滤镜预览 -->
-              <div
-                class="range-content"
-                :style="{ ...rangeStyle}"
-              >
-                <div
-                  v-for="(item, index) in chartEditStore.getComponentList"
-                  :key="item.id"
-                >
-                  <!-- 单组件 -->
-                  <edit-shape-box
-                    :data-id="item.id"
-                    :index="index"
-                    :style="useComponentStyle(item.attr, index)"
-                    :item="item"
-                    @click="mouseClickHandle($event, item)"
-                    @mousedown="mousedownHandle($event, item)"
-                    @mouseenter="mouseenterHandle($event, item)"
-                    @mouseleave="mouseleaveHandle($event, item)"
-                    @contextmenu="handleContextMenu($event, item)"
-                  >
-                    <component
-                      class="edit-content-chart"
-                      :is="item.chartConfig.chartKey"
-                      :chartConfig="item"
-                      :themeSetting="themeSetting"
-                      :themeColor="item.themeColor"
-                      :style="{
-                      ...useSizeStyle(item.attr),
-                    }"
-                    ></component>
-                  </edit-shape-box>
-                </div>
-              </div>
-            </edit-range>
-          </div>
+        <div class="editor-content">
+          <grid-layout
+            class="layoutbcc"
+            :layout.sync="layout"
+            :col-num="12"
+            :row-height="40"
+            :is-draggable="true"
+            :is-resizable="true"
+            :vertical-compact="true"
+            :use-css-transforms="true"
+          >
+            <grid-item
+              v-for="(item, index) in layout"
+              :x="item!.x"
+              :y="item!.y"
+              :w="item!.w"
+              :h="item!.h"
+              :i="item!.i"
+            >
+              <component
+                class="edit-content-chart"
+                :is="componentLists[index].chartConfig.chartKey"
+                :chartConfig="componentLists[index]"
+                :themeSetting="themeSetting"
+                :themeColor="componentLists[index].themeColor"
+                :style="{
+                  ...useSizeStyle(componentLists[index].attr),
+                }"
+              ></component>
+            </grid-item>
+          </grid-layout>
         </div>
       </div>
     </editor-canvas>
@@ -185,5 +177,13 @@ const rangeStyle = computed(() => {
     box-sizing: border-box;
     padding: 0 22px;
   }
+}
+.vue-grid-item:not(.vue-grid-placeholder) {
+  background: #f3f5ff;
+  border: 1px solid black;
+}
+
+.layoutbcc {
+  padding-bottom: 150px;
 }
 </style>

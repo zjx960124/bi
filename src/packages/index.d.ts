@@ -9,6 +9,8 @@ import type {
   ChartColorsNameType,
 } from '@/settings/chartThemes/index';
 
+import { DashboardLayout } from './index';
+
 // 组件配置
 export type ConfigType = {
   key: string;
@@ -183,6 +185,7 @@ export interface CreateComponentType extends PublicConfigType {
   option: { [P in keyof GlobalThemeJsonType]?: GlobalThemeJsonType[P] };
   themeColor?: { color: ChartColorsNameType } & any;
   requestConfig: PublicRequestType;
+  layout?: DashboardLayout;
 }
 
 // 组件成组实例类

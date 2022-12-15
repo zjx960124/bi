@@ -1,10 +1,10 @@
-<script lang='ts'>
+<script lang="ts">
 export default {
-  name: 'ComponentsPanel'
+  name: 'ComponentsPanel',
 };
 </script>
 <template>
-  <div class='components-panel'>
+  <div class="components-panel">
     <div
       v-for="item in list"
       :key="item.key"
@@ -14,38 +14,38 @@ export default {
       @dragend="dragendHandle"
       @dblclick="dblclickHandle(item)"
     >
-      <el-image
-        class="item-img"
-        :src="item.image"
-        fit="contain"
-      > </el-image>
-      <div class="item-name">{{item.title}}</div>
+      <el-image class="item-img" :src="item.image" fit="contain"> </el-image>
+      <div class="item-name">{{ item.title }}</div>
     </div>
   </div>
 </template>
- 
-<script setup lang='ts'>
+
+<script setup lang="ts">
 import { ref, reactive, toRefs, watch, PropType, onMounted } from 'vue';
 import omit from 'lodash/omit';
 import { DragKeyEnum } from '@/types';
-import { createComponent } from '@/packages';
+import { createComponent, createDashboardComponent } from '@/packages';
 import { ConfigType, CreateComponentType } from '@/packages/index.d';
 import { EditCanvasTypeEnum } from '@/store/chartEditStore/chartEditStore.d';
 import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
 import { componentInstall } from '@/utils';
-import { fetchConfigComponent, fetchChartComponent } from '@/packages/index';
+import {
+  fetchConfigComponent,
+  fetchChartComponent,
+  fetchDataComponent,
+} from '@/packages/index';
 
 const chartEditStore = useChartEditStore();
 
 const props = defineProps({
   data: {
     type: Array as PropType<ConfigType[]>,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const state = reactive({
-  list: [] as ConfigType[]
+  list: [] as ConfigType[],
 });
 
 const { list } = toRefs(state);
@@ -57,7 +57,7 @@ watch(
   },
   {
     immediate: true,
-    deep: true
+    deep: true,
   }
 );
 
@@ -71,6 +71,7 @@ onMounted(() => {
 const dragStartHandle = (e: DragEvent, item: ConfigType) => {
   componentInstall(item.chartKey, fetchChartComponent(item));
   componentInstall(item.conKey, fetchConfigComponent(item));
+  componentInstall(item.dataKey, fetchDataComponent(item));
   e!.dataTransfer!.setData(
     DragKeyEnum.DRAG_KEY,
     JSON.stringify(omit(item, ['image']))
@@ -85,8 +86,13 @@ const dblclickHandle = async (item: ConfigType) => {
     // 动态注册图表组件
     componentInstall(item.chartKey, fetchChartComponent(item));
     componentInstall(item.conKey, fetchConfigComponent(item));
+    componentInstall(item.dataKey, fetchDataComponent(item));
     // 创建新图表组件
-    let newComponent: CreateComponentType = await createComponent(item);
+    let newComponent: CreateComponentType = await createDashboardComponent(
+      item
+    );
+    console.log(newComponent);
+
     // 添加
     chartEditStore.addComponentList(newComponent, false, true);
     // 选中
@@ -96,7 +102,7 @@ const dblclickHandle = async (item: ConfigType) => {
   }
 };
 </script>
- 
+
 <style lang="scss" scoped>
 .components-panel {
   margin: 0 10px;

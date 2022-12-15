@@ -261,7 +261,7 @@
 
 .n-popover:not(.n-popover--raw) {
   background-color: #f6f7f9;
-  width: 295px;
+  max-width: 295px;
   max-height: 365px;
   border-radius: 11px;
 }

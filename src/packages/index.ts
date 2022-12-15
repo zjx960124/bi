@@ -1,3 +1,4 @@
+import { DashboardItem } from './../types';
 import { ChartList, ChartGenreList } from '@/packages/components/Charts/index';
 import { TextList, TextGenreList } from '@/packages/components/Texts/index';
 import { MediaList, MediaGenreList } from '@/packages/components/Media/index';
@@ -8,7 +9,14 @@ import {
   ConfigType,
   FetchComFlagType,
   ChartFrameEnum,
+  CreateComponentType,
 } from '@/packages/index.d';
+import type {
+  GlobalThemeJsonType,
+  ChartColorsNameType,
+} from '@/settings/chartThemes/index';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+const chartEditStore = useChartEditStore();
 
 const configModules = import.meta.globEager('./components/**/config.vue');
 const indexModules = import.meta.globEager('./components/**/index.vue');
@@ -131,6 +139,39 @@ export const createComponent = async (targetData: ConfigType) => {
     `./components/${targetData.package}/${category}/${key}/config.ts`
   );
   return new chart.default();
+};
+
+export type DashboardLayout = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  i: string;
+  resizable: boolean;
+  draggable: boolean;
+  static: boolean;
+};
+
+interface dashboardConfig extends CreateComponentType {
+  layout: DashboardLayout;
+  key: string;
+  chartConfig: ConfigType;
+  option: { [P in keyof GlobalThemeJsonType]?: GlobalThemeJsonType[P] };
+  themeColor?: { color: ChartColorsNameType } & any;
+}
+
+/**
+ * 获取仪表盘目标组件配置信息
+ */
+export const createDashboardComponent = async (targetData: ConfigType) => {
+  const { category, key } = targetData;
+  const chart = await import(
+    `./components/${targetData.package}/${category}/${key}/config.ts`
+  );
+  const result: dashboardConfig = new chart.default();
+  result.layout = chartEditStore.getCurrentLayout();
+  console.log(result);
+  return result;
 };
 
 /**

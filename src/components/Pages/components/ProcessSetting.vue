@@ -45,7 +45,7 @@ const props = defineProps({
         </template>
       </n-color-picker>
     </div>
-    <div class="common-item">
+    <div class="common-item" v-show="optionData.type === 'line'">
       <div class="common-sub-title">圆角半径</div>
       <el-input-number
         v-model="optionData.fillBorderRadius"
@@ -61,7 +61,7 @@ const props = defineProps({
       <el-input-number
         v-model="optionData.height"
         class="common-number-input"
-        :min="12"
+        :min="1"
         controls-position="right"
         size="small"
       />

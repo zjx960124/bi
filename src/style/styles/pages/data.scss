@@ -52,7 +52,7 @@
   }
 
   .dimension-drag-view::after {
-    content: "请拖入维度";
+    content: "拖动数据字段至此处";
     font-size: 12px;
   }
 
@@ -93,7 +93,7 @@
   }
 
   .measure-drag-view::after {
-    content: "请拖入度量";
+    content: "拖动数据字段至此处";
     font-size: 12px;
   }
   .update-btn {

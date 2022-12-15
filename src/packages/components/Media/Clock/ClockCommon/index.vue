@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, computed } from 'vue';
+import { toRefs, computed, ref, watch } from 'vue';
 import moment from 'moment';
 const props = defineProps({
   chartConfig: {
@@ -30,9 +30,21 @@ let {
   textAlign,
 } = toRefs(props.chartConfig.option);
 
-const resultTime = computed(() => {
-  return moment().format(format.value);
-});
+const resultTime = ref<String>('');
+
+watch(
+  () => format,
+  () => {
+    resultTime.value = moment().format(format.value);
+  }
+);
+const clock = ref<NodeJS.Timer | null>(null);
+
+(() => {
+  clock.value = setInterval(() => {
+    resultTime.value = moment().format(format.value);
+  }, 1000);
+})();
 </script>
 
 <style lang="scss" scoped></style>

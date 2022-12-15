@@ -48,7 +48,6 @@ const showStatus = (status: number) => {
 const service = axios.create({
   baseURL: config.mock ? config.mockApi : config.baseApi,
   headers: {
-    
     Authorization: "",
   },
   // 是否跨站点访问控制请求

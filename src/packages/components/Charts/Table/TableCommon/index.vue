@@ -157,7 +157,9 @@ watch(requestConfig, (newData, oldData) => {
     display: v-bind(headerType);
     font-size: v-bind(headerFontSizeComputed);
     font-style: v-bind(headerFontStyle);
-    font-weight: v-bind(headerFontWeight);
+    th {
+      font-weight: v-bind(headerFontWeight);
+    }
   }
   ::v-deep .el-table__border-left-patch {
     width: 0 !important;
@@ -170,6 +172,13 @@ watch(requestConfig, (newData, oldData) => {
     height: v-bind(bottomBorderHeight);
   }
   ::v-deep .el-table--border::before {
+    width: v-bind(bottomBorderHeight);
+  }
+
+  &::before {
+    width: v-bind(bottomBorderHeight);
+  }
+  &::after {
     width: v-bind(bottomBorderHeight);
   }
   ::v-deeo .el-table--border::after {

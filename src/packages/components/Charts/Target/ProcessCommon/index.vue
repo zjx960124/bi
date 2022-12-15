@@ -24,7 +24,21 @@
         {{ resultData }} {{ unit }}
       </n-text>
     </n-progress>
-    <div>目标值{{ targetData }}</div>
+    <div
+      class="traget"
+      v-show="customType"
+      :style="{
+        fontSize: `${customFontSize}px`,
+        color: customFontColor,
+        fontStyle: customFontStyle,
+        fontWeight: customFontWeight as any,
+        paddingTop: `${customMargginTop}px`,
+        flexDirection: exhibition as string & number
+      }"
+    >
+      <span>{{ customCurrentLabel }}{{ option.dataset }}</span>
+      <span>{{ customTargetLabel }}{{ targetData }}</span>
+    </div>
   </div>
 </template>
 
@@ -65,15 +79,25 @@ const {
   indicatorFontWeight,
   offsetDegree,
   dataset,
+  precision,
   fillBorderRadius,
+  customType,
+  customCurrentLabel,
+  customTargetLabel,
+  customFontSize,
+  customFontColor,
+  customFontStyle,
+  customFontWeight,
+  customMargginTop,
+  exhibition,
 } = toRefs(props.chartConfig.option);
 
 const option = shallowReactive({
   dataset: configOption.dataset,
 });
 
-const targetData = ref(0);
-const resultData = ref(0);
+const targetData = ref<String | Number>(0);
+const resultData = ref<String | Number>(0);
 
 // 手动更新
 watch(
@@ -85,6 +109,12 @@ watch(
     deep: false,
   }
 );
+
+watch(precision, (newData: any) => {
+  resultData.value = (
+    Math.round((option.dataset / Number(targetData.value)) * 10000) / 100
+  ).toFixed(precision.value);
+});
 
 const requestConfig = computed(() => {
   let requestConfig = props.chartConfig.requestConfig;
@@ -118,14 +148,18 @@ watch(requestConfig, (newData, oldData) => {
         if (props.chartConfig.requestConfig.dataType === 1) {
           option.dataset = res.data[0]['1'];
           targetData.value = res.data[0]['2'] || 0;
-          resultData.value =
-            Math.round((option.dataset / targetData.value) * 10000) / 100;
+          resultData.value = (
+            Math.round((option.dataset / Number(targetData.value)) * 10000) /
+            100
+          ).toFixed(precision.value);
         }
         if (props.chartConfig.requestConfig.dataType === 2) {
           option.dataset = res.data[0]['1'];
           targetData.value = props.chartConfig.requestConfig.data as number;
-          resultData.value =
-            Math.round((option.dataset / targetData.value) * 10000) / 100;
+          resultData.value = (
+            Math.round((option.dataset / Number(targetData.value)) * 10000) /
+            100
+          ).toFixed(precision.value);
         }
       });
     });
@@ -140,8 +174,9 @@ watch(
       props.chartConfig.requestConfig.dataType === 2
     ) {
       targetData.value = props.chartConfig.requestConfig.data as number;
-      resultData.value =
-        Math.round((option.dataset / targetData.value) * 10000) / 100;
+      resultData.value = (
+        Math.round((option.dataset / Number(targetData.value)) * 10000) / 100
+      ).toFixed(precision.value);
     }
   }
 );
@@ -152,3 +187,14 @@ const { vChartRef } = useTargetPreviewRequest(
   targetData
 );
 </script>
+
+<style lang="scss" scoped>
+.traget {
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  & > span {
+    text-align: left;
+  }
+}
+</style>

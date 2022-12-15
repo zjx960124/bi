@@ -54,6 +54,15 @@ export const option = {
   offsetDegree: 0,
   fillBorderRadius: 12,
   animationFlag: true,
+  customType: false,
+  exhibition: 'row',
+  customCurrentLabel: '',
+  customTargetLabel: '',
+  customMargginTop: 5,
+  customFontSize: 12,
+  customFontColor: '#ffffff',
+  customFontStyle: 'normal',
+  customFontWeight: 'normal',
 };
 
 export default class Config

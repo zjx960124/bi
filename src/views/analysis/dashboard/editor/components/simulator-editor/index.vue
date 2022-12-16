@@ -1,34 +1,74 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import {
+  computed,
+  onMounted,
+  ref,
+  getCurrentInstance,
+  nextTick,
+  reactive,
+} from 'vue';
 import { loadAsyncComponent } from '@/utils';
 import { chartColors } from '@/settings/chartThemes/index';
-import {
-  dragHandle,
-  dragoverHandle,
-  mousedownHandleUnStop,
-  useMouseHandle,
-} from '@/utils/hooks/useDrag';
+import { useMouseHandle } from '@/utils/hooks/useDrag';
 import { useAddKeyboard } from '@/utils/hooks/useKeyboard';
 import { useComponentStyle, useSizeStyle } from '@/utils/hooks/useStyle';
 import { useContextMenu } from '@/views/editor/charts/hooks/useContextMenu.hook';
 import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
-import { useLayout } from '@/utils/hooks/useLayout';
+import { useTargetData } from '@/utils/hooks/useTargetData';
 import { useRouter } from 'vue-router';
 import { editorCanvas } from '@/views/editor/operation/editorCanvas/index';
-import { EditShapeBox } from '@/views/editor/operation/EditShapeBox';
-import { EditRange } from '@/views/editor/operation/EditRange';
 import { editorConfigurations } from '@/views/editor/operation/editorConfigurations';
+import mitt from '@/utils/hooks/mitt';
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
 const router = useRouter();
 const currentRoute = router.currentRoute.value.name;
+const { layoutList } = useTargetData();
+const virtualItem = ref<any>([]);
+
+let currentInstance: any = null;
+// 注册事件
+mitt.on('move', (data: any) => {
+  if (virtualItem.value.length === 0) {
+    virtualItem.value.push({
+      w: 6,
+      h: 6,
+      x: 0,
+      y: 0,
+      i: 'drop',
+      id: 'drop',
+      resizable: true,
+      draggable: true,
+      static: true,
+    });
+  } else {
+    let parent = currentInstance.ctx.$refs.gridLayoutDom;
+    let virtual = currentInstance.ctx.$refs.virtualDom[0];
+    virtual.style.display = 'none';
+    virtual.dragging = {
+      top: data.e.clientY - data.rect.top,
+      left: data.e.clientX - data.rect.left,
+    };
+    let new_pos = virtual.calcXY(
+      data.e.clientY - data.rect.top,
+      data.e.clientX - data.rect.left
+    );
+    parent.dragEvent('dragstart', 'drop', new_pos.x, new_pos.y, 6, 6);
+  }
+});
+
+mitt.on('remove', (e) => {
+  console.log('remove');
+  virtualItem.value.length && (virtualItem.value = []);
+});
 
 // 布局处理
-useLayout();
+// useLayout();
 //监听键盘
 onMounted(() => {
   useAddKeyboard();
+  currentInstance = getCurrentInstance();
 });
 
 // 点击事件
@@ -75,15 +115,13 @@ const rangeStyle = computed(() => {
   };
 });
 
-const layout = computed(() => {
-  const data = chartEditStore.getComponentList;
-  console.log(data);
-  return data.map((item) => item.layout);
-});
+const activeComponent = (id: string) => {
+  chartEditStore.setTargetSelectChart(id);
+};
 
-const componentLists = computed(() => {
-  return chartEditStore.getComponentList;
-});
+const drop = async (e: DragEvent) => {
+  e.preventDefault();
+};
 </script>
 
 <template>
@@ -91,36 +129,52 @@ const componentLists = computed(() => {
     <editor-canvas
       class="editor-canvas"
       :class="{ 'no-padding': currentRoute === 'dashboardEditor' }"
+      @ondrop="drop"
     >
       <div class="editor-content-view">
-        <div class="editor-content">
+        <div class="editor-content" style="height: 800px">
           <grid-layout
             class="layoutbcc"
-            :layout.sync="layout"
+            ref="gridLayoutDom"
+            id="layoutView"
+            :layout.sync="layoutList"
             :col-num="12"
             :row-height="40"
             :is-draggable="true"
             :is-resizable="true"
             :vertical-compact="true"
             :use-css-transforms="true"
+            @ondrop="drop"
           >
             <grid-item
-              v-for="(item, index) in layout"
+              v-for="(item, index) in virtualItem"
+              ref="virtualDom"
               :x="item!.x"
               :y="item!.y"
               :w="item!.w"
               :h="item!.h"
               :i="item!.i"
             >
+            </grid-item>
+            <grid-item
+              v-for="(item, index) in layoutList"
+              :x="item!.x"
+              :y="item!.y"
+              :w="item!.w"
+              :h="item!.h"
+              :i="item!.i"
+              @click="activeComponent(item!.id)"
+            >
               <component
+                v-if="item.i !== 'drop'"
+                :ref="item.i"
                 class="edit-content-chart"
-                :is="componentLists[index].chartConfig.chartKey"
-                :chartConfig="componentLists[index]"
+                :is="
+                  chartEditStore.getComponentList[index].chartConfig.chartKey
+                "
+                :chartConfig="chartEditStore.getComponentList[index]"
                 :themeSetting="themeSetting"
-                :themeColor="componentLists[index].themeColor"
-                :style="{
-                  ...useSizeStyle(componentLists[index].attr),
-                }"
+                :themeColor="chartEditStore.getComponentList[index].themeColor"
               ></component>
             </grid-item>
           </grid-layout>
@@ -185,5 +239,6 @@ const componentLists = computed(() => {
 
 .layoutbcc {
   padding-bottom: 150px;
+  min-height: 800px;
 }
 </style>

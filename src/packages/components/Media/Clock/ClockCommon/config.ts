@@ -23,5 +23,5 @@ export default class Config
 {
   public key = ClockCommonConfig.key;
   public chartConfig = cloneDeep(ClockCommonConfig);
-  public option = option;
+  public option = cloneDeep(option);
 }

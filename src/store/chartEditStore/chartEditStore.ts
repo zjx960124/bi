@@ -1012,7 +1012,7 @@ export const useChartEditStore = defineStore({
     /**
      * 获取最新Layout
      */
-    getCurrentLayout() {
+    getCurrentLayout(target: any) {
       if (this.componentList.length) {
         const currentComponent =
           this.componentList[this.componentList.length - 1];
@@ -1025,6 +1025,7 @@ export const useChartEditStore = defineStore({
           resizable: true,
           draggable: true,
           static: false,
+          id: target.id,
         };
         return layout;
       } else {
@@ -1037,6 +1038,7 @@ export const useChartEditStore = defineStore({
           resizable: true,
           draggable: true,
           static: false,
+          id: target.id,
         };
       }
     },

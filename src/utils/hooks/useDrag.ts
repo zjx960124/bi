@@ -450,3 +450,8 @@ export const useMousePointHandle = (
   document.addEventListener('mousemove', mousemove);
   document.addEventListener('mouseup', mouseup);
 };
+
+// * 进入画布
+export const inRect = async (e: DragEvent) => {
+  
+};

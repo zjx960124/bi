@@ -7,7 +7,6 @@
       :loop="loop"
       class="video"
     ></video>
-    <div>{{ src }}</div>
   </div>
 </template>
 

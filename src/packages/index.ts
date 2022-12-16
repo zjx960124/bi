@@ -150,6 +150,7 @@ export type DashboardLayout = {
   resizable: boolean;
   draggable: boolean;
   static: boolean;
+  id: string;
 };
 
 interface dashboardConfig extends CreateComponentType {
@@ -169,8 +170,7 @@ export const createDashboardComponent = async (targetData: ConfigType) => {
     `./components/${targetData.package}/${category}/${key}/config.ts`
   );
   const result: dashboardConfig = new chart.default();
-  result.layout = chartEditStore.getCurrentLayout();
-  console.log(result);
+  result.layout = chartEditStore.getCurrentLayout(result);
   return result;
 };
 

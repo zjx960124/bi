@@ -16,5 +16,5 @@ export default class Config
 {
   public key = VideoCommonConfig.key;
   public chartConfig = cloneDeep(VideoCommonConfig);
-  public option = option;
+  public option = cloneDeep(option);
 }

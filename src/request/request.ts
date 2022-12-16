@@ -1,43 +1,43 @@
 // http.ts
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { config } from "../config"; // 引入config
-import { ElMessage } from "element-plus";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { config } from '../config'; // 引入config
+import { ElMessage } from 'element-plus';
 
 const showStatus = (status: number) => {
-  let message = "";
+  let message = '';
   switch (status) {
     case 400:
-      message = "请求错误(400)";
+      message = '请求错误(400)';
       break;
     case 401:
-      message = "未授权，请重新登录(401)";
+      message = '未授权，请重新登录(401)';
       break;
     case 403:
-      message = "拒绝访问(403)";
+      message = '拒绝访问(403)';
       break;
     case 404:
-      message = "请求出错(404)";
+      message = '请求出错(404)';
       break;
     case 408:
-      message = "请求超时(408)";
+      message = '请求超时(408)';
       break;
     case 500:
-      message = "服务器错误(500)";
+      message = '服务器错误(500)';
       break;
     case 501:
-      message = "服务未实现(501)";
+      message = '服务未实现(501)';
       break;
     case 502:
-      message = "网络错误(502)";
+      message = '网络错误(502)';
       break;
     case 503:
-      message = "服务不可用(503)";
+      message = '服务不可用(503)';
       break;
     case 504:
-      message = "网络超时(504)";
+      message = '网络超时(504)';
       break;
     case 505:
-      message = "HTTP版本不受支持(505)";
+      message = 'HTTP版本不受支持(505)';
       break;
     default:
       message = `连接出错(${status})!`;
@@ -45,10 +45,16 @@ const showStatus = (status: number) => {
   return `${message}，请检查网络或联系管理员！`;
 };
 
+const login = () => {
+  window.location.href =
+    'https://i.haiyanproduct.com/cas/login/redirect?url=' +
+    encodeURIComponent(window.location.href);
+};
+
 const service = axios.create({
   baseURL: config.mock ? config.mockApi : config.baseApi,
   headers: {
-    Authorization: "",
+    Authorization: '',
   },
   // 是否跨站点访问控制请求
   withCredentials: true,
@@ -76,17 +82,17 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    //获取token，并将其添加至请求头中
-    let token = localStorage.getItem("token");
-    if (token) {
-      config!.headers!.Authorization = `${token}`;
-    }
+    //获取token，并将其添加至请求头中  (接单点，无需写入)
+    // let token = localStorage.getItem('token');
+    // if (token) {
+    //   config!.headers!.Cookie = `${token}`;
+    // }
     return config;
   },
   (error) => {
     // 错误抛到业务代码
     error.data = {};
-    error.data.msg = "服务器异常，请联系管理员！";
+    error.data.msg = '服务器异常，请联系管理员！';
     return Promise.resolve(error);
   }
 );
@@ -95,11 +101,18 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse) => {
     const status = response.status;
-    let msg = "";
+    let msg = '';
+    // 单点登录
+    console.log(import.meta.env.VITE_APP_BASE_URL);
+    // login();
+    if (status == 302) {
+      login();
+      return;
+    }
     if (status < 200 || status >= 300) {
       // 处理http错误，抛到业务代码
       msg = showStatus(status);
-      if (typeof response.data === "string") {
+      if (typeof response.data === 'string') {
         response.data = { msg };
       } else {
         response.data.msg = msg;
@@ -109,12 +122,12 @@ service.interceptors.response.use(
   },
   (error) => {
     if (axios.isCancel(error)) {
-      console.log("repeated request: " + error.message);
+      console.log('repeated request: ' + error.message);
     } else {
       // handle error code
       // 错误抛到业务代码
       error.data = {};
-      error.data.msg = "请求超时或服务器异常，请检查网络或联系管理员！";
+      error.data.msg = '请求超时或服务器异常，请检查网络或联系管理员！';
       ElMessage.error(error.data.msg);
     }
     return Promise.reject(error);
@@ -132,7 +145,7 @@ const addPending = (config: AxiosRequestConfig) => {
     config.url,
     JSON.stringify(config.params),
     JSON.stringify(config.data),
-  ].join("&");
+  ].join('&');
   config.cancelToken =
     config.cancelToken ||
     new axios.CancelToken((cancel) => {
@@ -152,7 +165,7 @@ const removePending = (config: AxiosRequestConfig) => {
     config.url,
     JSON.stringify(config.params),
     JSON.stringify(config.data),
-  ].join("&");
+  ].join('&');
   if (pending.has(url)) {
     // 如果在 pending 中存在当前请求标识，需要取消当前请求，并且移除
     const cancel = pending.get(url);

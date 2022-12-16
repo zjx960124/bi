@@ -18,5 +18,5 @@ export default class Config
 {
   public key = MaterailCommonConfig.key;
   public chartConfig = cloneDeep(MaterailCommonConfig);
-  public option = option;
+  public option = cloneDeep(option);
 }

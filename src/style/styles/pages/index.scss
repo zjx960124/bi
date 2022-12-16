@@ -307,3 +307,15 @@
     }
   }
 }
+
+.n-popover[type*="Material"] {
+  .editor-charts-item {
+    .charts-item {
+      .item-img {
+        img {
+          object-fit: contain;
+        }
+      }
+    }
+  }
+}

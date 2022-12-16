@@ -48,6 +48,9 @@ const dblclickHandle = async (item: ConfigType) => {
     // 创建新图表组件
     let newComponent: CreateComponentType = await createComponent(item);
     // 添加
+
+    item.images && (newComponent.option.url = item.images);
+
     chartEditStore.addComponentList(newComponent, false, true);
     // 选中
     chartEditStore.setTargetSelectChart(newComponent.id);
@@ -82,7 +85,7 @@ const dblclickHandle = async (item: ConfigType) => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  padding-left: 17px;
   width: 100%;
   box-sizing: border-box;
   flex-wrap: wrap;

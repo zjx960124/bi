@@ -10,6 +10,7 @@ export default {
       :key="item.key"
       class="item"
       draggable
+      @drag="drag($event, item)"
       @dragstart="dragStartHandle($event, item)"
       @dragend="dragendHandle"
       @dblclick="dblclickHandle(item)"
@@ -34,8 +35,11 @@ import {
   fetchChartComponent,
   fetchDataComponent,
 } from '@/packages/index';
+import { useTargetData } from '@/utils/hooks/useTargetData';
+import mitt from '@/utils/hooks/mitt';
 
 const chartEditStore = useChartEditStore();
+const { layoutList } = useTargetData();
 
 const props = defineProps({
   data: {
@@ -68,17 +72,49 @@ onMounted(() => {
   };
 });
 
-const dragStartHandle = (e: DragEvent, item: ConfigType) => {
-  componentInstall(item.chartKey, fetchChartComponent(item));
-  componentInstall(item.conKey, fetchConfigComponent(item));
-  componentInstall(item.dataKey, fetchDataComponent(item));
-  e!.dataTransfer!.setData(
-    DragKeyEnum.DRAG_KEY,
-    JSON.stringify(omit(item, ['image']))
-  );
-  chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, true);
+const drag = (e: DragEvent, item: ConfigType) => {
+  const rect = document.querySelector('#layoutView')!.getBoundingClientRect();
+  if (
+    e.clientX > rect.left &&
+    e.clientX < rect.right &&
+    e.clientY > rect.top &&
+    e.clientY < rect.bottom
+  ) {
+    // 进入指定区域
+    mitt.emit('move', {
+      e,
+      rect,
+      index: chartEditStore.getComponentList.length,
+    });
+    return;
+  }
+  if (e.clientX !== 0 && e.clientY !== 0) {
+    mitt.emit('remove', e);
+  }
 };
-const dragendHandle = () => {
+
+const dragStartHandle = (e: DragEvent, item: ConfigType) => {
+  // componentInstall(item.chartKey, fetchChartComponent(item));
+  // componentInstall(item.conKey, fetchConfigComponent(item));
+  // componentInstall(item.dataKey, fetchDataComponent(item));
+  // e!.dataTransfer!.setData(
+  //   DragKeyEnum.DRAG_KEY,
+  //   JSON.stringify(omit(item, ['image']))
+  // );
+  // chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, true);
+};
+const dragendHandle = (e: DragEvent) => {
+  console.log('拖拽结束');
+  const rect = document.querySelector('#layoutView')!.getBoundingClientRect();
+  if (
+    e.clientX > rect.left &&
+    e.clientX < rect.right &&
+    e.clientY > rect.top &&
+    e.clientY < rect.bottom
+  ) {
+    // 成功放入指定区域
+    console.log('成功放入指定区域');
+  }
   chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, false);
 };
 const dblclickHandle = async (item: ConfigType) => {
@@ -92,7 +128,6 @@ const dblclickHandle = async (item: ConfigType) => {
       item
     );
     console.log(newComponent);
-
     // 添加
     chartEditStore.addComponentList(newComponent, false, true);
     // 选中

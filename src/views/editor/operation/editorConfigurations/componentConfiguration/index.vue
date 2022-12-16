@@ -7,11 +7,12 @@ import {
 } from '@vicons/ionicons5';
 import { useTargetData } from '@/utils/hooks/useTargetData';
 import { ref } from 'vue';
-import { LayoutData } from '../layoutData';
 import { Dimension } from './component/dimension';
 import { useDSData } from '@/utils/hooks/useDSData';
 const { targetData, chartEditStore } = useTargetData();
 const { DSList, targetRequestConfig } = useDSData();
+
+console.log(targetData);
 
 const activeTab = ref<string>('config');
 const handleActiveTab = (target: string): void => {

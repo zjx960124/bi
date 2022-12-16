@@ -18,5 +18,5 @@ export default class Config
 {
   public key = ImageCommonConfig.key;
   public chartConfig = cloneDeep(ImageCommonConfig);
-  public option = option;
+  public option = cloneDeep(option);
 }

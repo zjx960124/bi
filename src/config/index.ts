@@ -8,7 +8,7 @@ export interface IConfig {
 
 const dev: IConfig = {
   env: 'development',
-  mock: true,
+  mock: false,
   title: '开发',
   baseApi: '/', // 本地api请求地址,注意：如果你使用了代理，请设置成'/'
   mockApi: '/gapi',

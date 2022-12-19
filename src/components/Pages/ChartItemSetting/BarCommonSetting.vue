@@ -2,7 +2,6 @@
 import { ref, computed, PropType } from 'vue';
 import { ChevronDown } from '@vicons/ionicons5';
 import { GlobalThemeJsonType } from '@/settings/chartThemes';
-import { isArray } from '@/utils';
 
 const props = defineProps({
   optionData: {

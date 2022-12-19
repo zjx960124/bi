@@ -75,7 +75,6 @@ mitt.on('move', (data: any) => {
 });
 
 mitt.on('remove', (e) => {
-  mitt.emit('transfer', new_pos);
   virtualItem.value.length && (virtualItem.value = []);
   currentInstance.ctx.$refs.gridLayoutDom.dragEvent(
     'dragend',
@@ -85,6 +84,7 @@ mitt.on('remove', (e) => {
     6,
     6
   );
+  mitt.emit('transfer', new_pos);
 });
 
 mitt.on('delete', (e) => {
@@ -190,7 +190,7 @@ const layoutHandleClick = (
               :row-height="40"
               :is-draggable="true"
               :is-resizable="true"
-              :vertical-compact="true"
+              :vertical-compact="false"
               :use-css-transforms="true"
               @ondrop="drop"
               @click="layoutHandleClick"

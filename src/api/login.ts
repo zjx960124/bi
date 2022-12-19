@@ -1,5 +1,5 @@
-import Request from "../request/request";
-import { HttpResponse } from "../types";
+import Request from '../request/request';
+import { HttpResponse } from '../types';
 
 interface LoginParams {
   username: string;
@@ -7,23 +7,19 @@ interface LoginParams {
 }
 
 export class UserService {
-  static async login(params: LoginParams): Promise<HttpResponse> {
-    return Request("/rest/report/project/list", {
-      method: "get",
-      responseType: "json",
-      params: {
-        ...params,
-      },
+  static async login(url: string): Promise<HttpResponse> {
+    return Request(`/rest/bi/redirect/url=${url}`, {
+      method: 'get',
+      responseType: 'json',
+      params: {},
     });
   }
 
   static async resgister(params: LoginParams): Promise<HttpResponse> {
-    return Request("/rest/report/project/list", {
-      method: "get",
-      responseType: "json",
-      params: {
-        ...params,
-      },
+    return Request('/rest/bi/out', {
+      method: 'get',
+      responseType: 'json',
+      params: {},
     });
   }
 }

@@ -14,10 +14,11 @@ import {
 } from "@/components/Pages/ChartItemSetting";
 import { ProgressComponent, PieLabelCommon } from "@/components/Pages/components";
 import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
+import { option } from '@/packages/components/Charts/Distribution/PieCommon/config';
 
 const props = defineProps({
   optionData: {
-    type: Object as PropType<GlobalThemeJsonType>,
+    type: Object as PropType<GlobalThemeJsonType & typeof option>,
     required: true,
   },
   attr: {

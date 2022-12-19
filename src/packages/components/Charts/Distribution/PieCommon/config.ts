@@ -46,6 +46,7 @@ export const option = {
       fontWeight: 'normal',
       fontStyle: 'normal',
     },
+    icon: 'circle',
   },
   dataset: {
     source: dataJson,

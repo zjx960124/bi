@@ -22,6 +22,7 @@ const props = defineProps({
 
 let {
   dataset,
+  pageSize,
   columns,
   data,
   tableAlign,
@@ -93,13 +94,29 @@ const requestConfig = computed(() => {
   return [...requestConfig.dimension, ...requestConfig.measure];
 });
 
+// 页数
+const pageNum = ref<number>(0);
+// 当前页码
+const currentPage = ref<number>(0);
+// 当前页数据
+const currentPageData = ref<any[]>([]);
+// 整体数据
+const allPageData = ref<any[]>([]);
+
 watch(requestConfig, (newData, oldData) => {
   DSService.getComponentData(newData).then((res: any) => {
     nextTick(() => {
-      console.log(res.data);
+      pageNum.value = Math.ceil(res.data.data.length / pageSize.value);
+      currentPage.value = 0;
+      currentPageData.value = res.data.data.slice(
+        pageNum.value * currentPage.value,
+        pageSize.value
+      );
+      allPageData.value = res.data.data;
       dataset.value.columns = res.data.columns;
-      dataset.value.data = res.data.data;
-      console.log(dataset);
+      dataset.value.data = currentPageData.value;
+      console.log(currentPageData);
+      console.log(allPageData);
     });
   });
 });

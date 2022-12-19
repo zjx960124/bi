@@ -38,5 +38,10 @@ export const useRouteStore = defineStore({
     async setDefaultRoute(val: string): Promise<void> {
       this.default_navication = val;
     },
+    async deleteBreadCrumb(index: number) {
+      console.log(index);
+      if (this.breadcrumbList.length === 1) return;
+      this.breadcrumbList.splice(index, 1);
+    },
   },
 });

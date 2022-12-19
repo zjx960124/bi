@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed, watch, PropType, reactive } from 'vue';
+import { ref, nextTick, computed, watch, PropType } from 'vue';
 import VChart from 'vue-echarts';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { PieChart } from 'echarts/charts';
-import config, { includes, seriesItem } from './config';
+import config, { includes } from './config';
 import { mergeTheme, handlePieSeries } from '@/packages/hook/chart';
 import { isPreview } from '@/utils';
 import cloneDeep from 'lodash/cloneDeep';
@@ -88,7 +88,7 @@ const requestConfig = computed(() => {
   return [...requestConfig.dimension, ...requestConfig.measure];
 });
 
-watch(requestConfig, (newData, oldData) => {
+watch(requestConfig, (newData) => {
   DSService.getComponentData(newData).then((res: any) => {
     nextTick(() => {
       props.chartConfig.option.dataset = {

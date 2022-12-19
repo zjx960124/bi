@@ -25,11 +25,16 @@ const changeBarDirection = (val: string | number | boolean): void => {
   if (val === 'level') {
     props.optionData.xAxis.type = 'value';
     props.optionData.yAxis.type = 'category';
+    props.optionData.xAxis.splitLine.show = true;
+    props.optionData.yAxis.splitLine.show = false;
   }
   if (val === 'vertical') {
     props.optionData.xAxis.type = 'category';
     props.optionData.yAxis.type = 'value';
+    props.optionData.xAxis.splitLine.show = false;
+    props.optionData.yAxis.splitLine.show = true;
   }
+  // 柱子圆角
   if (props.type === 'barCommon') {
     const radius = props.optionData.series.itemStyle.borderRadius;
     if (Math.max(...radius) > 0) {

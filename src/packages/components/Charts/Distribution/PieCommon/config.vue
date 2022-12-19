@@ -1,23 +1,33 @@
 <template>
-  <pie-common-setting :attr="attr" :optionData="optionData" :themeColor="themeColor" type="barCommon">
+  <pie-common-setting
+    :attr="attr"
+    :optionData="optionData"
+    :themeColor="themeColor"
+    type="barCommon"
+  >
     <template #series>
-      <progress-component label="半径占比" :target="props.optionData.series.radius"></progress-component>
+      <progress-component
+        label="半径占比"
+        :target="props.optionData.series.radius"
+      ></progress-component>
       <pie-label-common :series="optionData.series"></pie-label-common>
     </template>
   </pie-common-setting>
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
+import { PropType } from 'vue';
+import { PieCommonSetting } from '@/components/Pages/ChartItemSetting';
 import {
-  PieCommonSetting
-} from "@/components/Pages/ChartItemSetting";
-import { ProgressComponent, PieLabelCommon } from "@/components/Pages/components";
-import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
+  ProgressComponent,
+  PieLabelCommon,
+} from '@/components/Pages/components';
+import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
+import { option } from '@/packages/components/Charts/Distribution/PieCommon/config';
 
 const props = defineProps({
   optionData: {
-    type: Object as PropType<GlobalThemeJsonType>,
+    type: Object as PropType<GlobalThemeJsonType & typeof option>,
     required: true,
   },
   attr: {
@@ -29,6 +39,4 @@ const props = defineProps({
     required: true,
   },
 });
-
-
 </script>

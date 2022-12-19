@@ -47,7 +47,8 @@ const showStatus = (status: number) => {
 
 const login = () => {
   window.location.href =
-    'https://i.haiyanproduct.com/cas/login/redirect?url=' +
+    import.meta.env.VITE_APP_BASE_URL +
+    '/rest/bi/login/redirect?url=' +
     encodeURIComponent(window.location.href);
 };
 
@@ -104,10 +105,10 @@ service.interceptors.response.use(
     let msg = '';
     // 单点登录
     console.log(import.meta.env.VITE_APP_BASE_URL);
-    // login();
-    if (status == 302) {
-      login();
-      return;
+    console.log(response);
+    if (response.data.code == 302) {
+      // login();
+      // return;
     }
     if (status < 200 || status >= 300) {
       // 处理http错误，抛到业务代码

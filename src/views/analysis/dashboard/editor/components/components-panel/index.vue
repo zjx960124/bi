@@ -47,7 +47,6 @@ mitt.on('transfer', async (e: any) => {
   console.log(e);
 
   pos.value = e.value;
-  console.log(pos.value.x);
 
   componentInstall(
     currentItem!.value!.chartKey,
@@ -66,7 +65,6 @@ mitt.on('transfer', async (e: any) => {
   );
   newComponent.layout!.x = pos.value.x;
   newComponent.layout!.y = pos.value.y;
-  console.log(newComponent);
 
   chartEditStore.addComponentList(newComponent, false, true);
   chartEditStore.setTargetSelectChart(newComponent.id);

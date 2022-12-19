@@ -40,21 +40,21 @@ mitt.on('move', (data: any) => {
       id: 'drop',
       resizable: true,
       draggable: true,
-      static: true,
+      static: false,
     });
   } else {
-    let parent = currentInstance.ctx.$refs.gridLayoutDom;
-    let virtual = currentInstance.ctx.$refs.virtualDom[0];
-    virtual.style.display = 'none';
-    virtual.dragging = {
-      top: data.e.clientY - data.rect.top,
-      left: data.e.clientX - data.rect.left,
-    };
-    let new_pos = virtual.calcXY(
-      data.e.clientY - data.rect.top,
-      data.e.clientX - data.rect.left
-    );
-    parent.dragEvent('dragstart', 'drop', new_pos.x, new_pos.y, 6, 6);
+    // let parent = currentInstance.ctx.$refs.gridLayoutDom;
+    // let virtual = currentInstance.ctx.$refs.virtualDom[0];
+    // // virtual.style.display = 'none';
+    // virtual.dragging = {
+    //   top: data.e.clientY - data.rect.top,
+    //   left: data.e.clientX - data.rect.left,
+    // };
+    // let new_pos = virtual.calcXY(
+    //   data.e.clientY - data.rect.top,
+    //   data.e.clientX - data.rect.left
+    // );
+    // parent.dragEvent('dragstart', 'drop', new_pos.x, new_pos.y, 6, 6);
   }
 });
 
@@ -122,6 +122,12 @@ const activeComponent = (id: string) => {
 const drop = async (e: DragEvent) => {
   e.preventDefault();
 };
+
+const allList = computed(() => {
+  console.log([...layoutList.value, ...virtualItem.value]);
+
+  return [...layoutList.value, ...virtualItem.value];
+});
 </script>
 
 <template>
@@ -137,7 +143,7 @@ const drop = async (e: DragEvent) => {
             class="layoutbcc"
             ref="gridLayoutDom"
             id="layoutView"
-            :layout.sync="layoutList"
+            :layout.sync="allList"
             :col-num="12"
             :row-height="40"
             :is-draggable="true"
@@ -146,37 +152,41 @@ const drop = async (e: DragEvent) => {
             :use-css-transforms="true"
             @ondrop="drop"
           >
-            <grid-item
-              v-for="(item, index) in virtualItem"
-              ref="virtualDom"
-              :x="item!.x"
-              :y="item!.y"
-              :w="item!.w"
-              :h="item!.h"
-              :i="item!.i"
-            >
-            </grid-item>
-            <grid-item
-              v-for="(item, index) in layoutList"
-              :x="item!.x"
-              :y="item!.y"
-              :w="item!.w"
-              :h="item!.h"
-              :i="item!.i"
-              @click="activeComponent(item!.id)"
-            >
-              <component
-                v-if="item.i !== 'drop'"
-                :ref="item.i"
-                class="edit-content-chart"
-                :is="
-                  chartEditStore.getComponentList[index].chartConfig.chartKey
-                "
-                :chartConfig="chartEditStore.getComponentList[index]"
-                :themeSetting="themeSetting"
-                :themeColor="chartEditStore.getComponentList[index].themeColor"
-              ></component>
-            </grid-item>
+            <div>
+              <!-- <grid-item
+                v-for="(item, index) in virtualItem"
+                ref="virtualDom"
+                :x="item!.x"
+                :y="item!.y"
+                :w="item!.w"
+                :h="item!.h"
+                :i="item!.i"
+              >
+              </grid-item> -->
+              <grid-item
+                v-for="(item, index) in allList"
+                :x="item!.x"
+                :y="item!.y"
+                :w="item!.w"
+                :h="item!.h"
+                :i="item!.i"
+                @click="activeComponent(item!.id)"
+              >
+                <component
+                  v-if="item.i !== 'drop'"
+                  :ref="item.i"
+                  class="edit-content-chart"
+                  :is="
+                    chartEditStore.getComponentList[index].chartConfig.chartKey
+                  "
+                  :chartConfig="chartEditStore.getComponentList[index]"
+                  :themeSetting="themeSetting"
+                  :themeColor="
+                    chartEditStore.getComponentList[index].themeColor
+                  "
+                ></component>
+              </grid-item>
+            </div>
           </grid-layout>
         </div>
       </div>

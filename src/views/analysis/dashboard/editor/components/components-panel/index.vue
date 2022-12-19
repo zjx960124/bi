@@ -12,7 +12,7 @@ export default {
       draggable
       @drag="drag($event, item)"
       @dragstart="dragStartHandle($event, item)"
-      @dragend="dragendHandle"
+      @dragend="dragendHandle($event, item)"
       @dblclick="dblclickHandle(item)"
     >
       <el-image class="item-img" :src="item.image" fit="contain"> </el-image>
@@ -40,6 +40,37 @@ import mitt from '@/utils/hooks/mitt';
 
 const chartEditStore = useChartEditStore();
 const { layoutList } = useTargetData();
+
+const currentItem = ref<ConfigType>();
+const pos = ref({ x: 0, y: 0 });
+mitt.on('transfer', async (e: any) => {
+  console.log(e);
+
+  pos.value = e.value;
+  console.log(pos.value.x);
+
+  componentInstall(
+    currentItem!.value!.chartKey,
+    fetchChartComponent(currentItem.value as ConfigType)
+  );
+  componentInstall(
+    currentItem!.value!.conKey,
+    fetchConfigComponent(currentItem!.value as ConfigType)
+  );
+  componentInstall(
+    currentItem!.value!.dataKey,
+    fetchDataComponent(currentItem!.value as ConfigType)
+  );
+  let newComponent: CreateComponentType = await createDashboardComponent(
+    currentItem!.value as ConfigType
+  );
+  newComponent.layout!.x = pos.value.x;
+  newComponent.layout!.y = pos.value.y;
+  console.log(newComponent);
+
+  chartEditStore.addComponentList(newComponent, false, true);
+  chartEditStore.setTargetSelectChart(newComponent.id);
+});
 
 const props = defineProps({
   data: {
@@ -89,7 +120,7 @@ const drag = (e: DragEvent, item: ConfigType) => {
     return;
   }
   if (e.clientX !== 0 && e.clientY !== 0) {
-    mitt.emit('remove', e);
+    mitt.emit('delete', e);
   }
 };
 
@@ -103,7 +134,7 @@ const dragStartHandle = (e: DragEvent, item: ConfigType) => {
   // );
   // chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, true);
 };
-const dragendHandle = (e: DragEvent) => {
+const dragendHandle = async (e: DragEvent, item: ConfigType) => {
   console.log('拖拽结束');
   const rect = document.querySelector('#layoutView')!.getBoundingClientRect();
   if (
@@ -114,6 +145,8 @@ const dragendHandle = (e: DragEvent) => {
   ) {
     // 成功放入指定区域
     console.log('成功放入指定区域');
+    currentItem.value = item;
+    mitt.emit('remove');
   }
   chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, false);
 };
@@ -127,7 +160,6 @@ const dblclickHandle = async (item: ConfigType) => {
     let newComponent: CreateComponentType = await createDashboardComponent(
       item
     );
-    console.log(newComponent);
     // 添加
     chartEditStore.addComponentList(newComponent, false, true);
     // 选中

@@ -19,15 +19,24 @@ import { useRouter } from 'vue-router';
 import { editorCanvas } from '@/views/editor/operation/editorCanvas/index';
 import { editorConfigurations } from '@/views/editor/operation/editorConfigurations';
 import mitt from '@/utils/hooks/mitt';
+import {
+  CreateComponentType,
+  CreateComponentGroupType,
+  PickCreateComponentType,
+} from '@/packages/index.d';
 
 const chartEditStore = useChartEditStore();
 const { handleContextMenu } = useContextMenu();
 const router = useRouter();
 const currentRoute = router.currentRoute.value.name;
 const { layoutList } = useTargetData();
-const virtualItem = ref<any>([]);
 
 let currentInstance: any = null;
+const virtualItem = ref<any>([]);
+const new_pos = ref({
+  x: 0,
+  y: 0,
+});
 // 注册事件
 mitt.on('move', (data: any) => {
   if (virtualItem.value.length === 0) {
@@ -43,23 +52,42 @@ mitt.on('move', (data: any) => {
       static: false,
     });
   } else {
-    // let parent = currentInstance.ctx.$refs.gridLayoutDom;
-    // let virtual = currentInstance.ctx.$refs.virtualDom[0];
-    // // virtual.style.display = 'none';
-    // virtual.dragging = {
-    //   top: data.e.clientY - data.rect.top,
-    //   left: data.e.clientX - data.rect.left,
-    // };
-    // let new_pos = virtual.calcXY(
-    //   data.e.clientY - data.rect.top,
-    //   data.e.clientX - data.rect.left
-    // );
-    // parent.dragEvent('dragstart', 'drop', new_pos.x, new_pos.y, 6, 6);
+    let parent = currentInstance.ctx.$refs.gridLayoutDom;
+    let virtual = currentInstance.ctx.$refs.virtualDom[0];
+    virtual.style.display = 'none';
+    virtual.dragging = {
+      top: data.e.clientY - data.rect.top,
+      left: data.e.clientX - data.rect.left,
+    };
+    new_pos.value = virtual.calcXY(
+      data.e.clientY - data.rect.top,
+      data.e.clientX - data.rect.left
+    );
+    parent.dragEvent(
+      'dragstart',
+      'drop',
+      new_pos.value.x,
+      new_pos.value.y,
+      6,
+      6
+    );
   }
 });
 
 mitt.on('remove', (e) => {
-  console.log('remove');
+  mitt.emit('transfer', new_pos);
+  virtualItem.value.length && (virtualItem.value = []);
+  currentInstance.ctx.$refs.gridLayoutDom.dragEvent(
+    'dragend',
+    'drop',
+    new_pos.value.x,
+    new_pos.value.y,
+    6,
+    6
+  );
+});
+
+mitt.on('delete', (e) => {
   virtualItem.value.length && (virtualItem.value = []);
 });
 
@@ -115,7 +143,9 @@ const rangeStyle = computed(() => {
   };
 });
 
-const activeComponent = (id: string) => {
+const activeComponent = (e: Event, id: string) => {
+  e.preventDefault();
+  e.stopPropagation();
   chartEditStore.setTargetSelectChart(id);
 };
 
@@ -124,10 +154,21 @@ const drop = async (e: DragEvent) => {
 };
 
 const allList = computed(() => {
-  console.log([...layoutList.value, ...virtualItem.value]);
-
   return [...layoutList.value, ...virtualItem.value];
 });
+
+const layoutHandleClick = (
+  e: MouseEvent,
+  item?: CreateComponentType | CreateComponentGroupType
+) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (item) {
+    chartEditStore.setTargetSelectChart(item.id);
+    return;
+  }
+  chartEditStore.setTargetSelectChart(undefined);
+};
 </script>
 
 <template>
@@ -138,56 +179,59 @@ const allList = computed(() => {
       @ondrop="drop"
     >
       <div class="editor-content-view">
-        <div class="editor-content" style="height: 800px">
-          <grid-layout
-            class="layoutbcc"
-            ref="gridLayoutDom"
-            id="layoutView"
-            :layout.sync="allList"
-            :col-num="12"
-            :row-height="40"
-            :is-draggable="true"
-            :is-resizable="true"
-            :vertical-compact="true"
-            :use-css-transforms="true"
-            @ondrop="drop"
-          >
-            <div>
-              <!-- <grid-item
-                v-for="(item, index) in virtualItem"
-                ref="virtualDom"
-                :x="item!.x"
-                :y="item!.y"
-                :w="item!.w"
-                :h="item!.h"
-                :i="item!.i"
-              >
-              </grid-item> -->
-              <grid-item
-                v-for="(item, index) in allList"
-                :x="item!.x"
-                :y="item!.y"
-                :w="item!.w"
-                :h="item!.h"
-                :i="item!.i"
-                @click="activeComponent(item!.id)"
-              >
-                <component
-                  v-if="item.i !== 'drop'"
-                  :ref="item.i"
-                  class="edit-content-chart"
-                  :is="
-                    chartEditStore.getComponentList[index].chartConfig.chartKey
-                  "
-                  :chartConfig="chartEditStore.getComponentList[index]"
-                  :themeSetting="themeSetting"
-                  :themeColor="
-                    chartEditStore.getComponentList[index].themeColor
-                  "
-                ></component>
-              </grid-item>
-            </div>
-          </grid-layout>
+        <div class="editor-content">
+          <div class="layout-area-view">
+            <grid-layout
+              class="layoutbcc"
+              ref="gridLayoutDom"
+              id="layoutView"
+              :layout.sync="allList"
+              :col-num="12"
+              :row-height="40"
+              :is-draggable="true"
+              :is-resizable="true"
+              :vertical-compact="true"
+              :use-css-transforms="true"
+              @ondrop="drop"
+              @click="layoutHandleClick"
+            >
+              <div>
+                <grid-item
+                  v-for="(item, index) in virtualItem"
+                  ref="virtualDom"
+                  :x="item!.x"
+                  :y="item!.y"
+                  :w="item!.w"
+                  :h="item!.h"
+                  :i="item!.i"
+                >
+                </grid-item>
+                <grid-item
+                  v-for="(item, index) in layoutList"
+                  :x="item!.x"
+                  :y="item!.y"
+                  :w="item!.w"
+                  :h="item!.h"
+                  :i="item!.i"
+                  @click="activeComponent($event, item!.id)"
+                >
+                  <component
+                    :ref="item.i"
+                    class="edit-content-chart"
+                    :is="
+                      chartEditStore.getComponentList[index].chartConfig
+                        .chartKey
+                    "
+                    :chartConfig="chartEditStore.getComponentList[index]"
+                    :themeSetting="themeSetting"
+                    :themeColor="
+                      chartEditStore.getComponentList[index].themeColor
+                    "
+                  ></component>
+                </grid-item>
+              </div>
+            </grid-layout>
+          </div>
         </div>
       </div>
     </editor-canvas>
@@ -224,6 +268,7 @@ const allList = computed(() => {
       .editor-content {
         position: relative;
         box-sizing: border-box;
+        height: 100%;
         .range-content {
           width: inherit;
           height: inherit;
@@ -240,6 +285,13 @@ const allList = computed(() => {
     height: 100%;
     box-sizing: border-box;
     padding: 0 22px;
+
+    ::v-deep .editor-configuration-view {
+      .common-configuration {
+        width: 435px;
+        height: 100%;
+      }
+    }
   }
 }
 .vue-grid-item:not(.vue-grid-placeholder) {
@@ -247,8 +299,12 @@ const allList = computed(() => {
   border: 1px solid black;
 }
 
-.layoutbcc {
-  padding-bottom: 150px;
-  min-height: 800px;
+.layout-area-view {
+  padding-bottom: 300px;
+  box-sizing: border-box;
+  height: 100%;
+  ::v-deep .layoutbcc {
+    min-height: 100%;
+  }
 }
 </style>

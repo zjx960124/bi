@@ -33,6 +33,7 @@ import { chartColors, ChartColorsNameType } from '@/settings/chartThemes/index';
 import { fieldItem } from '@/packages/index.d';
 import { DSService } from '@/api/DS';
 import { usePreviewRequest } from '@/utils/hooks/usePreviewScale';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
   themeSetting: {
@@ -90,6 +91,10 @@ const requestConfig = computed(() => {
 
 watch(requestConfig, (newData, oldData) => {
   DSService.getComponentData(newData).then((res: any) => {
+    if (res.code == '500') {
+      ElMessage.error(res.msg);
+      return;
+    }
     nextTick(() => {
       props.chartConfig.option.dataset = {
         source: res.data[0],

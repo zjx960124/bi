@@ -1,6 +1,6 @@
 import throttle from 'lodash/throttle';
 import { isPreview } from '@/utils';
-import { ref, toRefs, nextTick } from 'vue';
+import { ref, toRefs, nextTick, Ref } from 'vue';
 import type VChart from 'vue-echarts';
 import { CreateComponentType, ChartFrameEnum } from '@/packages/index.d';
 import { DSService } from '@/api/DS';
@@ -272,8 +272,6 @@ export const useTargetPreviewRequest = (
     ]).then((res: any) => {
       nextTick(() => {
         if (vChartRef.value) {
-          console.log('更新接口数据');
-          console.log(res);
           if (requestConfig.value.dataType === 1) {
             targetData.value = res.data[0]['2'] || 0;
             resultData.value =
@@ -290,5 +288,37 @@ export const useTargetPreviewRequest = (
   };
 
   isPreview() && requestIntervalFn();
+  return { vChartRef };
+};
+
+/**
+ * 表格类定时刷新
+ */
+export const useTableTimeInterval = (
+  pageNum: Ref<number>,
+  currentPage: Ref<number>,
+  currentPageData: Ref<any[]>,
+  allPageData: Ref<any[]>,
+  dataset: Ref<any>,
+  pageSize: Ref<any>
+) => {
+  const vChartRef = ref<null>(null);
+  const time = ref<NodeJS.Timer | null>(null);
+  if (pageNum.value > 1) {
+    // 需要定时换页
+    time.value = setInterval(() => {
+      ++currentPage.value;
+      if (currentPage.value > pageNum.value) {
+        currentPage.value = 0;
+      }
+      currentPageData.value = allPageData.value.slice(
+        pageNum.value * currentPage.value,
+        pageSize.value
+      );
+      dataset.value.data = currentPageData.value;
+    }, 1000);
+  }
+  console.log(pageNum.value);
+
   return { vChartRef };
 };

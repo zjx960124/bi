@@ -12,6 +12,8 @@ import { CreateComponentType } from '@/packages/index.d';
 import { fieldItem } from '@/packages/index.d';
 import { DSService } from '@/api/DS';
 import Config from './config';
+import { useTableTimeInterval } from '@/utils/hooks/usePreviewScale';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
   chartConfig: {
@@ -95,9 +97,9 @@ const requestConfig = computed(() => {
 });
 
 // 页数
-const pageNum = ref<number>(0);
+const pageNum = ref<number>(1);
 // 当前页码
-const currentPage = ref<number>(0);
+const currentPage = ref<number>(1);
 // 当前页数据
 const currentPageData = ref<any[]>([]);
 // 整体数据
@@ -105,9 +107,13 @@ const allPageData = ref<any[]>([]);
 
 watch(requestConfig, (newData, oldData) => {
   DSService.getComponentData(newData).then((res: any) => {
+    if (res.code == '500') {
+      ElMessage.error(res.msg);
+      return;
+    }
     nextTick(() => {
       pageNum.value = Math.ceil(res.data.data.length / pageSize.value);
-      currentPage.value = 0;
+      currentPage.value = 1;
       currentPageData.value = res.data.data.slice(
         pageNum.value * currentPage.value,
         pageSize.value
@@ -120,29 +126,46 @@ watch(requestConfig, (newData, oldData) => {
     });
   });
 });
+
+const { vChartRef } = useTableTimeInterval(
+  pageNum,
+  currentPage,
+  currentPageData,
+  allPageData,
+  dataset,
+  pageSize
+);
 </script>
 <template>
-  <el-table
-    :data="dataset!.data"
-    :border="border"
-    :stripe="stripe"
-    style="width: 100%"
-    class="customize-table"
-  >
-    <template v-if="indexColumn">
-      <el-table-column
-        type="index"
-        :width="indexColumnWidth"
-        :label="indexColumnLabel"
-        :index="indexMethod"
-        :align="tableAlign"
-      />
-    </template>
-    <template v-for="(item, index) in dataset!.columns" :key="index">
-      <el-table-column :prop="item.key" :align="tableAlign" :label="item.label">
-      </el-table-column>
-    </template>
-  </el-table>
+  <div>
+    <el-table
+      :data="dataset!.data"
+      :border="border"
+      :stripe="stripe"
+      style="width: 100%"
+      class="customize-table"
+      ref="vChartRef"
+    >
+      <template v-if="indexColumn">
+        <el-table-column
+          type="index"
+          :width="indexColumnWidth"
+          :label="indexColumnLabel"
+          :index="indexMethod"
+          :align="tableAlign"
+        />
+      </template>
+      <template v-for="(item, index) in dataset!.columns" :key="index">
+        <el-table-column
+          :prop="item.key"
+          :align="tableAlign"
+          :label="item.label"
+        >
+        </el-table-column>
+      </template>
+    </el-table>
+    <div class="page-view">{{ currentPage }} / {{ pageNum }}</div>
+  </div>
 </template>
 <style lang="scss" scoped>
 .customize-table {
@@ -208,5 +231,12 @@ watch(requestConfig, (newData, oldData) => {
   ::v-deep .cell {
     line-height: 1;
   }
+}
+
+.page-view {
+  position: absolute;
+  color: #ffffff;
+  font-size: 14px;
+  right: 0;
 }
 </style>

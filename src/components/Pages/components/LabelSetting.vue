@@ -26,12 +26,16 @@ const precisionOpitons = ref([
 ]);
 const labelFontStyleFlag = ref({ type: false });
 const labelFontWeightFlag = ref({ type: false });
+const customFontWeightFlag = ref({ type: false });
+const customFontStyleFlag = ref({ type: false });
 
-const changeBarDirection = (val: string) => {
+const changeDirection = (val: string) => {
   indicatorPlacement.value = val;
   props.optionData.indicatorPlacement = val;
 };
-const selectPrecision = () => {};
+const selectPrecision = (value: number) => {
+  props.optionData.precision = value;
+};
 const switchCommon = (
   target: any,
   key: string,
@@ -40,6 +44,10 @@ const switchCommon = (
 ) => {
   target[key] = form;
   depend.type! = !depend.type!;
+};
+
+const changeCustomDirection = (val: string) => {
+  props.optionData.exhibition = val;
 };
 </script>
 <template>
@@ -55,13 +63,13 @@ const switchCommon = (
         :on-update:value="selectPrecision"
       />
     </div>
-    <div class="common-item">
+    <div class="common-item" v-show="optionData.type === 'line'">
       <div class="common-sub-title">显示位置</div>
       <n-radio-group
         class="common-radio-group"
         v-model:value="indicatorPlacement"
         name="radiogroup"
-        :on-update:value="changeBarDirection"
+        :on-update:value="changeDirection"
       >
         <n-space>
           <n-radio key="1" value="inside"> 跟随进度 </n-radio>
@@ -102,19 +110,125 @@ const switchCommon = (
             labelFontWeightFlag
           )
         "
-        :class="{ commonActive: labelFontWeightFlag.type }"
+        :class="{ commonActive: optionData.indicatorFontWeight === 'bold' }"
       >
         B
       </div>
       <div
         class="commmon-switch-self"
-        :class="{ commonActive: labelFontStyleFlag.type }"
+        :class="{ commonActive: optionData.indicatorFontStyle === 'oblique' }"
         @click="
           switchCommon(
             optionData,
             'indicatorFontStyle',
             labelFontStyleFlag.type ? 'normal' : 'oblique',
             labelFontStyleFlag
+          )
+        "
+      >
+        I
+      </div>
+    </div>
+    <div class="common-item">
+      <n-checkbox v-model:checked="optionData.customType"
+        >显示之前值/目标值</n-checkbox
+      >
+    </div>
+    <div class="common-item">
+      <div class="common-space"></div>
+      <div>当前值—展示名称</div>
+      <n-input
+        small
+        class="common-input"
+        style="width: 75px"
+        placeholder=""
+        v-model:value="optionData.customCurrentLabel"
+      ></n-input>
+    </div>
+    <div class="common-item">
+      <div class="common-space"></div>
+      <div>目标值—展示名称</div>
+      <n-input
+        small
+        class="common-input"
+        style="width: 75px"
+        placeholder=""
+        v-model:value="optionData.customTargetLabel"
+      ></n-input>
+    </div>
+    <div class="common-item">
+      <div class="common-space"></div>
+      <div class="common-sub-title">排列方式</div>
+      <n-radio-group
+        class="common-radio-group"
+        v-model:value="optionData.exhibition"
+        name="radiogroup"
+        :on-update:value="changeCustomDirection"
+      >
+        <n-space>
+          <n-radio key="1" value="row"> 水平 </n-radio>
+          <n-radio key="2" value="column"> 垂直 </n-radio>
+        </n-space>
+      </n-radio-group>
+    </div>
+    <div class="common-item">
+      <div class="common-space"></div>
+      <div class="common-sub-title">上边距</div>
+      <el-input-number
+        v-model="optionData.customMargginTop"
+        class="common-number-input"
+        :min="1"
+        controls-position="right"
+        size="small"
+      />
+    </div>
+    <div class="common-item">
+      <div class="common-space"></div>
+      <div class="common-sub-title">文本</div>
+      <el-input-number
+        v-model="optionData.customFontSize"
+        class="common-number-input"
+        :min="1"
+        :max="44"
+        controls-position="right"
+        size="small"
+      />
+      <n-color-picker
+        class="common-color-picker"
+        style="display: inline-block"
+        v-model:value="optionData.customFontColor"
+      >
+        <template #label>
+          <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
+        </template>
+      </n-color-picker>
+    </div>
+    <div class="common-item">
+      <div class="common-sub-title"></div>
+      <div class="common-space"></div>
+      <div
+        class="commmon-switch-self"
+        @click="
+          switchCommon(
+            optionData,
+            'customFontWeight',
+            customFontWeightFlag.type ? 'normal' : 'bold',
+            customFontWeightFlag
+          )
+        "
+        :class="{ commonActive: optionData.customFontWeight === 'bold' }"
+      >
+        B
+      </div>
+      <div
+        class="commmon-switch-self"
+        :class="{ commonActive: optionData.customFontStyle === 'oblique' }"
+        @click="
+          switchCommon(
+            optionData,
+            'customFontStyle',
+            customFontStyleFlag.type ? 'normal' : 'oblique',
+            customFontStyleFlag
           )
         "
       >

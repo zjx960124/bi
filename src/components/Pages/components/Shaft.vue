@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { ChevronDown } from "@vicons/carbon";
+import { computed, ref } from 'vue';
+import { ChevronDown } from '@vicons/carbon';
 const props = defineProps({
   axis: {
     type: Object,
@@ -22,16 +22,21 @@ const axisLabelFontWeightFlag = ref({ type: false });
 const axisLabelFontStyleFlag = ref({ type: false });
 const lineTypeOptions = ref([
   {
-    label: "·········",
-    value: "dashed",
+    label: '·········',
+    value: 'dashed',
   },
   {
-    label: "——",
-    value: "solid",
+    label: '——',
+    value: 'solid',
   },
 ]);
 
-const switchCommon = (target: any, key: string, form: any, depend: {type: boolean}) => {
+const switchCommon = (
+  target: any,
+  key: string,
+  form: any,
+  depend: { type: boolean }
+) => {
   target[key] = form;
   depend.type = !depend.type;
 };
@@ -73,13 +78,13 @@ const switchCommon = (target: any, key: string, form: any, depend: {type: boolea
           axisLabelFontWeightFlag
         )
       "
-      :class="{ commonActive: axisLabelFontWeightFlag.type }"
+      :class="{ commonActive: axis.axisLabel.fontWeight === 'bold' }"
     >
       B
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ active: axisLabelFontStyleFlag.type }"
+      :class="{ commonActive: axis.axisLabel.fontStyle === 'oblique' }"
       @click="
         switchCommon(
           axis.axisLabel,
@@ -137,13 +142,13 @@ const switchCommon = (target: any, key: string, form: any, depend: {type: boolea
           axisFontWeightFlag
         )
       "
-      :class="{ commonActive: axisFontWeightFlag.type }"
+      :class="{ commonActive: axis.nameTextStyle.fontWeight === 'bold' }"
     >
       B
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ active: axisFontStyleFlag.type }"
+      :class="{ commonActive: axis.nameTextStyle.fontStyle === 'oblique' }"
       @click="
         switchCommon(
           axis.nameTextStyle,
@@ -186,5 +191,4 @@ const switchCommon = (target: any, key: string, form: any, depend: {type: boolea
     </n-color-picker>
   </div>
 </template>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

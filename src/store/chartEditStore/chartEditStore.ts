@@ -1005,9 +1005,42 @@ export const useChartEditStore = defineStore({
         previewScaleType: previewScaleType,
       };
     },
-    setStorageInfo(item) {
+    setStorageInfo(item: any) {
       this.componentList = item.componentList;
       this.editCanvasConfig = item.editCanvasConfig;
+    },
+    /**
+     * 获取最新Layout
+     */
+    getCurrentLayout(target: any) {
+      if (this.componentList.length) {
+        const currentComponent =
+          this.componentList[this.componentList.length - 1];
+        const layout = {
+          x: 0,
+          y: currentComponent.layout!.y + 6,
+          w: 6,
+          h: 6,
+          i: this.componentList.length.toString(),
+          resizable: true,
+          draggable: true,
+          static: false,
+          id: target.id,
+        };
+        return layout;
+      } else {
+        return {
+          x: 0,
+          y: 0,
+          w: 6,
+          h: 6,
+          i: '0',
+          resizable: true,
+          draggable: true,
+          static: false,
+          id: target.id,
+        };
+      }
     },
   },
 });

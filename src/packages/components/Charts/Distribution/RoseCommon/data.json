@@ -1,33 +1,11 @@
 {
-  "dimensions": ["product", "data1"],
-  "source": [
-    {
-      "product": "Mon",
-      "data1": 120
-    },
-    {
-      "product": "Tue",
-      "data1": 200
-    },
-    {
-      "product": "Wed",
-      "data1": 150
-    },
-    {
-      "product": "Thu",
-      "data1": 80
-    },
-    {
-      "product": "Fri",
-      "data1": 70
-    },
-    {
-      "product": "Sat",
-      "data1": 110
-    },
-    {
-      "product": "Sun",
-      "data1": 130
-    }
-  ]
+  "product": [
+    "TyYuan_",
+    "九月吃不胖",
+    "小椰不耶",
+    "小狗请多多来信",
+    "小许同学"
+  ],
+  "博主粉丝量": [10000, 20000, 15000, 18000, 16000],
+  "第二种度量": [10000, 20000, 15000, 18000, 16000]
 }

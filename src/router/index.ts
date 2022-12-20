@@ -14,6 +14,7 @@ const Layout = () => import('@/views/layout/index.vue');
 const editor = () => import('@/views/editor');
 const dashboardEditor = () => import('@/views/analysis/dashboard/editor');
 const preview = () => import('@/views/preview/index.vue');
+const canvasd = () => import('@/views/editor/canvas/index.vue');
 
 interface metaType extends RouteMeta {
   isShow?: boolean;
@@ -70,6 +71,15 @@ const EditorRoute: Array<RouteRecordRaw> = [
     component: editor,
     meta: {
       title: 'editor',
+      icon: '',
+    },
+  },
+  {
+    path: '/canvasd',
+    name: 'canvasd',
+    component: canvasd,
+    meta: {
+      title: 'canvasd',
       icon: '',
     },
   },

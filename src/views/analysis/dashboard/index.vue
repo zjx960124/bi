@@ -3,44 +3,20 @@ import { ref, onMounted, reactive, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import router from '@/router';
 import {
-  getDataScreenList,
+  getAllScreenDataByFoldId,
   deleteDataScreen,
-  saveFileFold
+  saveFileFold,
+  updateFileFold,
+  deleteFileFoldById
 } from '@/api/dataAnalysis';
-import { dataScreenListParam } from '@/views/analysis/types';
 
 const state = reactive({
-  queryParams: { keyword: '', pageNum: 0, pageSize: 10 } as dataScreenListParam,
+  keyword: '',
   loading: false,
-  list: [
-    // {
-    //   id: 0,
-    //   name: '文件夹名称',
-    //   data: [
-    //     { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/bar.png' },
-    //     { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/line.png' }
-    //   ]
-    // },
-    // {
-    //   id: 1,
-    //   name: '文件夹名称1',
-    //   data: [
-    //     { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
-    //     { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
-    //   ]
-    // },
-    // {
-    //   id: 2,
-    //   name: '文件夹名称2',
-    //   data: [
-    //     { id: 0, name: '可视化名称0', imgUrl: '/src/assets/img/line.png' },
-    //     { id: 1, name: '可视化名称1', imgUrl: '/src/assets/img/bar.png' }
-    //   ]
-    // }
-  ]
+  list: []
 });
 
-const { queryParams, loading, list } = toRefs(state);
+const { keyword, loading, list } = toRefs(state);
 
 onMounted(() => {
   getData();
@@ -48,8 +24,10 @@ onMounted(() => {
 
 function getData() {
   state.loading = true;
-  getDataScreenList({ category: 0 }, state.queryParams).then(({ data }) => {
-    state.list = data.data;
+  getAllScreenDataByFoldId({
+    name: state.keyword
+  }).then(({ data }) => {
+    state.list = data;
     state.loading = false;
   });
 }
@@ -76,11 +54,31 @@ function handleEditFolderName(data: any) {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     inputPattern: /^.+$/,
-    inputErrorMessage: '文件夹名称输入有误'
+    inputErrorMessage: '文件夹名称输入有误',
+    inputValue: data.name
   }).then(({ value }) => {
-    ElMessage({
-      type: 'success',
-      message: '修改成功'
+    updateFileFold({ id: data.id, name: value }).then(({ data }) => {
+      getData();
+      ElMessage({
+        type: 'success',
+        message: '修改成功'
+      });
+    });
+  });
+}
+
+function handleDelFolderName(data: any) {
+  ElMessageBox.confirm(`确认删除文件夹“${data.name}”?`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    deleteFileFoldById({ id: data.id }).then(({ data }) => {
+      getData();
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      });
     });
   });
 }
@@ -118,7 +116,7 @@ function handleCopy(data: any) {}
         />
         <el-input
           class="input"
-          v-model="queryParams.keyword"
+          v-model="keyword"
           clearable
           placeholder="请输入关键字搜索"
         >
@@ -160,13 +158,26 @@ function handleCopy(data: any) {}
               src="/src/assets/analysis/folderSign.png"
             />
             <span class="name">{{ item.name }}</span>
-            <img
+            <!-- <img
               class="btn"
               width="13"
               height="15"
               src="/src/assets/analysis/edit.png"
               @click="handleEditFolderName(item)"
-            />
+            /> -->
+            <el-icon
+              class="fold-icon"
+              @click="handleEditFolderName(item)"
+            >
+              <EditPen />
+            </el-icon>
+
+            <el-icon
+              class="fold-icon"
+              @click="handleDelFolderName(item)"
+            >
+              <Delete />
+            </el-icon>
           </div>
           <div class="item-list clearfix">
             <div
@@ -177,7 +188,7 @@ function handleCopy(data: any) {}
               <img
                 width="378"
                 height="213"
-                :src="sItem.imgUrl"
+                :src="sItem.image"
               />
               <div class="sItem-bottom">
                 <span class="name">{{ sItem.name }}</span>
@@ -290,6 +301,11 @@ function handleCopy(data: any) {}
         line-height: 1;
       }
       .btn {
+        cursor: pointer;
+      }
+
+      .fold-icon {
+        margin: 0 10px;
         cursor: pointer;
       }
     }

@@ -9,6 +9,7 @@ export const ProcessCircleConfig: ConfigType = {
   chartKey: 'VProcessCircle',
   // 配置组件渲染 Components 格式: VC + key
   conKey: 'VCProcessCircle',
+  dataKey: 'VDProcessCircle',
   // 名称
   title: '环形进度条',
   // 子分类目录

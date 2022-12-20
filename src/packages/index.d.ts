@@ -1,26 +1,35 @@
-import { GenreEnum, GenreEnumName } from './components/Charts/index.d';
+import {
+  GenreEnum,
+  GenreEnumName,
+  fieldEnum,
+  fieldEnumName,
+} from './components/Charts/index.d';
 import type {
   GlobalThemeJsonType,
   ChartColorsNameType,
 } from '@/settings/chartThemes/index';
+
+import { DashboardLayout } from './index';
 
 // 组件配置
 export type ConfigType = {
   key: string;
   chartKey: string;
   conKey: string;
+  dataKey: string;
   title: string;
   category: string;
   categoryName: string;
   package: string;
   chartFrame?: ChartFrameEnum;
   image: string | (() => Promise<typeof import('*.png')>);
+  images?: string | (() => Promise<typeof import('*.png')>);
 };
 
 // 包分类枚举
 export enum PackagesCategoryEnum {
   CHARTS = 'Charts',
-  TEXT = 'Text',
+  TEXT = 'Texts',
   MEDIA = 'Media',
   MATERIAL = 'Material',
 }
@@ -57,12 +66,19 @@ export type GenreConfigType = {
 // };
 
 export type GenreType = {
-  [GenreEnum.COMPARE]?: GenreConfigType;
-  [GenreEnum.TREND]?: GenreConfigType;
-  [GenreEnum.TABLE]?: GenreConfigType;
-  [GenreEnum.TARGET]?: GenreConfigType;
-  [GenreEnum.DISTRIBUTION]?: GenreConfigType;
-  [GenreEnum.SPACE]?: GenreConfigType;
+  [GenreEnum.COMPARE]?: ConfigType[];
+  [GenreEnum.TREND]?: ConfigType[];
+  [GenreEnum.TABLE]?: ConfigType[];
+  [GenreEnum.TARGET]?: ConfigType[];
+  [GenreEnum.DISTRIBUTION]?: ConfigType[];
+  [GenreEnum.SPACE]?: ConfigType[];
+  [GenreEnum.TEXT]?: ConfigType[];
+  [GenreEnum.CLOCK]?: ConfigType[];
+  [GenreEnum.IMAGE]?: ConfigType[];
+  [GenreEnum.VIDEO]?: ConfigType[];
+  [GenreEnum.HEADER]?: ConfigType[];
+  [GenreEnum.BORDER]?: ConfigType[];
+  [GenreEnum.CUROFFLINE]?: ConfigType[];
 };
 
 export type PackagesGenreType = {
@@ -76,6 +92,7 @@ export type PackagesGenreType = {
 export enum FetchComFlagType {
   VIEW,
   CONFIG,
+  DATA,
 }
 
 export enum ChartFrameEnum {
@@ -115,6 +132,35 @@ export enum FilterEnum {
   SKEW_Y = 'skewY',
 }
 
+export type PublicRequestType = {
+  DSID: string | number;
+  dimension: fieldItem[];
+  measure: fieldItem[];
+  measureLength: number;
+  dimensionLength: number;
+  dataType?: number;
+  data?: number | string;
+};
+
+export type fieldItem = {
+  [fieldEnum.columnName]: string;
+  [fieldEnum.dataSetColumnName]: string;
+  [fieldEnum.setDataType]: number;
+  [fieldEnum.originDataType]: number;
+  [fieldEnum.dataSetId]: number;
+  [fieldEnum.commentComment]: string;
+  [fieldEnum.columnType]?: number;
+  dataReturnMethod?: number;
+  combinationMode?: number;
+  customize?: string | number;
+};
+
+export interface DSResponseType {
+  id: number;
+  setDataType: number;
+  columnName: string;
+}
+
 // 组件实例类
 export interface PublicConfigType {
   id: string;
@@ -130,13 +176,16 @@ export interface PublicConfigType {
   };
   filter?: string;
   setPosition: Function;
+  requestConfig: PublicRequestType;
 }
 
 export interface CreateComponentType extends PublicConfigType {
   key: string;
   chartConfig: ConfigType;
-  option: GlobalThemeJsonType;
+  option: { [P in keyof GlobalThemeJsonType]?: GlobalThemeJsonType[P] };
   themeColor?: { color: ChartColorsNameType } & any;
+  requestConfig: PublicRequestType;
+  layout?: DashboardLayout;
 }
 
 // 组件成组实例类

@@ -23,6 +23,16 @@ export enum MenuEnum {
   BACK = 'back',
   // 前进
   FORWORD = 'forward',
+  // 上移
+  UP = 'up',
+  // 下移
+  DOWN = 'down',
+  // 置顶
+  TOP = 'top',
+  // 置底
+  BOTTOM = 'bottom',
+  // 清空
+  CLEAR = 'clear',
 }
 
 // Win 键盘枚举

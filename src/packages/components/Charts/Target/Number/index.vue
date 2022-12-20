@@ -37,8 +37,18 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, toRefs, ref, reactive, watch } from 'vue';
+import {
+  PropType,
+  toRefs,
+  ref,
+  reactive,
+  watch,
+  computed,
+  nextTick,
+} from 'vue';
 import { CreateComponentType } from '@/packages/index.d';
+import { fieldItem } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
 
 const props = defineProps({
   chartConfig: {
@@ -50,7 +60,7 @@ const option = reactive({
   from: 0,
   dataset: 0,
 });
-const { w, h } = toRefs(props.chartConfig.attr);
+
 let {
   dur,
   showSeparator,
@@ -95,6 +105,24 @@ watch(
     deep: false,
   }
 );
+
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.measure.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  return requestConfig.measure;
+});
+
+watch(requestConfig, (newData) => {
+  DSService.getComponentData(newData).then((res: any) => {
+    nextTick(() => {
+      props.chartConfig.option.dataset = res.data[0]['1'];
+    });
+  });
+});
 
 // useChartDataFetch(props.chartConfig, useChartEditStore, updateNumber)
 </script>

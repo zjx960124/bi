@@ -24,7 +24,7 @@ export type LegendConfigurationType = {
 
 export const LegendConfiguration: LegendConfigurationType = {
   left: {
-    left: '5%',
+    left: '0%',
     top: 'center',
     orient: 'vertical',
     except: ['bottom', 'right'],
@@ -32,20 +32,20 @@ export const LegendConfiguration: LegendConfigurationType = {
   },
   top: {
     left: 'center',
-    top: '5%',
+    top: '0%',
     orient: 'horizontal',
     except: ['bottom', 'right'],
     legendPosition: 'top',
   },
   bottom: {
-    bottom: '5%',
+    bottom: '0%',
     left: 'center',
     orient: 'horizontal',
     except: ['top', 'right'],
     legendPosition: 'bottom',
   },
   right: {
-    right: '5%',
+    right: '0%',
     top: 'center',
     orient: 'vertical',
     except: ['bottom', 'left'],

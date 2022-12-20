@@ -1,35 +1,63 @@
 <template>
-  <n-progress
-    :type="type"
-    :height="height"
-    :processing="animationFlag"
-    :percentage="option.dataset"
-    :indicator-placement="indicatorPlacement"
-    :color="color"
-    :rail-color="railColor"
-    :offset-degree="offsetDegree"
-    :border-radius="fillBorderRadius + 'px'"
-    :fill-border-radius="fillBorderRadius + 'px'"
-  >
-    <n-text
+  <div class="process-view">
+    <n-progress
+      ref="vChartRef"
+      class="process"
+      :type="type"
+      :processing="animationFlag"
+      :percentage="resultData"
+      :indicator-placement="indicatorPlacement"
+      :color="color"
+      :rail-color="railColor"
+      :offset-degree="offsetDegree"
+      :border-radius="fillBorderRadius + 'px'"
+      :fill-border-radius="fillBorderRadius + 'px'"
+      :stroke-width="height"
+    >
+      <n-text
+        :style="{
+          color: indicatorTextColor,
+          fontSize: `${indicatorTextSize}px`,
+          fontStyle: indicatorFontStyle,
+          fontWeight: indicatorFontWeight,
+        }"
+      >
+        {{ resultData }} {{ unit }}
+      </n-text>
+    </n-progress>
+    <div
+      class="traget"
+      v-show="customType"
       :style="{
-        color: indicatorTextColor,
-        fontSize: `${indicatorTextSize}px`,
-        indicatorFontStyle,
-        indicatorFontWeight,
+        fontSize: `${customFontSize}px`,
+        color: customFontColor,
+        fontStyle: customFontStyle,
+        fontWeight: customFontWeight as any,
+        paddingTop: `${customMargginTop}px`,
+        flexDirection: exhibition as string & number
       }"
     >
-      {{ option.dataset }} {{ unit }}
-    </n-text>
-  </n-progress>
+      <span>{{ customCurrentLabel }}{{ option.dataset }}</span>
+      <span>{{ customTargetLabel }}{{ targetData }}</span>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, toRefs, watch, shallowReactive } from 'vue';
-// import { useChartDataFetch } from '@/hooks'
-// import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore'
+import {
+  PropType,
+  toRefs,
+  watch,
+  shallowReactive,
+  computed,
+  nextTick,
+  ref,
+} from 'vue';
 import config, { option as configOption } from './config';
 import { toNumber } from '@/utils';
+import { fieldItem } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
+import { useTargetPreviewRequest } from '@/utils/hooks/usePreviewScale';
 
 const props = defineProps({
   chartConfig: {
@@ -52,12 +80,25 @@ const {
   indicatorFontWeight,
   offsetDegree,
   dataset,
+  precision, // 小数位
   fillBorderRadius,
+  customType,
+  customCurrentLabel,
+  customTargetLabel,
+  customFontSize,
+  customFontColor,
+  customFontStyle,
+  customFontWeight,
+  customMargginTop,
+  exhibition,
 } = toRefs(props.chartConfig.option);
 
 const option = shallowReactive({
   dataset: configOption.dataset,
 });
+
+const targetData = ref<String | Number>(0);
+const resultData = ref<String | Number>(0);
 
 // 手动更新
 watch(
@@ -69,8 +110,99 @@ watch(
     deep: false,
   }
 );
-// 预览更新
-// useChartDataFetch(props.chartConfig, useChartEditStore, (newData: number) => {
-//   option.dataset = toNumber(newData, 2)
-// })
+
+watch(precision, (newData: any) => {
+  resultData.value = (
+    Math.round((option.dataset / Number(targetData.value)) * 10000) / 100
+  ).toFixed(precision.value);
+});
+
+const requestConfig = computed(() => {
+  let requestConfig = props.chartConfig.requestConfig;
+  requestConfig.dimension.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  requestConfig.measure.forEach((element: fieldItem) => {
+    element.combinationMode = 1;
+    element.dataReturnMethod = 1;
+    delete element.columnType;
+  });
+  if (requestConfig.dataType === 1) {
+    return [...requestConfig.dimension, ...requestConfig.measure];
+  }
+  if (requestConfig.dataType === 2) {
+    return requestConfig.dimension;
+  }
+});
+
+watch(requestConfig, (newData, oldData) => {
+  if (
+    requestConfig.value?.length === 2 ||
+    (requestConfig.value?.length === 1 &&
+      props.chartConfig.requestConfig.dataType === 2)
+  ) {
+    DSService.getComponentData(newData).then((res: any) => {
+      nextTick(() => {
+        if (props.chartConfig.requestConfig.dataType === 1) {
+          option.dataset = res.data[0]['1'];
+          targetData.value = res.data[0]['2'] || 0;
+          resultData.value = (
+            Math.round((option.dataset / Number(targetData.value)) * 10000) /
+            100
+          ).toFixed(precision.value);
+        }
+        if (props.chartConfig.requestConfig.dataType === 2) {
+          option.dataset = res.data[0]['1'];
+          targetData.value = props.chartConfig.requestConfig.data as number;
+          resultData.value = (
+            Math.round((option.dataset / Number(targetData.value)) * 10000) /
+            100
+          ).toFixed(precision.value);
+        }
+      });
+    });
+  }
+});
+
+watch(
+  () => props.chartConfig.requestConfig.data,
+  (newData, oldData) => {
+    if (
+      props.chartConfig.requestConfig.dimension.length === 1 &&
+      props.chartConfig.requestConfig.dataType === 2
+    ) {
+      targetData.value = props.chartConfig.requestConfig.data as number;
+      resultData.value = (
+        Math.round((option.dataset / Number(targetData.value)) * 10000) / 100
+      ).toFixed(precision.value);
+    }
+  }
+);
+
+const { vChartRef } = useTargetPreviewRequest(
+  props.chartConfig,
+  resultData,
+  targetData
+);
 </script>
+
+<style lang="scss" scoped>
+.process-view {
+  position: absolute;
+  display: flex;
+  .process {
+    width: 100%;
+    height: 100%;
+  }
+  .traget {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    color: #ffffff;
+    display: flex;
+  }
+}
+</style>

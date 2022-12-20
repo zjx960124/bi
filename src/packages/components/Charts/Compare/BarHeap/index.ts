@@ -10,6 +10,7 @@ export const BarHeapConfig: ConfigType = {
   key: 'BarHeap',
   chartKey: 'VBarHeap',
   conKey: 'VCBarHeap',
+  dataKey: 'VDBarHeap',
   title: '堆积柱状图',
   category: GenreEnum.COMPARE,
   categoryName: GenreEnumName.COMPARE,

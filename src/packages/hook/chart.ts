@@ -38,7 +38,7 @@ export const expendSeries = (
 ) => {
   // tool fill方法就连cloneDeep后的数据都指向最初的指针地址
   option.series = Array.from(
-    new Array(option.dataset.dimensions.length - 1),
+    new Array(Object.keys(option.dataset.source).length - 1),
     () => cloneDeep(option.series)
   );
   theme && handleGradient(option.series, theme);
@@ -54,6 +54,7 @@ export const expendSeries = (
 export const formatterFunc = (option: string[], arrange: string) => {
   const options = option;
   return (params: any) => {
+    console.log(params);
     if (options.length < 1) {
       return '';
     } else {
@@ -105,7 +106,7 @@ export const mapFormatterFunc = (option: string[]) => {
       let result = '';
       options.forEach((item: string, index: number) => {
         index < options.length - 1 && index !== 0 && (result += ',');
-        result += params[item];
+        result += params[item] || '';
       });
       return result;
     }
@@ -117,18 +118,18 @@ export const mapFormatterFunc = (option: string[]) => {
  * @param option
  */
 export const handleMapSeries = (option: ChartConfigType) => {
-  option.series.forEach((item: any) => {
-    if (item.type === 'effectScatter' && option.dataset.point)
-      item.data = option.dataset.point;
-    else if (item.type === 'map' && option.dataset.point)
-      item.data = option.dataset.map;
-  });
-  if (option.series[1].label.show) {
-    option.series[1].label.formatter = mapFormatterFunc(
-      option.series[1].label.formatterOption
+  // option.series.forEach((item: any) => {
+  //   if (item.type === 'effectScatter' && option.dataset.point)
+  //     item.data = option.dataset.point;
+  //   else if (item.type === 'map' && option.dataset.point)
+  //     item.data = option.dataset.map;
+  // });
+  if (option.series[0]?.label?.show) {
+    option.series[0].label.formatter = mapFormatterFunc(
+      option.series[0].label.formatterOption
     );
   }
-  console.log(option);
+  option.visualMap.type = option.visualMapType;
   return option;
 };
 
@@ -186,6 +187,14 @@ export class PublicConfigClass implements PublicConfigType {
     this.attr.x = x;
     this.attr.y = y;
   }
+  // 设置请求数据
+  public requestConfig = {
+    DSID: '',
+    dimension: [],
+    measure: [],
+    measureLength: 5,
+    dimensionLength: 1,
+  };
 }
 
 /**

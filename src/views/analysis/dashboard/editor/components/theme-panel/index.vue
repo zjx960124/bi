@@ -20,6 +20,7 @@ export default {
                 v-for="item in list"
                 class="item"
                 :style="`background-color:${item.color}`"
+                @click="handleThemeSelect(item)"
               >{{item.name}}</div>
             </div>
           </el-scrollbar>
@@ -58,7 +59,9 @@ export default {
           <template #title>
             <span class="collapse-title">组件</span>
           </template>
-          <div class="content"></div>
+          <div class="content">
+            <!-- <component-configuration></component-configuration> -->
+          </div>
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -68,6 +71,9 @@ export default {
  
 <script setup lang='ts'>
 import { ref, reactive, toRefs } from 'vue';
+// import { ComponentConfiguration } from '@/views/editor/operation/editorConfigurations/componentConfiguration';
+
+const emit = defineEmits(['themeSelect']);
 
 const state = reactive({
   themeActiveItem: '1',
@@ -90,7 +96,14 @@ const state = reactive({
       color: '#23D8C2',
       name: '青草'
     }
-  ]
+  ],
+  layoutModels: { info: 0, size: '1000*1000', custom: '' },
+  stylesModels: {
+    colorSystem: 0,
+    gradualColor: true,
+    font: '',
+    borderRadius: 0
+  }
 });
 
 const {
@@ -100,6 +113,10 @@ const {
   componentsActiveItem,
   list
 } = toRefs(state);
+
+const handleThemeSelect = (item: any) => {
+  emit('themeSelect', item);
+};
 </script>
  
 <style lang="scss" scoped>

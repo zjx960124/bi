@@ -10,7 +10,7 @@ const themeColor = { color: 'customed' };
 export const seriesItem = {
   type: 'line',
   smooth: false,
-  showSymbol: false,
+  showSymbol: true,
   symbol: 'emptyCircle',
   symbolSize: 10,
   lineStyle: {
@@ -22,10 +22,10 @@ export const seriesItem = {
     },
   },
   label: {
-    show: false,
+    show: true,
     position: 'top',
-    fontSize: 12,
-    color: '#333333',
+    fontSize: 24,
+    color: '#ffffff',
     fontStyle: 'normal',
   },
   areaStyle: {
@@ -58,7 +58,7 @@ export const option = {
     nameLocation: 'center',
     nameGap: 30,
     nameTextStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -78,7 +78,13 @@ export const option = {
     nameLocation: 'center',
     nameGap: 30,
     nameTextStyle: {
-      color: '#333333',
+      color: '#FFFFFF',
+      fontSize: 12,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+    },
+    axisLabel: {
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -92,7 +98,8 @@ export const option = {
       },
     },
   },
-  dataset: { ...dataJson },
+  exhibition: 'vertical',
+  dataset: { source: dataJson },
   series: seriesItem,
 };
 

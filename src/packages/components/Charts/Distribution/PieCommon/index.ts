@@ -10,6 +10,7 @@ export const PieCommonConfig: ConfigType = {
   key: 'PieCommon',
   chartKey: 'VPieCommon',
   conKey: 'VCPieCommon',
+  dataKey: 'VDPieCommon',
   title: '饼图',
   category: GenreEnum.DISTRIBUTION,
   categoryName: GenreEnumName.DISTRIBUTION,

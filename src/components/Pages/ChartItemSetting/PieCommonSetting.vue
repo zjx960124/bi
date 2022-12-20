@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { ChevronUp } from '@vicons/ionicons5';
-import { PropType } from 'vue';
+import { PropType, reactive } from 'vue';
 import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
-import {
-  Coordinates,
-  PaintingCommon,
-  Shaft,
-  LegendCommon,
-} from '../components';
+import { option } from '@/packages/components/Charts/Distribution/PieCommon/config';
+import { Coordinates, LegendCommon } from '../components';
 import {
   chartColorsList,
   ChartColorsNameType,
@@ -15,7 +11,7 @@ import {
 
 const props = defineProps({
   optionData: {
-    type: Object as PropType<GlobalThemeJsonType>,
+    type: Object as PropType<GlobalThemeJsonType & typeof option>,
     required: true,
   },
   attr: {
@@ -34,6 +30,25 @@ const props = defineProps({
 
 const selectTheme = (theme: ChartColorsNameType) => {
   props.themeColor.color = theme;
+};
+
+const legendIconOption = reactive([
+  {
+    label: '圆形',
+    value: 'circle',
+  },
+  {
+    label: '方形',
+    value: 'rect',
+  },
+  {
+    label: '圆角方形',
+    value: 'roundRect',
+  },
+]);
+
+const selectIcon = (value: string) => {
+  props.optionData.legend.icon = value;
 };
 </script>
 <template>
@@ -60,6 +75,17 @@ const selectTheme = (theme: ChartColorsNameType) => {
     </n-collapse-item>
     <n-collapse-item title="图例" name="2">
       <legend-common :optionData="props.optionData"></legend-common>
+      <div class="common-item">
+        <div class="common-sub-title">图标</div>
+        <n-select
+          class="common-select"
+          v-model:value="props.optionData.legend.icon"
+          round
+          size="small"
+          :options="legendIconOption"
+          :on-update:value="selectIcon"
+        />
+      </div>
       <template #arrow>
         <n-icon size="16" color="#869299">
           <chevron-up />

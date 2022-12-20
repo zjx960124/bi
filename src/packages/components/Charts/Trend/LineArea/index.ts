@@ -10,6 +10,7 @@ export const LineAreaConfig: ConfigType = {
   key: 'LineArea',
   chartKey: 'VLineArea',
   conKey: 'VCLineArea',
+  dataKey: 'VDLineArea',
   title: '折线面积图',
   category: GenreEnum.TREND,
   categoryName: GenreEnumName.TREND,

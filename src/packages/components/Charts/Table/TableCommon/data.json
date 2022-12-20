@@ -1,0 +1,33 @@
+{
+  "columns": [
+    {
+      "label": "名字",
+      "key": "name"
+    },
+    {
+      "label": "年龄",
+      "key": "age"
+    },
+    {
+      "label": "地址",
+      "key": "address"
+    }
+  ],
+  "data": [
+    {
+      "name": "张",
+      "age": 18,
+      "address": "厦门"
+    },
+    {
+      "name": "陈",
+      "age": 18,
+      "address": "厦门"
+    },
+    {
+      "name": "李",
+      "age": 18,
+      "address": "厦门"
+    }
+  ]
+}

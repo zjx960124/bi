@@ -1,24 +1,29 @@
 <script setup lang="ts">
-import headerPlugin from "./headerPlugin";
-import { loadAsyncComponent } from "@/utils";
-import Project from "@/store/pageEditStore/pageEditStore";
-import { setLocalStorage, getLocalStorage } from "@/utils";
-import { useContextMenu } from "./charts/hooks/useContextMenu.hook";
-import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
-import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
-import { useRouter } from "vue-router";
+import headerPlugin from './headerPlugin';
+import { loadAsyncComponent } from '@/utils';
+import Project from '@/store/pageEditStore/pageEditStore';
+import { setLocalStorage, getLocalStorage } from '@/utils';
+import { useContextMenu } from './charts/hooks/useContextMenu.hook';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
+import { useRouter } from 'vue-router';
 import {
   ChevronBack,
   ArrowUndo,
   ArrowRedo,
   ImagesOutline,
-} from "@vicons/ionicons5";
-import { reactive, ref, computed, markRaw } from "vue";
-import { icon } from "@/plugins";
+} from '@vicons/ionicons5';
+import { reactive, ref, computed, nextTick } from 'vue';
+import { DSService } from '@/api/DS';
+import createImage, { generateImage } from '@/utils/hooks/usePreview';
 
-const charts = loadAsyncComponent(() => import("./charts/index.vue"));
-const pages = loadAsyncComponent(() => import("./pages/index.vue"));
-const operation = loadAsyncComponent(() => import("./operation/index.vue"));
+const charts = loadAsyncComponent(() => import('./charts/index.vue'));
+const pages = loadAsyncComponent(() => import('./pages/index.vue'));
+const operation = loadAsyncComponent(() => import('./operation/index.vue'));
+const Preview = loadAsyncComponent(() => import('@/views/preview/index.vue'));
+const showPreview = ref(false);
+const previewId = ref('');
+const previews = ref(null);
 
 const chartHistoryStore = useChartHistoryStore();
 const chartEditStore = useChartEditStore();
@@ -37,11 +42,11 @@ const { menuOptions, onClickOutSide, mousePosition, handleMenuSelect } =
 const sizeValue = ref<number>(0);
 const sizeOptions = reactive([
   {
-    label: "1920*1080（默认）",
+    label: '1920*1080(默认)',
     value: 0,
   },
   {
-    label: "1600*900",
+    label: '1600*900',
     value: 1,
   },
 ]);
@@ -53,25 +58,25 @@ const isForwardStack = computed(
 );
 const historyList = reactive([
   {
-    key: "backStack",
+    key: 'backStack',
     select: isBackStack,
-    title: "后退",
+    title: '后退',
     icon: ArrowUndo,
   },
   {
-    key: "forward",
+    key: 'forward',
     select: isForwardStack,
-    title: "前进",
+    title: '前进',
     icon: ArrowRedo,
   },
 ]);
 // 历史记录处理
 const clickHistoryHandle = (key: string) => {
   switch (key) {
-    case "backStack":
+    case 'backStack':
       chartEditStore.setBack();
       break;
-    case "forward":
+    case 'forward':
       chartEditStore.setForward();
       break;
   }
@@ -79,18 +84,56 @@ const clickHistoryHandle = (key: string) => {
 
 const previewHandle = () => {
   const projectInfo = Project.value.getProjectInfo();
-  const sessionStorageInfo = getLocalStorage(projectInfo.id) || {};
   setLocalStorage(projectInfo.id, projectInfo);
   const { href } = router.resolve({
-    path: "/preview",
+    path: '/preview',
     query: {
       id: projectInfo.id,
     },
   });
-  window.open(href, "_blank");
+  window.open(href, '_blank');
 };
 
-const changeProjectName = (e) => {
+const saveHandle = () => {
+  const projectInfo = Project.value.getProjectInfo();
+  setLocalStorage(projectInfo.id, projectInfo);
+  previewId.value = projectInfo.id;
+  showPreview.value = true;
+  nextTick(() => {
+    setTimeout(() => {
+      generateImage(previews)
+        .then((res) => {
+          console.log(res);
+          var blob = new Blob([res], {
+            type: 'image/jpeg',
+          });
+          const param = new FormData(); // 创建form对象
+          param.append('files', blob); // 通过append向form对象添加数据
+          DSService.uploadImage(param).then((res1: any) => {
+            console.log(res1);
+            if (res1.code === '200') {
+              const request = {
+                category: 1,
+                name: Project.value.getProjectName(),
+                dataFileFoldId: '',
+                code: JSON.stringify(Project.value.getProjectInfo()),
+                image: res1.data,
+              };
+              DSService.saveScreen(request).then((res2) => {
+                console.log(res2);
+                showPreview.value = false;
+              });
+            }
+          });
+        })
+        .catch((err) => {
+          showPreview.value = false;
+        });
+    }, 1000);
+  });
+};
+
+const changeProjectName = (e: any) => {
   if (e.target.innerHTML.length > 10) {
     let result = e.target.innerHTML.substr(0, 10);
     Project.value.setProjectName(result);
@@ -102,12 +145,16 @@ const changeProjectName = (e) => {
 const projectName = computed(() => {
   return Project.value.getProjectName();
 });
+
+const returnHome = () => {
+  router.push('/screenManage');
+};
 </script>
 <template>
   <div class="editor">
     <header-plugin>
       <template #left>
-        <n-button round color="#6D79FF" class="return-btn">
+        <n-button round color="#6D79FF" @click="returnHome" class="return-btn">
           <template #icon>
             <n-icon :component="ChevronBack"></n-icon>
           </template>
@@ -170,6 +217,11 @@ const projectName = computed(() => {
           </template>
           预览
         </n-button>
+        <img
+          class="preview-btn"
+          @click="saveHandle"
+          src="@/assets/screen/save.png"
+        />
       </template>
     </header-plugin>
     <main>
@@ -190,8 +242,24 @@ const projectName = computed(() => {
     :on-clickoutside="onClickOutSide"
     @select="handleMenuSelect"
   ></n-dropdown>
+
+  <!-- createVnode遇到未知问题,暂时用此办法 -->
+  <template v-if="showPreview">
+    <div class="preview-views" ref="previews">
+      <Preview :previewId="previewId"></Preview>
+    </div>
+  </template>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
+.preview-views {
+  position: fixed;
+  left: -100vw;
+  top: -100vh;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+}
+
 .editor {
   width: 100vw;
   height: 100vh;
@@ -199,7 +267,7 @@ const projectName = computed(() => {
   background: #f3f5ff;
   .screen-name {
     font-size: 24px;
-    font-family: "PingFang SC";
+    font-family: 'PingFang SC';
     font-weight: bold;
     color: #293270;
     padding-left: 44px;
@@ -212,7 +280,7 @@ const projectName = computed(() => {
     white-space: nowrap;
   }
   .screen-name::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 27px;
     top: 50%;
@@ -229,7 +297,7 @@ const projectName = computed(() => {
     & > span {
       color: #6b797f;
       font-size: 14px;
-      font-family: "PingFang SC";
+      font-family: 'PingFang SC';
       margin-right: 9px;
     }
   }
@@ -237,6 +305,8 @@ const projectName = computed(() => {
     width: 89px;
     height: 43px;
     padding: 0;
+    cursor: pointer;
+    margin-right: 19px;
   }
   main {
     overflow: hidden;

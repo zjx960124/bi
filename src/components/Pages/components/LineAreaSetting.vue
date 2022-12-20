@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, PropType, watch } from "vue";
-import { GlobalThemeJsonType } from "@/settings/chartThemes";
-import { GraphicClass } from "@/packages/hook/chart";
-import { chartColors, ChartColorsNameType } from "@/settings/chartThemes/index";
+import { ref, computed, PropType, watch } from 'vue';
+import { GlobalThemeJsonType } from '@/settings/chartThemes';
+import { GraphicClass } from '@/packages/hook/chart';
+import { chartColors, ChartColorsNameType } from '@/settings/chartThemes/index';
 
 const props = defineProps({
   optionData: {
@@ -11,8 +11,8 @@ const props = defineProps({
   },
   themeColor: {
     type: Object as PropType<{ color: ChartColorsNameType }>,
-    require: true
-  }
+    require: true,
+  },
 });
 const series = computed(() => {
   return props.optionData.series;
@@ -25,21 +25,30 @@ const switchGradient = (val: boolean) => {
   } else {
     series.value.areaStyle.opacity = 0;
   }
-}
+};
 </script>
 <template>
   <div class="common-item">
     <div class="common-sub-title">面积样式</div>
   </div>
   <div class="common-item">
-    <n-checkbox v-model:checked="series.areaStyle.openOpacity" :on-update:checked="switchGradient">开启渐变效果</n-checkbox>
+    <n-checkbox
+      v-model:checked="series.areaStyle.openOpacity"
+      :on-update:checked="switchGradient"
+      >开启渐变效果</n-checkbox
+    >
   </div>
   <div class="common-item">
     <div class="common-sub-title">透明度</div>
-    <n-slider class="common-slider" v-model:value="series.areaStyle.opacity" :step="0.1" :max="1" :min="0" />
+    <n-slider
+      class="common-slider"
+      :disabled="!series.areaStyle.openOpacity"
+      v-model:value="series.areaStyle.opacity"
+      :step="0.1"
+      :max="1"
+      :min="0"
+    />
     {{ series.areaStyle.opacity }}
   </div>
 </template>
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

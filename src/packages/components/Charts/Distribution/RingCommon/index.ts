@@ -10,6 +10,7 @@ export const RingCommonConfig: ConfigType = {
   key: 'RingCommon',
   chartKey: 'VRingCommon',
   conKey: 'VCRingCommon',
+  dataKey: 'VDRingCommon',
   title: '环状图',
   category: GenreEnum.DISTRIBUTION,
   categoryName: GenreEnumName.DISTRIBUTION,

@@ -12,7 +12,11 @@ import {
   loadingFinish,
   loadingError,
 } from '@/utils';
-import { fetchConfigComponent, fetchChartComponent } from '@/packages/index';
+import {
+  fetchConfigComponent,
+  fetchChartComponent,
+  fetchDataComponent,
+} from '@/packages/index';
 const chartEditStore = useChartEditStore();
 const props = defineProps({
   menuOptions: {
@@ -23,6 +27,7 @@ const props = defineProps({
 const dragStartHandle = (e: DragEvent, item: ConfigType) => {
   componentInstall(item.chartKey, fetchChartComponent(item));
   componentInstall(item.conKey, fetchConfigComponent(item));
+  componentInstall(item.dataKey, fetchDataComponent(item));
   e!.dataTransfer!.setData(
     DragKeyEnum.DRAG_KEY,
     JSON.stringify(omit(item, ['image']))
@@ -34,13 +39,18 @@ const dragendHandle = () => {
 };
 const dblclickHandle = async (item: ConfigType) => {
   try {
+    console.log(item);
     // loadingStart();
     // 动态注册图表组件
     componentInstall(item.chartKey, fetchChartComponent(item));
     componentInstall(item.conKey, fetchConfigComponent(item));
+    componentInstall(item.dataKey, fetchDataComponent(item));
     // 创建新图表组件
     let newComponent: CreateComponentType = await createComponent(item);
     // 添加
+
+    item.images && (newComponent.option.url = item.images);
+
     chartEditStore.addComponentList(newComponent, false, true);
     // 选中
     chartEditStore.setTargetSelectChart(newComponent.id);
@@ -75,30 +85,39 @@ const dblclickHandle = async (item: ConfigType) => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0 40px;
-  width: calc(100% - 80px);
+  padding-left: 17px;
+  width: 100%;
   box-sizing: border-box;
-  flex: 1;
+  flex-wrap: wrap;
+  height: 250px;
   .charts-item {
     width: 120px;
     cursor: pointer;
-    height: 100px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
     .item-img {
       width: 120px;
       height: 75px;
-      background: red;
+      padding: 5px;
+      box-sizing: border-box;
+      border: 1px solid rgba($color: #000000, $alpha: 0);
       & > img {
         width: 100%;
         height: 100%;
       }
     }
+    .item-img:hover {
+      border: 1px solid #6d79ff;
+    }
     .item-label {
       text-align: center;
       font-size: 12px;
       user-select: none;
+      color: #8386a1;
+      margin-top: 10px;
     }
   }
-  .charts-item + .charts-item {
+  .charts-item:nth-child(2n) {
     margin-left: 20px;
   }
 }

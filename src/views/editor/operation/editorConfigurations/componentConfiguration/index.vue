@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import {
-  AddCircleOutline,
-  ChevronUp,
   ChevronForward,
   ChevronBack,
   ColorPalette,
   DocumentText,
-} from "@vicons/ionicons5";
-import { useTargetData } from "@/utils/hooks/useTargetData";
-import { computed, ref } from "vue";
-import { LayoutData } from "../layoutData";
+} from '@vicons/ionicons5';
+import { useTargetData } from '@/utils/hooks/useTargetData';
+import { ref } from 'vue';
+import { Dimension } from './component/dimension';
+import { useDSData } from '@/utils/hooks/useDSData';
 const { targetData, chartEditStore } = useTargetData();
+const { DSList, targetRequestConfig } = useDSData();
 
-const activeTab = ref<string>("config");
+console.log(targetData);
+
+const activeTab = ref<string>('config');
 const handleActiveTab = (target: string): void => {
   activeTab.value = target;
 };
@@ -20,7 +22,7 @@ const handleActiveTab = (target: string): void => {
 const configurationFlag = ref<boolean>(true);
 const hiddenConfiguration = () => {
   configurationFlag.value = !configurationFlag.value;
-  chartEditStore.computedScale();
+  // chartEditStore.computedScale();
 };
 </script>
 <template>
@@ -66,19 +68,30 @@ const hiddenConfiguration = () => {
         </n-button-group>
       </div>
       <div class="configuration-view">
-        <layout-data
+        <!-- <layout-data
           v-show="activeTab === 'data'"
           :optionData="targetData.option"
-        ></layout-data>
+          :request-config="targetData.requestConfig"
+        ></layout-data> -->
+        <!-- <component
+          v-show="activeTab === 'data'"
+          :is="targetData.chartConfig.dataKey"
+          :optionData="targetData.option"
+          :request-config="targetRequestConfig"
+        ></component> -->
         <component
-          v-show="activeTab === 'config'"
-          :is="targetData.chartConfig.conKey"
+          :is="
+            activeTab === 'config'
+              ? targetData.chartConfig.conKey
+              : targetData.chartConfig.dataKey
+          "
           :attr="targetData.attr"
           :optionData="targetData.option"
           :themeColor="targetData.themeColor"
+          :request-config="targetRequestConfig"
         ></component>
       </div>
-      <div class="update-btn">更新</div>
+      <!-- <div class="update-btn">更新</div> -->
     </div>
     <div class="configuration-arrow" v-show="!configurationFlag">
       <n-icon
@@ -90,12 +103,14 @@ const hiddenConfiguration = () => {
     </div>
     <div class="information">
       <div class="information-titile">数据</div>
-      <div class="dimension"></div>
-      <div class="measure"></div>
+      <dimension
+        :DSList="DSList"
+        :request-config="targetRequestConfig"
+      ></dimension>
     </div>
   </div>
 </template>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .component-configuration-view {
   display: flex;
   height: 100%;
@@ -135,7 +150,7 @@ const hiddenConfiguration = () => {
           border-radius: 15px;
           :deep .n-collapse-item__header {
             color: #293270;
-            font-family: "PingFang-SC-Bold";
+            font-family: 'PingFang-SC-Bold';
             font-weight: bold;
             font-size: 14px;
             height: 33px;
@@ -198,21 +213,6 @@ const hiddenConfiguration = () => {
       color: #293270;
       font-size: 14px;
       flex-shrink: 0;
-    }
-    .dimension {
-      width: 100%;
-      height: 0;
-      flex: 403;
-      margin: 17px 0;
-      background: #ffffff;
-      border-radius: 15px;
-    }
-    .measure {
-      width: 100%;
-      height: 0;
-      flex: 513;
-      background: #ffffff;
-      border-radius: 15px;
     }
   }
 }

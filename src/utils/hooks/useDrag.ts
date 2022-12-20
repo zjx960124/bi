@@ -42,6 +42,8 @@ export const dragHandle = async (e: DragEvent) => {
     // 创建新图表组件
     let newComponent: CreateComponentType = await createComponent(dropData);
 
+    dropData.images && (newComponent.option.url = dropData.images);
+
     newComponent.setPosition(
       e.offsetX - newComponent.attr.w / 2,
       e.offsetY - newComponent.attr.h / 2
@@ -447,4 +449,9 @@ export const useMousePointHandle = (
 
   document.addEventListener('mousemove', mousemove);
   document.addEventListener('mouseup', mouseup);
+};
+
+// * 进入画布
+export const inRect = async (e: DragEvent) => {
+  
 };

@@ -36,19 +36,23 @@ const titleFontStyleFlag = ref({ type: false });
 const labelFontWeightFlag = ref({ type: false });
 const labelFontStyleFlag = ref({ type: false });
 const visualMapType = ref<string>('continuous');
-const visualColor = ref<number>(2);
+const visualColor = ref<number>(1);
+const piecewiseColor = ref<number>(0);
+const piecewiseColorOption = computed(() => {
+  const result = [];
+  for (let i = 0; i < props.optionData.visualMap.splitNumber; i++) {
+    result.push({ label: i + 1, value: i });
+  }
+  return result;
+});
 const visualColorOption = ref([
   {
     label: '最大值',
-    value: 2,
+    value: 1,
   },
   {
     label: '最小值',
     value: 0,
-  },
-  {
-    label: '中间值',
-    value: 1,
   },
 ]);
 
@@ -64,8 +68,9 @@ const switchCommon = (
 const selectVisualColor = (val: number) => {
   visualColor.value = val;
 };
-const changeVisualMapType = (val: string) => {
+const changeVisualType = (val: string) => {
   visualMapType.value = val;
+  props.optionData.visualMapType = val;
 };
 </script>
 <template>
@@ -121,13 +126,13 @@ const changeVisualMapType = (val: string) => {
               titleFontWeightFlag
             )
           "
-          :class="{ commonActive: titleFontWeightFlag.type }"
+          :class="{ commonActive: title.textStyle.fontWeight === 'bold' }"
         >
           B
         </div>
         <div
           class="commmon-switch-self"
-          :class="{ commonActive: titleFontStyleFlag.type }"
+          :class="{ commonActive: title.textStyle.fontStyle === 'oblique' }"
           @click="
             switchCommon(
               title.textStyle,
@@ -158,7 +163,7 @@ const changeVisualMapType = (val: string) => {
     </n-collapse-item>
     <n-collapse-item title="地理区域" name="2">
       <div class="common-item">
-        <n-checkbox v-model:checked="series[1].itemStyle.showHainanIsLands"
+        <n-checkbox v-model:checked="series[0].itemStyle.showHainanIsLands"
           >显示海南群岛</n-checkbox
         >
       </div>
@@ -167,7 +172,7 @@ const changeVisualMapType = (val: string) => {
         <n-color-picker
           class="common-color-picker"
           style="display: inline-block"
-          v-model:value="series[1].itemStyle.areaColor"
+          v-model:value="series[0].itemStyle.areaColor"
         >
           <template #label>
             <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
@@ -179,7 +184,7 @@ const changeVisualMapType = (val: string) => {
         <n-color-picker
           class="common-color-picker"
           style="display: inline-block"
-          v-model:value="series[1].itemStyle.borderColor"
+          v-model:value="series[0].itemStyle.borderColor"
         >
           <template #label>
             <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
@@ -201,35 +206,96 @@ const changeVisualMapType = (val: string) => {
           class="common-radio-group"
           v-model:value="props.optionData.visualMapType"
           name="radiogroup"
+          :on-update:value="changeVisualType"
         >
-          <n-space>
-            <n-radio key="1" value="continuous"> 连续型区间 </n-radio>
-            <n-radio key="2" value="piecewise"> 分段型区间 </n-radio>
-          </n-space>
+          <n-radio key="1" value="continuous"> 连续型区间 </n-radio>
+          <n-radio key="2" value="piecewise"> 分段型区间 </n-radio>
         </n-radio-group>
       </div>
       <div class="common-item">
         <div class="common-sub-title">颜色配置</div>
       </div>
       <div class="common-item">
-        <n-select
-          class="common-select"
-          v-model:value="visualColor"
-          round
+        <div class="common-space"></div>
+        最小值
+        <el-input-number
+          v-model="visualMap.min"
+          style="margin-left: 9px"
+          :min="0"
+          controls-position="right"
           size="small"
-          :options="visualColorOption"
-          :on-update:value="selectVisualColor"
         />
-        <n-color-picker
-          class="common-color-picker"
-          style="display: inline-block"
-          v-model:value="visualMap.inRange.color[visualColor]"
-        >
-          <template #label>
-            <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
-          </template>
-        </n-color-picker>
       </div>
+      <div class="common-item">
+        <div class="common-space"></div>
+        最大值
+        <el-input-number
+          v-model="visualMap.max"
+          style="margin-left: 9px"
+          controls-position="right"
+          size="small"
+        />
+      </div>
+      <template v-if="props.optionData.visualMapType === 'continuous'">
+        <div class="common-item">
+          <n-select
+            class="common-select"
+            v-model:value="visualColor"
+            round
+            size="small"
+            :options="visualColorOption"
+            :on-update:value="selectVisualColor"
+          />
+          <n-color-picker
+            class="common-color-picker"
+            style="display: inline-block"
+            v-model:value="visualMap.inRange.color[visualColor]"
+          >
+            <template #label>
+              <n-icon
+                :component="ChevronDown"
+                size="12"
+                color="#6B797F"
+              ></n-icon>
+            </template>
+          </n-color-picker>
+        </div>
+      </template>
+      <template v-if="props.optionData.visualMapType === 'piecewise'">
+        <div class="common-item">
+          <div class="common-space"></div>
+          分段数
+          <el-input-number
+            v-model="visualMap.splitNumber"
+            style="margin-left: 9px"
+            :min="1"
+            controls-position="right"
+            size="small"
+          />
+        </div>
+        <div class="common-item">
+          <n-select
+            class="common-select"
+            v-model:value="piecewiseColor"
+            round
+            size="small"
+            :options="piecewiseColorOption"
+          />
+          <n-color-picker
+            class="common-color-picker"
+            style="display: inline-block"
+            v-model:value="visualMap.inRange.color[piecewiseColor]"
+          >
+            <template #label>
+              <n-icon
+                :component="ChevronDown"
+                size="12"
+                color="#6B797F"
+              ></n-icon>
+            </template>
+          </n-color-picker>
+        </div>
+      </template>
       <template #arrow>
         <n-icon size="16" color="#869299">
           <chevron-up />
@@ -242,7 +308,7 @@ const changeVisualMapType = (val: string) => {
       </div>
       <div class="common-item">
         <div class="common-double-space"></div>
-        <n-checkbox-group v-model:value="series[1].label.formatterOption">
+        <n-checkbox-group v-model:value="series[0].label.formatterOption">
           <n-checkbox value="name" label="区域名称" />
           <n-checkbox value="value" label="度量" />
         </n-checkbox-group>
@@ -251,7 +317,7 @@ const changeVisualMapType = (val: string) => {
         <div class="common-double-space"></div>
         <div class="common-sub-title">文本</div>
         <el-input-number
-          v-model="series[1].label.fontSize"
+          v-model="series[0].label.fontSize"
           class="common-number-input"
           :min="1"
           :max="44"
@@ -261,7 +327,7 @@ const changeVisualMapType = (val: string) => {
         <n-color-picker
           class="common-color-picker"
           style="display: inline-block"
-          v-model:value="series[1].label.color"
+          v-model:value="series[0].label.color"
         >
           <template #label>
             <n-icon :component="ChevronDown" size="12" color="#6B797F"></n-icon>
@@ -275,7 +341,7 @@ const changeVisualMapType = (val: string) => {
           class="commmon-switch-self"
           @click="
             switchCommon(
-              series[1].label,
+              series[0].label,
               'fontWeight',
               labelFontWeightFlag.type ? 'normal' : 'bold',
               labelFontWeightFlag
@@ -290,7 +356,7 @@ const changeVisualMapType = (val: string) => {
           :class="{ commonActive: labelFontStyleFlag.type }"
           @click="
             switchCommon(
-              series[1].label,
+              series[0].label,
               'fontStyle',
               labelFontStyleFlag.type ? 'normal' : 'oblique',
               labelFontStyleFlag

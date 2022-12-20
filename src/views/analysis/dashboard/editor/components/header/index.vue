@@ -27,6 +27,7 @@ export default {
           class="boardSizeBox-value"
           placeholder="1000*1000（默认）"
           size="default"
+          @change="handleBoardSizeChange"
         >
           <el-option
             v-for="item in boardSizeOptions"
@@ -44,8 +45,9 @@ export default {
           placement="bottom"
         >
           <svg-icon
-            class-name="btn active"
+            :class-name="`btn ${isBackOff? 'active':''}`"
             icon="backOff"
+            @click="handleBackOff"
           ></svg-icon>
         </el-tooltip>
         <el-tooltip
@@ -55,8 +57,9 @@ export default {
           placement="bottom"
         >
           <svg-icon
-            class-name="btn"
+            :class-name="`btn ${isForward? 'active':''}`"
             icon="forward"
+            @click="handleForward"
           ></svg-icon>
         </el-tooltip>
       </div>
@@ -84,7 +87,7 @@ export default {
         </div>
         <div
           class="el-button-primary margin-left-10"
-          @click="handleSave"
+          @click="handleMore"
         >
           <img
             width="14"
@@ -98,39 +101,105 @@ export default {
 </template>
  
 <script setup lang='ts'>
-import { ref, reactive, toRefs } from 'vue';
+import { ref, reactive, toRefs, computed, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
 import router from '@/router';
+import Project from '@/store/pageEditStore/pageEditStore';
+import { setLocalStorage, getLocalStorage } from '@/utils';
+import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
+const chartEditStore = useChartEditStore();
+const chartHistoryStore = useChartHistoryStore();
+const canvasConfig = chartEditStore.getEditCanvasConfig;
 
 const state = reactive({
-  boardSize: '',
+  boardSize: '1000*1000',
   boardSizeOptions: [
     {
       id: 0,
-      label: '1920*1080',
-      value: '0'
+      label: '1000*1000',
+      value: '1000*1000'
     },
     {
       id: 1,
-      label: '2560*1440',
-      value: '1'
+      label: '1920*1080',
+      value: '1920*1080'
     },
     {
       id: 2,
+      label: '2560*1440',
+      value: '2560*1440'
+    },
+    {
+      id: 3,
       label: '3840*2160',
-      value: '3'
+      value: '3840*2160'
     }
   ]
 });
 
 const { boardSize, boardSizeOptions } = toRefs(state);
 
+onMounted(() => {
+  canvasConfig.width = 1000;
+  canvasConfig.height = 1000;
+});
+
+// 前进后退按钮
+const isBackOff = computed(() => chartHistoryStore.getBackStack.length > 1);
+const isForward = computed(() => chartHistoryStore.getForwardStack.length > 0);
+
 const handleBack = () => {
   router.go(-1);
 };
 
-const handlePreview = () => {};
+const handleBoardSizeChange = (value: any) => {
+  let sizes = value.split('*');
+  canvasConfig.width = sizes[0];
+  canvasConfig.height = sizes[1];
+};
 
-const handleSave = () => {};
+const handlePreview = () => {
+  const projectInfo = Project.value.getProjectInfo();
+  const sessionStorageInfo = getLocalStorage(projectInfo.id) || {};
+  setLocalStorage(projectInfo.id, projectInfo);
+  const { href } = router.resolve({
+    path: '/preview',
+    query: {
+      id: projectInfo.id
+    }
+  });
+  window.open(href, '_blank');
+};
+
+const handleSave = () => {
+  ElMessage({
+    type: 'success',
+    message: '保存成功'
+  });
+};
+
+// 历史记录处理
+const handleBackOff = () => {
+  if (!isBackOff) {
+    return;
+  }
+  chartEditStore.setBack();
+};
+
+const handleForward = () => {
+  if (!isForward) {
+    return;
+  }
+  chartEditStore.setForward();
+};
+
+const handleMore = () => {
+  ElMessage({
+    type: 'success',
+    message: '点击了更多'
+  });
+};
 </script>
  
 <style lang="scss" scoped>
@@ -208,6 +277,9 @@ const handleSave = () => {};
       }
       .active {
         color: #6d79ff;
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
     .operation {

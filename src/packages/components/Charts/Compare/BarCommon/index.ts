@@ -10,6 +10,7 @@ export const BarCommonConfig: ConfigType = {
   key: 'BarCommon',
   chartKey: 'VBarCommon',
   conKey: 'VCBarCommon',
+  dataKey: 'VDBarCommon',
   title: '柱状图',
   category: GenreEnum.COMPARE,
   categoryName: GenreEnumName.COMPARE,

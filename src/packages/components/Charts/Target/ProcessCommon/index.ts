@@ -9,6 +9,7 @@ export const ProcessCommonConfig: ConfigType = {
   chartKey: 'VProcessCommon',
   // 配置组件渲染 Components 格式: VC + key
   conKey: 'VCProcessCommon',
+  dataKey: 'VDProcessCommon',
   // 名称
   title: '进度条',
   // 子分类目录

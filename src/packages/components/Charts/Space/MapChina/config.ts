@@ -10,7 +10,6 @@ export const includes = [];
 const themeColor = { color: 'customed' };
 
 export const option = {
-  dataset: dataJson,
   title: {
     show: true,
     text: '',
@@ -27,17 +26,34 @@ export const option = {
     trigger: 'item',
   },
   geo: {
-    show: false,
+    show: true,
     type: 'map',
     roam: false,
     map: 'china',
+    label: {
+      normal: {
+        show: false,
+      },
+      emphasis: {
+        show: false,
+      },
+    },
+    itemStyle: {
+      normal: {
+        areaColor: '#031525',
+        borderColor: '#3B5077',
+      },
+      emphasis: {
+        areaColor: '#2B91B7',
+      },
+    },
   },
   legend: {
     show: true,
     top: '5%',
     legendPosition: 'top',
     textStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -46,31 +62,27 @@ export const option = {
   visualMapType: 'continuous',
   visualMap: {
     type: 'continuous',
+    splitNumber: 5,
+    show: true,
+    dimension: 0,
     min: 0,
-    max: 400,
+    max: 30000,
+    calculable: true,
     inRange: {
-      color: ['#121122', 'rgba(3,4,5,0.4)', 'red'],
+      color: ['#0217F9', '#FF0000'],
+    },
+    textStyle: {
+      color: '#ffffff',
     },
   },
+  // dataset: {
+  //   source: dataJson,
+  // },
   series: [
     {
-      type: 'effectScatter',
-      coordinateSystem: 'geo',
-      symbolSize: 6,
-      zlevel: 1,
-      label: {
-        show: false,
-      },
-      itemStyle: {
-        shadowBlur: 10,
-        color: '#00ECC8',
-      },
-      data: [],
-    },
-    {
-      name: '地图',
       type: 'map',
       map: 'china',
+      name: '2022',
       zoom: 1, //缩放
       itemStyle: {
         // 背景色
@@ -94,7 +106,16 @@ export const option = {
         fontStyle: 'normal',
         fontWeight: 'normal',
       },
-      data: [],
+      data: [
+        {
+          name: '福建省',
+          value: 10000,
+        },
+        {
+          name: '广东省',
+          value: 15000,
+        },
+      ],
     },
   ],
 };
@@ -108,4 +129,21 @@ export default class Config
   public chartConfig = MapChinaConfig;
   public option = echartOptionProfixHandle(option, includes);
   public themeColor = cloneDeep(markRaw(themeColor));
+
+  constructor() {
+    super();
+    this.requestConfig.dimension = [
+      {
+        columnName: '中国地图',
+        dataSetColumnName: '中国地图',
+        setDataType: 1,
+        originDataType: 1,
+        dataSetId: 21,
+        commentComment: '',
+        dataReturnMethod: 3,
+        combinationMode: 1,
+      },
+    ];
+    this.requestConfig.measureLength = 1;
+  }
 }

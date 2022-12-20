@@ -18,7 +18,7 @@ export const seriesItem = {
     formatterOption: [],
     formatterArrange: 'left',
     fontSize: 12,
-    color: '#333333',
+    color: '#ffffff',
     fontWeight: 'normal',
     fontStyle: 'normal',
   },
@@ -41,7 +41,7 @@ export const option = {
     top: '5%',
     legendPosition: 'top',
     textStyle: {
-      color: '#333333',
+      color: '#ffffff',
       fontSize: 12,
       fontWeight: 'normal',
       fontStyle: 'normal',
@@ -59,4 +59,9 @@ export default class Config
   public chartConfig = cloneDeep(RingCommonConfig);
   public option = echartOptionProfixHandle(option, includes);
   public themeColor = cloneDeep(markRaw(themeColor));
+
+  constructor() {
+    super();
+    this.requestConfig.measureLength = 1;
+  }
 }

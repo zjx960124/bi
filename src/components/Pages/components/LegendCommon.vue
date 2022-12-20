@@ -129,13 +129,13 @@ const switchCommon = (
           legendFontWeightFlag
         )
       "
-      :class="{ commonActive: legendFontWeightFlag.type }"
+      :class="{ commonActive: legend.textStyle.fontWeight === 'bold' }"
     >
       B
     </div>
     <div
       class="commmon-switch-self"
-      :class="{ commonActive: legendFontStyleFlag.type }"
+      :class="{ commonActive: legend.textStyle.fontStyle === 'oblique' }"
       @click="
         switchCommon(
           legend.textStyle,

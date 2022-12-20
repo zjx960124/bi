@@ -71,7 +71,36 @@ const packagesGenreListObj = {
       label: GenreEnumName.SPACE,
     },
   },
+  [PackagesCategoryEnum.TEXT]: {
+    Text: {
+      label: '文本',
+    },
+  },
+  [PackagesCategoryEnum.MATERIAL]: {
+    Header: {
+      label: '头部装饰',
+    },
+    Border: {
+      label: '区块边框',
+    },
+    Curoffline: {
+      label: '分割线',
+    },
+  },
+  [PackagesCategoryEnum.MEDIA]: {
+    Image: {
+      label: '图片',
+    },
+    Video: {
+      label: '视频',
+    },
+    Clock: {
+      label: '时钟',
+    },
+  },
 };
+
+console.log(getPackagesGenreList);
 
 // 处理列表
 const handlePackagesList = () => {

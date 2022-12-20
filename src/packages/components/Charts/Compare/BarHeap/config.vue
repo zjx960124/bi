@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed } from "vue";
+import { PropType, computed } from 'vue';
 import {
   CommonSetting,
   BarCommonSetting,
-} from "@/components/Pages/ChartItemSetting";
-import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
+} from '@/components/Pages/ChartItemSetting';
+import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
 
 const props = defineProps({
   optionData: {

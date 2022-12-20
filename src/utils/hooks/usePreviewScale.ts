@@ -1,4 +1,9 @@
 import throttle from 'lodash/throttle';
+import { isPreview } from '@/utils';
+import { ref, toRefs, nextTick } from 'vue';
+import type VChart from 'vue-echarts';
+import { CreateComponentType, ChartFrameEnum } from '@/packages/index.d';
+import { DSService } from '@/api/DS';
 
 // 拆出来是为了更好的分离单独复用
 
@@ -210,4 +215,80 @@ export const usePreviewFullScale = (
     windowResize,
     unWindowResize,
   };
+};
+
+/**
+ * echatrs预览发送请求
+ * @param targetComponent
+ * @param updateCallback
+ * @returns
+ */
+export const usePreviewRequest = (
+  targetComponent: CreateComponentType,
+  updateCallback?: (...args: any) => any
+) => {
+  const vChartRef = ref<typeof VChart | null>(null);
+
+  const { requestConfig } = toRefs(targetComponent);
+
+  const requestIntervalFn = () => {
+    DSService.getComponentData([
+      ...requestConfig.value.dimension,
+      ...requestConfig.value.measure,
+    ]).then((res: any) => {
+      nextTick(() => {
+        if (vChartRef.value) {
+          console.log('更新接口数据');
+          vChartRef.value.setOption({
+            dataset: {
+              source: res.data[0],
+            },
+          });
+        }
+      });
+    });
+  };
+
+  isPreview() && requestIntervalFn();
+  return { vChartRef };
+};
+
+/**
+ * target类型组件 发送请求
+ */
+export const useTargetPreviewRequest = (
+  targetComponent: CreateComponentType,
+  resultData?: any,
+  targetData?: any
+) => {
+  const vChartRef = ref<typeof VChart | null>(null);
+
+  const { requestConfig } = toRefs(targetComponent);
+
+  const requestIntervalFn = () => {
+    DSService.getComponentData([
+      ...requestConfig.value.dimension,
+      ...requestConfig.value.measure,
+    ]).then((res: any) => {
+      nextTick(() => {
+        if (vChartRef.value) {
+          console.log('更新接口数据');
+          console.log(res);
+          if (requestConfig.value.dataType === 1) {
+            targetData.value = res.data[0]['2'] || 0;
+            resultData.value =
+              Math.round((res.data[0]['1'] / targetData.value) * 10000) / 100;
+          }
+          if (requestConfig.value.dataType === 2) {
+            targetData.value = requestConfig.value.data as number;
+            resultData.value =
+              Math.round((res.data[0]['1'] / targetData.value) * 10000) / 100;
+          }
+        }
+      });
+    });
+  };
+
+  isPreview() && requestIntervalFn();
+  return { vChartRef };
 };

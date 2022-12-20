@@ -10,6 +10,7 @@ export const MapChinaConfig: ConfigType = {
   key: 'MapChina',
   chartKey: 'VMapChina',
   conKey: 'VCMapChina',
+  dataKey: 'VDMapChina',
   title: '地图',
   category: GenreEnum.SPACE,
   categoryName: GenreEnumName.SPACE,

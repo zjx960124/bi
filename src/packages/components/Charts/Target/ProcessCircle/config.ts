@@ -34,7 +34,7 @@ export const option = {
   dataset: 36,
   // 默认类型
   type: 'circle',
-  height: 24,
+  height: 8,
   // 主颜色
   color: '#4992FFFF',
   // 轨道颜色
@@ -54,6 +54,15 @@ export const option = {
   offsetDegree: 0,
   fillBorderRadius: 12,
   animationFlag: true,
+  customType: false,
+  exhibition: 'row',
+  customCurrentLabel: '',
+  customTargetLabel: '',
+  customMargginTop: 5,
+  customFontSize: 12,
+  customFontColor: '#ffffff',
+  customFontStyle: 'normal',
+  customFontWeight: 'normal',
 };
 
 export default class Config
@@ -64,4 +73,11 @@ export default class Config
   public attr = { ...chartInitConfig, h: 500, zIndex: -1 };
   public chartConfig = cloneDeep(ProcessCircleConfig);
   public option = cloneDeep(option);
+
+  constructor() {
+    super();
+    this.requestConfig.dataType = 1;
+    this.requestConfig.data = 10;
+    this.requestConfig.measureLength = 1;
+  }
 }

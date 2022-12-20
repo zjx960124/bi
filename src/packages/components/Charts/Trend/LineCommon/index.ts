@@ -10,6 +10,7 @@ export const LineCommonConfig: ConfigType = {
   key: 'LineCommon',
   chartKey: 'VLineCommon',
   conKey: 'VCLineCommon',
+  dataKey: 'VDLineCommon',
   title: '折线图',
   category: GenreEnum.TREND,
   categoryName: GenreEnumName.TREND,

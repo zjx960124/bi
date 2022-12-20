@@ -247,6 +247,7 @@ onMounted(() => {
       display: flex;
       justify-content: space-between;
       cursor: pointer;
+      color: #6b797f;
       & .item-info {
         width: calc(100% - 46px);
         height: 100%;
@@ -270,14 +271,10 @@ onMounted(() => {
       }
       &.active {
         background: #f3f5ff;
+        color: #293270;
         .title {
           font-weight: bold;
           color: #293270;
-        }
-        .icondatalist {
-          :deep(".svg-icon") {
-            fill: #293270 !important;
-          }
         }
       }
       & .item-btn {

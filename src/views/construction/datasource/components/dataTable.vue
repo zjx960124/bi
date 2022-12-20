@@ -72,6 +72,7 @@
               type="primary"
               size="small"
               icon="Download"
+              @click="downLoadData(row)"
             >
               下载
             </el-button>
@@ -329,6 +330,16 @@ const openSQLdetail = async (val: any) => {
   });
   drawDataList.value = data;
   drawInfo.value = { type: "detail", drawer: true };
+};
+
+//下载数据
+const downLoadData = (val: any) => {
+  let url = `/rest/bi/template/downloadData/${val.id}/${datasource.value?.id}`;
+  var down = document.createElement("a");
+  down.href = url;
+  document.body.appendChild(down);
+  down.click();
+  down.remove();
 };
 
 //抽屉框数据

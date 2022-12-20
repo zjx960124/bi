@@ -6,7 +6,7 @@
     @close="handleClose"
   >
     <template #header>
-      <div class="header-title-left">增加数据</div>
+      <div class="header-title-left">替换数据</div>
     </template>
     <div class="datasource-set-content">
       <el-form
@@ -21,7 +21,10 @@
             ref="uploadRef"
             class="upload-file"
             action=""
+            :limit="1"
             :auto-upload="false"
+            accept=".xlsx,.xls,.csv"
+            :on-change="fileChange"
           >
             <template #trigger>
               <el-button type="primary" class="upload-button"

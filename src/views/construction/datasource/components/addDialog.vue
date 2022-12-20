@@ -16,7 +16,6 @@
         :auto-upload="false"
         accept=".xlsx,.xls,.csv"
         :on-change="fileChange"
-        multiple
       >
         <el-button type="primary">上传文件</el-button>
         <template #tip>

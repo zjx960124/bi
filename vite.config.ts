@@ -65,12 +65,13 @@ export default defineConfig({
   },
   server: {
     https: false,
-    open: true,
+    open: false,
     host: '0.0.0.0',
     port: 8001,
     proxy: {
       '/rest': {
         target: 'http://192.168.1.101:10001', // 后台接口
+        // target: 'http://10.0.0.18:', // 后台接口
         changeOrigin: true,
         // secure: false, // 如果是https接口，需要配置这个参数
         // ws: true, //websocket支持

@@ -1,132 +1,209 @@
 <template>
   <div class="excel-create-container">
     <div class="left">
-      <el-button
-        type="primary"
-        class="left-button"
-      >
+      <el-button type="primary" class="left-button" @click="goBack">
         <el-icon>
           <ArrowLeft />
         </el-icon>返回
       </el-button>
       <div class="upload-file-container">
-        <div class="title">新建Excel数据集/替换数据/追加数据</div>
-        <div class="container-content-title">
-          选择数据
-          <el-popover
-            placement="right"
-            :width="400"
-            trigger="hover"
-          >
-            <template #reference>
-              <img src="~@/assets/data/warning.png" />
-            </template>
-            <div class="popover-content">
-              <p>1、Excel文件中不能存在合并单元格；</p>
-              <p>2、Excel文件的第一行为标题行，不能为空，不能为日期型；</p>
-              <p>3、文件大小请确保在500M以内；</p>
-            </div>
-          </el-popover>
-        </div>
         <div class="content-list">
-          <div class="item active">
-            <span>222222222222222</span>
-            <el-icon>
-              <Close />
-            </el-icon>
+          <div class="content-list-title">
+            <span><img src="@/assets/data/search-sql.png" class="search" /><span>当前数据源</span></span>
+            <img src="@/assets/data/rest.png" class="rest" @click="getAllDataSource" />
+          </div>
+          <div class="list-box" v-loading="dataLoading">
+            <el-scrollbar style="height: 700px;" v-if="dataList && dataList.length > 0">
+              <div class="item" v-for="(item, idx) in dataList" :class="{ active: currentIndex === idx }"
+                @click="sqlClick(item, idx)">
+                <span>{{ item?.dataSourceShowName }}</span>
+              </div>
+            </el-scrollbar>
+            <el-empty v-else :image="noImgUrl" class="datasource-empty" description="暂无内容" />
           </div>
         </div>
-        <el-upload
-          ref="uploadRef"
-          class="upload-file"
-          action=""
-          :limit="1"
-          :auto-upload="false"
-          v-if="dataList && dataList.length == 0"
-        >
-          <template #trigger>
-            <el-button
-              type="primary"
-              class="upload-button"
-            ><img src="~@/assets/data/upload.png" />上传文件</el-button>
-          </template>
-        </el-upload>
       </div>
     </div>
     <div class="right">
-      <div class="right-title">
-        <span>未命名仪表盘</span>
-        <el-button type="primary">保存</el-button>
-      </div>
-      <div class="right-content">
-        <el-empty
-          :image="imgUrl"
-          v-if="dataList && dataList.length == 0"
-          class="datasource-empty"
-          description="请先上传Excel数据"
-        />
-        <div class="tableBox el-common-tableBox">
-          <el-table
-            :data="tableData"
-            align="center"
-            fit
-            :highlight-current-row="false"
-            :border="false"
-            show-overflow-tooltip
-            style="width: 100%"
-          >
-            <el-table-column
-              prop="name"
-              label="名称"
-              min-width="120"
-              align="center"
-            />
-            <el-table-column
-              prop="name"
-              label="名称"
-              min-width="120"
-              align="center"
-            />
-            <el-table-column
-              prop="name"
-              label="名称"
-              min-width="120"
-              align="center"
-            />
-
-            <el-table-column
-              prop="name"
-              label="名称"
-              min-width="120"
-              align="center"
-            />
-            <el-table-column
-              prop="name"
-              label="名称"
-              min-width="120"
-              align="center"
-            />
-          </el-table>
-          <el-pagination
-            class="pagination"
-            background
-            layout="->,prev, pager, next, total, sizes,jumper"
-            :total="1000"
-          />
+      <section v-if="dataSourceShowName && dataSourceShowName.length > 0">
+        <!-- 表标题及操作按钮 -->
+        <div class="right-title">
+          <span>{{ dataSourceShowName }}</span>
+          <div class="workBox">
+            <el-button type="primary" style="height: 43px;width: 89px;border-radius: 22px;" @click="sqlSave">
+              <img src="@/assets/data/sql-save.png" style="width: 16px;margin-right: 8px;" />
+              保存
+            </el-button>
+          </div>
         </div>
-      </div>
+        <!-- 表标题及操作按钮 -->
+        <div class="right-content">
+          <div class="tableBox el-common-tableBox">
+            <!-- 内容数据 -->
+            <el-table :data="tableData" :height="680" align="center" fit :highlight-current-row="false" :border="false"
+               style="width: 100%">
+              <el-table-column v-for="(it, idx) in headers" :key="idx" :prop="it.fieldName" :label="it.showName"
+                :min-width="it.minWidth" align="center" :show-overflow-tooltip="true"/>
+            </el-table>
+            <div style="display:flex;justify-content:center;margin-top: 5px;">
+              <el-pagination class="pagination" background layout="->,prev, pager, next, total, sizes,jumper"
+                :total="page.counts" :page-size="page.pageSize" :current-page="page.pageNum"
+                @current-change="currentChange" @size-change="sizeChange" />
+            </div>
+            <!-- 内容数据 -->
+          </div>
+        </div>
+      </section>
+      <!-- 暂无数据模块 -->
+      <el-empty v-else :image="excelImgUrl" class="datasource-empty" description="暂无内容" />
+      <!-- 暂无数据模块 -->
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import noData from '@/assets/data/excelNo.png';
-import { ref } from 'vue';
-const imgUrl = ref(noData);
+import excelData from '@/assets/data/excelNo.png';
+import noData from '@/assets/data/noData.png';
+import { ref, onMounted, reactive, toRefs, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import { DataSource } from '@/api/dataSource';
+import { addDataSetOrFileFolder, getDataByTableId } from '@/api/dataset';
+import { checkDatasourceType, headerType } from '@/views/construction/types';
 
-const dataList = ref([{}]);
+//暂无数据图片
+const excelImgUrl = ref(excelData);
+const noImgUrl = ref(noData);
+//左侧表数据列表
+let dataList = ref<Array<checkDatasourceType>>();
+let currentIndex = ref<number>();
+let dataLoading = ref<boolean>(false);
+//获取地址栏参数
+const route = useRoute();
+const router = useRouter();
+const { fileName, id, type } = route.query;
+let fileShowName = ref();
+if (fileName) {
+  fileShowName.value = fileName;
+}
+let parentId = ref();
+if (id) {
+  parentId.value = id;
+}
+let typeName = ref();
+if (type) {
+  typeName.value = type;
+}
 
-const tableData = ref([{}, {}, {}]);
+
+//右侧数据
+const State = reactive({
+  //数据源id
+  dataSourceId: 0,
+  //数据源名称
+  dataSourceShowName:'',
+  //表格数据
+  tableData: [],
+  headers: [] as Array<headerType>,
+});
+
+const { dataSourceId, dataSourceShowName,tableData, headers } = toRefs(State)
+
+const { getDatasourceList, getAllExcelDataByDataSourceId } = DataSource;//数据源接口
+
+//获取所有数据源
+const getAllDataSource = async () => {
+  const {
+    data: { counts, data },
+  } = await getDatasourceList({ pageNum: 0, pageSize: 9999, accessType: 2 });
+  if (counts > 0) {
+    dataList.value = data;
+  }
+}
+
+
+//数据库数据集-通过表名获取数据
+let page = ref({
+  pageNum: 1,
+  pageSize: 10,
+  counts: 0
+})
+const getMySqlTableData = async () => {
+  const { data: { data, counts } } = await getAllExcelDataByDataSourceId({
+    pageNum: page.value.pageNum - 1,
+    pageSize: page.value.pageSize,
+    dataSourceId: dataSourceId.value,
+  });
+  if (counts > 0) {
+    const arr = data;
+    let ars = [] as any;
+    Object.keys(arr[0]).forEach((it) => {
+      ars.push({
+        fieldName: it,
+        minWidth: 240,
+        showName: it,
+      })
+    });
+    headers.value = ars;
+    tableData.value = arr;
+    page.value.counts = counts;
+  }
+}
+
+const currentChange = (val: any) => {
+  page.value.pageNum = val;
+  getMySqlTableData();
+}
+
+const sizeChange = (val: any) => {
+  page.value.pageSize = val;
+  getMySqlTableData();
+}
+
+//点击表获取sql数据
+const sqlClick = (val: any, key: number) => {
+  currentIndex.value = key;
+  dataSourceId.value = val.id;
+  dataSourceShowName.value = val.dataSourceShowName
+  getMySqlTableData();
+}
+
+
+//保存
+const sqlSave = async () => {
+  const { data } = await addDataSetOrFileFolder({
+    "createTime": "",
+    "creator": "",
+    "dataSetType": type,
+    "datasourceId": dataSourceId.value,
+    "excelFileUrl": "",
+    "id": 0,
+    "isDeleted": 0,
+    "isFileFolder": 2,
+    "name": fileName,
+    "parentId": parentId.value,
+    "sqlContent": '',
+    "status": 0,
+    "tableName": dataSourceShowName.value,
+    "updateTime": "",
+    "updater": ""
+  });
+  if (data && Object.keys(data).length > 0) {
+    ElMessage.success('保存成功');
+    router.push('/dataset/list')
+  }
+}
+
+
+//返回上一页
+const goBack = () => {
+  window.history.go(-1);
+}
+
+onMounted(() => {
+  getAllDataSource();//获取所有数据源
+})
+
 </script>
 <style scoped lang="scss">
 .excel-create-container {
@@ -134,11 +211,13 @@ const tableData = ref([{}, {}, {}]);
   height: calc(100vh - 80px);
   display: flex;
   justify-content: space-between;
+
   & .left {
     width: 264px;
     height: 100%;
     background: transparent;
     border-radius: 15px;
+
     .el-button.left-button {
       width: 100%;
       display: flex;
@@ -154,47 +233,74 @@ const tableData = ref([{}, {}, {}]);
       background: #ffffff;
       border-radius: 15px;
       margin-top: 15px;
-      & > .title {
-        font-size: 14px;
-        font-family: 'PingFang SC';
-        font-weight: bold;
-        color: #293270;
-        line-height: 30px;
-        text-align: center;
-      }
-      & > .container-content-title {
-        text-align: left;
-        padding: 0 15px;
-        box-sizing: border-box;
-        font-size: 12px;
-        font-family: 'PingFang SC';
-        font-weight: 400;
-        color: #6b797f;
-        line-height: 30px;
-        & > img {
-          // margin-left: 12px;
-        }
-      }
+      padding-top: 12px;
+      box-sizing: border-box;
 
-      & > .content-list {
+      &>.content-list {
         width: 100%;
-        // padding: 0 15px;
         box-sizing: border-box;
-        & > .item {
-          text-align: left;
-          cursor: pointer;
-          color: #6b797f;
+        // padding: 0 15px;
+
+        & .content-list-title {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 15px;
-          &.active {
-            color: #fff;
-            background: linear-gradient(
-              90deg,
-              rgba(91, 101, 195, 0.8) 0%,
-              rgba(122, 133, 255, 0.3) 100%
-            );
+          height: 25px;
+          padding: 0 15px;
+          box-sizing: border-box;
+
+          & span {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            font-size: 14px;
+            font-family: "PingFang SC";
+            font-weight: bold;
+            color: #293270;
+            line-height: 30px;
+          }
+
+          & img.search {
+            width: 22px;
+          }
+
+          & img.rest {
+            width: 19px;
+            cursor: pointer;
+          }
+        }
+
+        & .list-box {
+          width: 100%;
+          height: auto;
+          display: flex;
+          flex-direction: column;
+
+          & .item {
+            width: 100%;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 25px;
+            box-sizing: border-box;
+            cursor: pointer;
+
+            & img {
+              width: 14px;
+              margin-right: 12px;
+            }
+
+            font-size: 12px;
+            font-family: "PingFang SC";
+            font-weight: 400;
+            color: #6B797F;
+            line-height: 30px;
+
+            &.active {
+              color: #293270;
+              background: #F3F5FF;
+            }
           }
         }
       }
@@ -206,6 +312,8 @@ const tableData = ref([{}, {}, {}]);
     height: 100%;
     background: transparent;
     border-radius: 15px;
+    position: relative;
+
     & .right-title {
       width: 100%;
       display: flex;
@@ -219,6 +327,7 @@ const tableData = ref([{}, {}, {}]);
       position: relative;
       padding-left: 15px;
       box-sizing: border-box;
+
       &::before {
         content: '';
         position: absolute;
@@ -236,53 +345,191 @@ const tableData = ref([{}, {}, {}]);
         border-radius: 16px;
       }
     }
-    & .right-content {
+
+    section {
+      height: 100%;
+    }
+
+    .right-content {
       width: 100%;
       height: calc(100% - 60px);
       background: #ffffff;
       border-radius: 15px;
       margin-top: 15px;
       position: relative;
-      .datasource-empty {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+    }
+
+    .sql-input-box {
+      width: 100%;
+      height: auto;
+      padding: 15px;
+    }
+
+    .tableBox {
+      padding: 0 15px;
+      box-sizing: border-box;
+      width: 100%;
+      // height: calc(100% - 190px) !important;
+      display: inline-block;
+
+      .tableBox-title {
+        width: 100%;
+        height: 35px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        & .title {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          font-size: 14px;
+          font-family: "PingFang SC";
+          font-weight: bold;
+          color: #293270;
+          line-height: 30px;
+
+          &>img {
+            width: 34px;
+            margin-right: 8px;
+          }
+        }
+
+        & .workspace {
+          &>.el-button {
+            width: 101px;
+            height: 27px;
+            background: #FFFFFF;
+            border: 1px solid #DCDDE0;
+            border-radius: 14px;
+
+            img {
+              width: 17px;
+              margin-right: 4px;
+            }
+
+            :deep(span) {
+              font-size: 14px;
+              font-family: "PingFang SC";
+              font-weight: 500;
+              color: #BBBCBB;
+              line-height: 30px;
+            }
+          }
+        }
+      }
+
+      .table-status {
+        height: 300px;
+        background: #FFFFFF;
+        border: 2px solid #FF0100;
+        border-radius: 15px;
+        padding: 12px;
+        box-sizing: border-box;
+        overflow: auto;
+
+        & .status-title {
+          width: 100%;
+          height: auto;
+          display: flex;
+          flex-direction: column;
+
+          & div.title {
+            display: flex;
+            font-size: 14px;
+            font-family: "PingFang SC";
+            font-weight: bold;
+            color: #FF0100;
+            align-items: center;
+
+            & img {
+              width: 16px;
+              margin-right: 8px;
+            }
+          }
+
+          & div.info {
+            font-size: 14px;
+            font-family: "PingFang SC";
+            font-weight: bold;
+            color: #FF0100;
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+          }
+        }
+
+        .detail {
+          font-size: 14px;
+          font-family: "PingFang SC";
+          font-weight: bold;
+          color: #FF0100;
+          line-height: 30px;
+          display: flex;
+          justify-content: flex-start;
+        }
+
+        .detail-desc {
+          font-size: 14px;
+          font-family: "PingFang SC";
+          font-weight: bold;
+          color: #FF0100;
+          text-align: left;
+        }
       }
     }
+
+
+    .datasource-empty {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 }
 
-.popover-content {
-  font-size: 12px;
-  font-family: 'PingFang SC';
-  font-weight: 400;
-  color: #6b797f;
-  line-height: 30px;
-}
-
-.upload-file {
+.elSelectValue {
   width: 100%;
-  padding: 0 15px;
-  box-sizing: border-box;
-  .upload-button {
-    width: 113px;
-    height: 31px;
-    border-radius: 16px;
-    margin-top: 12px;
-    border-color: #7c87ff;
-    &:hover {
-      background: rgba($color: #7c87ff, $alpha: 0.8);
-      border-color: #7c87ff;
-    }
-    & img {
-      margin-right: 8px;
-    }
+  height: 29px;
+
+  ::v-deep .el-input__wrapper {
+    background: #FFFFFF;
+    border: 1px solid #D5D5DE;
+    border-radius: 12px;
+    box-shadow: unset;
+    height: 29px;
   }
 }
 
-.tableBox {
-  padding: 0 15px;
-  box-sizing: border-box;
+.turn {
+  animation: turn 10s linear infinite;
+}
+
+@keyframes turn {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(72deg);
+  }
+
+  40% {
+    transform: rotate(144deg);
+  }
+
+  60% {
+    transform: rotate(216deg);
+  }
+
+  80% {
+    transform: rotate(288deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -3,12 +3,7 @@
     <template #operation>
       <div class="searchBox">
         <img width="22" height="21" src="~@/assets/analysis/search.png" />
-        <el-input
-          class="input"
-          v-model="searchValue"
-          clearable
-          placeholder="共X个文件"
-        >
+        <el-input class="input" v-model="searchValue" clearable placeholder="共X个文件">
         </el-input>
       </div>
       <div class="el-button-primary margin-left-22" @click="openDraw">
@@ -17,17 +12,11 @@
       </div>
       <el-dropdown class="margin-left-22" v-if="datasource?.accessType == 2">
         <el-button type="primary">
-          <img
-            width="18"
-            height="18"
-            src="~@/assets/data/editexcel.png"
-          />编辑EXCEL
+          <img width="18" height="18" src="~@/assets/data/editexcel.png" />编辑EXCEL
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="openRelpaceDialog"
-              >替换数据</el-dropdown-item
-            >
+            <el-dropdown-item @click="openRelpaceDialog">替换数据</el-dropdown-item>
             <el-dropdown-item @click="openAddDialog">增加数据</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -44,14 +33,14 @@
       </div>
     </template>
   </JsLayout>
-  <addDialog ref="addDialogs" @restData="restData"/>
+  <addDialog ref="addDialogs" @restData="restData" />
   <replaceDialog ref="replaceDialogs" />
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import dataList from "./components/dataList.vue";
-import dataTable from "./components/dataTable.vue";
+import dataList from "./components/dataList.vue";//左侧列表
+import dataTable from "./components/dataTable.vue";//右侧表格
 import addDialog from "./components/addDialog.vue";
 import replaceDialog from "./components/replaceDialog.vue";
 import { drawerTypes, checkDatasourceType } from "../types/index";
@@ -76,23 +65,16 @@ const openRelpaceDialog = () => {
   replaceDialogs.value.initData();
 };
 
-//获取数据源类型
+//获取数据源类型(左侧列表)
 const { getTableByDataSourceId } = DataSource;
 const datasource = ref<checkDatasourceType>();
 const getDatasourceType = async (val: checkDatasourceType) => {
-  const { data } = await getTableByDataSourceId({
-    dataSourceId: val.id,
-  });
-  if (data && data.length > 0) {
-    let tableName = data[0].tableName;
-    datasource.value = val;
-    datasource.value["tableName"] = tableName;
-  }
+  datasource.value = val;
 };
 
 //刷新
-const restData = ()=>{
-  
+const restData = () => {
+
 }
 </script>
 <style scoped lang="scss">
@@ -101,12 +83,13 @@ const restData = ()=>{
   height: calc(100vh - 180px);
   display: flex;
   justify-content: space-between;
-  & > .left {
+
+  &>.left {
     width: 284px;
     margin-right: 14px;
   }
 
-  & > .right {
+  &>.right {
     width: calc(100% - 300px);
   }
 }
@@ -122,9 +105,11 @@ const restData = ()=>{
   padding: 0 17px;
   background: #ffffff;
   border-radius: 22px;
+
   .input {
     :deep(.el-input__wrapper) {
       box-shadow: none;
+
       .el-input__inner {
         padding: 0 12px;
         border: none;
@@ -140,6 +125,7 @@ const restData = ()=>{
     height: 100%;
     border-radius: 22px;
     padding: 0 16px;
+
     & img {
       margin-right: 8px;
     }

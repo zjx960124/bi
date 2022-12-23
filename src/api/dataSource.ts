@@ -104,6 +104,10 @@ export class DataSource {
     return Request(`/rest/bi/getTableByDataSourceId/${params.dataSourceId}`, {
       method: 'get',
       responseType: 'json',
+      params: {
+        pageNum: params.pageNum,
+        pageSize: params.pageSize,
+      },
     });
   }
   //根据数据源id与表信息名称查询字段信息
@@ -113,6 +117,10 @@ export class DataSource {
       {
         method: 'get',
         responseType: 'json',
+        params: {
+          pageNum: params.pageNum,
+          pageSize: params.pageSize,
+        },
       }
     );
   }

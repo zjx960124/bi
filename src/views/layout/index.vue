@@ -8,14 +8,12 @@
         <navbar />
       </div>
       <div class="layout-container-main">
-        <!-- <transition name="fade-transform" mode="out-in">
-          <router-view :key="path" />
-        </transition> -->
-        <router-view v-slot="{ Component }">
+        <router-view />
+        <!-- <router-view v-slot="{ Component }">
           <transition name="fade-transform" mode="out-in">
             <component :is="Component" />
           </transition>
-        </router-view>
+        </router-view> -->
       </div>
     </div>
   </div>
@@ -53,15 +51,18 @@ watch(
   justify-content: flex-start;
   align-items: center;
   background-color: #f3f5ff;
+
   .layout-container-left {
     width: 260px;
     height: 100%;
     background: #0e1337;
     border: 1px solid #364059;
   }
+
   .layout-container-right {
     width: calc(100vw - 260px);
     height: 100%;
+
     .layout-container-main {
       margin: auto 15px;
     }

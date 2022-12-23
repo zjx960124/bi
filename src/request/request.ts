@@ -1,7 +1,18 @@
 // http.ts
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponseHeaders } from 'axios';
 import { config } from '../config'; // 引入config
 import { ElMessage } from 'element-plus';
+
+interface AxiosResponse<T = any, D = any> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: AxiosResponseHeaders;
+  config: AxiosRequestConfig<D>;
+  request?: any;
+  code?: number | string
+  msg?: string
+}
 
 const showStatus = (status: number) => {
   let message = '';
@@ -105,7 +116,7 @@ service.interceptors.response.use(
     let msg = '';
     // 单点登录
     console.log(import.meta.env.VITE_APP_BASE_URL);
-    console.log(response);
+    // console.log(response);
     if (response.data.code == 302) {
       // login();
       // return;

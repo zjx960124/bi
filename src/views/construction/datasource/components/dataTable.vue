@@ -1,94 +1,37 @@
 <template>
   <div class="datatable-container-box">
-    <div
-      class="tableBox el-common-tableBox"
-      v-if="datasource && Object.keys(datasource).length > 0"
-    >
-      <el-table
-        v-if="datasource?.accessType === 1"
-        :data="tableData"
-        align="center"
-        fit
-        show-overflow-tooltip
-        :highlight-current-row="false"
-        :border="false"
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="tableName"
-          label="名称"
-          min-width="120"
-          align="center"
-          width="auto"
-        />
+    <div class="tableBox el-common-tableBox" v-if="datasource && Object.keys(datasource).length > 0">
+      <el-table v-if="datasource?.accessType === 1" :data="tableData" align="center" fit show-overflow-tooltip
+        :highlight-current-row="false" :border="false" v-loading="loading" style="width: 100%">
+        <el-table-column prop="tableName" label="名称" min-width="120" align="center" width="auto" />
         <el-table-column label="操作" width="300" align="center">
           <template #default="{ row }">
-            <el-button
-              class="el-button-edit"
-              link
-              type="primary"
-              size="small"
-              icon="InfoFilled"
-              @click="openSQLdetail(row)"
-            >
+            <el-button class="el-button-edit" link type="primary" size="small" icon="InfoFilled"
+              @click="openSQLdetail(row)">
               详情
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-table
-        v-else-if="datasource?.accessType === 2"
-        :data="tableData"
-        align="center"
-        fit
-        :highlight-current-row="false"
-        show-overflow-tooltip
-        :border="false"
-        style="width: 100%"
-      >
-        <el-table-column
-          :prop="item.value"
-          :label="item.name"
-          v-for="(item, index) in tableHeader"
-          :show-overflow-tooltip="true"
-          :key="index"
-        >
+      <el-table v-else-if="datasource?.accessType === 2" v-loading="loading" :data="tableData" align="center" fit
+        :highlight-current-row="false" show-overflow-tooltip :border="false" style="width: 100%">
+        <el-table-column :prop="item.value" :label="item.name" v-for="(item, index) in tableHeader"
+          :show-overflow-tooltip="true" :key="index">
         </el-table-column>
         <el-table-column label="操作" width="300" align="center">
           <template #default="{ row }">
-            <el-button
-              class="el-button-edit"
-              link
-              type="primary"
-              size="small"
-              icon="InfoFilled"
-              @click="openDetail(row)"
-            >
+            <el-button class="el-button-edit" link type="primary" size="small" icon="InfoFilled"
+              @click="openDetail(row)">
               详情
             </el-button>
-            <el-button
-              class="el-button-edit"
-              link
-              type="primary"
-              size="small"
-              icon="Download"
-              @click="downLoadData(row)"
-            >
+            <el-button class="el-button-edit" link type="primary" size="small" icon="Download"
+              @click="downLoadData(row)">
               下载
             </el-button>
 
-            <el-popconfirm
-              title="确定删除该数据？"
-              @confirm.stop="deleteRow(row)"
-            >
+            <el-popconfirm title="确定删除该数据？" @confirm.stop="deleteRow(row)">
               <template #reference>
-                <el-button
-                  class="el-button-edit"
-                  link
-                  type="danger"
-                  size="small"
-                  icon="Delete"
-                >
+                <el-button class="el-button-edit" link type="danger" size="small" icon="Delete">
                   删除
                 </el-button>
               </template>
@@ -96,20 +39,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        class="pagination"
-        background
-        layout="->,prev, pager, next, total, sizes,jumper"
-        :total="page.counts"
-        v-if="tableData.length > 0"
-      />
+      <el-pagination class="pagination" background layout="->,prev, pager, next, total, sizes,jumper"
+        :total="page.counts" :page-size="page.pageSize" :current-page="page.pageNum" v-if="tableData.length > 0"
+        @current-change="currentChange" @size-change="sizeChange" />
     </div>
-    <el-empty
-      :image="imgUrl"
-      class="datasource-empty"
-      description="暂无数据"
-      v-else
-    />
+    <el-empty :image="imgUrl" class="datasource-empty" description="暂无数据" v-else />
   </div>
 
   <el-drawer v-model="drawInfo.drawer" :direction="direction" :size="getSize">
@@ -128,62 +62,27 @@
         <div class="info-box" v-if="datasource.accessType == 2">
           文件名称：{{ datasource.dataSourceShowName }}
         </div>
-        <div class="info-box">表名称：{{ datasource.tableName }}</div>
+        <div class="info-box">表名称：{{ drawInfo.tableName }}</div>
         <div class="table-box">
           <div class="info-box">表描述:</div>
-          <el-table
-            :data="drawDataList"
-            align="center"
-            fit
-            :highlight-current-row="false"
-            show-overflow-tooltip
-            :border="false"
-            style="width: 100%"
-          >
-            <el-table-column
-              prop="columnName"
-              label="字段名称"
-              min-width="120"
-              align="center"
-            />
-            <el-table-column
-              prop="columnType"
-              label="字段类型"
-              min-width="120"
-              align="center"
-            />
-            <el-table-column
-              prop="commentComment"
-              label="字段描述"
-              min-width="120"
-              align="center"
-            />
+          <el-table :data="drawDataList" align="center" fit :highlight-current-row="false" show-overflow-tooltip
+            :border="false" style="width: 100%">
+            <el-table-column prop="columnName" label="字段名称" min-width="120" align="center" />
+            <el-table-column prop="columnType" label="字段类型" min-width="120" align="center" />
+            <el-table-column prop="commentComment" label="字段描述" min-width="120" align="center" />
           </el-table>
         </div>
       </template>
       <template v-if="drawInfo.type == 'add'">
         <div class="datasource-action-content" v-if="isShowType == 'none'">
-          <div
-            class="item"
-            v-for="(item, idx) in dataList"
-            :key="idx"
-            @click="openSetting(item)"
-          >
+          <div class="item" v-for="(item, idx) in dataList" :key="idx" @click="openSetting(item)">
             <div class="item-img"></div>
             <div class="item-title">{{ item.title }}</div>
           </div>
         </div>
         <template v-if="isShowType">
-          <setting
-            v-if="isShowType == 'sql'"
-            :isShowTitle="false"
-            @setIsShowType="setIsShowType"
-          />
-          <uploadfile
-            v-if="isShowType == 'file'"
-            :isShowTitle="false"
-            @setIsShowType="setIsShowType"
-          />
+          <setting v-if="isShowType == 'sql'" :isShowTitle="false" @setIsShowType="setIsShowType" />
+          <uploadfile v-if="isShowType == 'file'" :isShowTitle="false" @setIsShowType="setIsShowType" />
         </template>
       </template>
     </template>
@@ -203,13 +102,13 @@ import {
   excelByIdType,
 } from "@/views/construction/types/index";
 import { ElMessage } from "element-plus";
-const imgUrl = ref(noData);
+const imgUrl = ref(noData);//无数据图片
 
 const tableData = ref([]); //表格数据
 const tableHeader = ref<Array<{ name: string; value: string }>>([]); //表头
 //分页数据
 const page = ref<excelByIdType>({
-  pageNum: 0,
+  pageNum: 1,
   pageSize: 10,
   counts: 0,
 });
@@ -229,6 +128,7 @@ const props = defineProps({
     },
   },
 });
+//新建数据源右弹窗
 let drawInfo = ref<drawerTypes>({
   type: "add",
   drawer: false,
@@ -247,13 +147,15 @@ watch(
   (val) => {
     if (val && Object.keys(val).length > 0) {
       datasource.value = val;
+      page.value.pageNum = 1;
+      page.value.pageSize = 10;
       if (datasource.value.accessType == 1) {
         getDataSourceByIdList();
       } else {
         getAllExcelDataById();
       }
     }
-  }
+  }, { immediate: true }
 );
 const {
   getAllExcelDataByDataSourceId,
@@ -261,11 +163,13 @@ const {
   deleteFileDataByDataSourceIdAndDataId,
   getTableByDataSourceId,
 } = DataSource;
+const loading = ref(false);
 //根据数据源id获取excel数据
 const getAllExcelDataById = async () => {
   const id = datasource.value?.id;
   tableData.value = [];
   tableHeader.value = [];
+  loading.value = true;
   const {
     data: { data, counts },
   } = await getAllExcelDataByDataSourceId({
@@ -285,26 +189,66 @@ const getAllExcelDataById = async () => {
       }
     });
   }
+  loading.value = false;
 };
 
 //根据id获取数据源数据
 const getDataSourceByIdList = async () => {
   const id = datasource.value?.id;
   tableData.value = [];
-  const { data } = await getTableByDataSourceId({ dataSourceId: id });
-  if (data && data.length > 0) {
+  loading.value = true;
+  const params = {
+    pageNum: page.value.pageNum - 1,
+    pageSize: page.value.pageSize,
+  } as excelByIdType;
+  const { data: { counts, data } } = await getTableByDataSourceId({
+    dataSourceId: id,
+    ...params
+  });
+  if (counts > 0) {
     tableData.value = data;
+    page.value.counts = counts;
   }
+  loading.value = false;
 };
 
+//分页切换
+const currentChange = (val: any) => {
+  page.value.pageNum = val;
+  if (datasource.value?.accessType == 1) {
+    getDataSourceByIdList();
+  } else {
+    getAllExcelDataById();
+  }
+}
+
+const sizeChange = (val: any) => {
+  page.value.pageSize = val;
+  if (datasource.value?.accessType == 1) {
+    getDataSourceByIdList();
+  } else {
+    getAllExcelDataById();
+  }
+}
+
+
+// =======================详情=====================
+//抽屉框数据
+const drawDataList = ref([]);
+const direction = ref("rtl") as any;
 //文件详情
 const openDetail = async (val: any) => {
-  const { data } = await getColumnByTableId({
+  const { data: { data, counts } } = await getColumnByTableId({
     tableName: datasource.value?.tableName,
     dataSourceId: datasource.value?.id,
+    pageNum: 0,
+    pageSize: 999
   });
-  drawDataList.value = data;
-  drawInfo.value = { type: "detail", drawer: true };
+
+  if (counts > 0) {
+    drawDataList.value = data;
+  }
+  drawInfo.value = { type: "detail", drawer: true, tableName: val.tableName };
 };
 
 //删除文件数据
@@ -324,12 +268,17 @@ const deleteRow = async (val: any) => {
 
 //sql详情
 const openSQLdetail = async (val: any) => {
-  const { data } = await getColumnByTableId({
+  const { data: { data, counts } } = await getColumnByTableId({
     tableName: val.tableName,
     dataSourceId: datasource.value?.id,
+    pageNum: 0,
+    pageSize: 999
   });
-  drawDataList.value = data;
-  drawInfo.value = { type: "detail", drawer: true };
+  if (counts > 0) {
+    drawDataList.value = data;
+  }
+
+  drawInfo.value = { type: "detail", drawer: true ,tableName: val.tableName};
 };
 
 //下载数据
@@ -342,9 +291,7 @@ const downLoadData = (val: any) => {
   down.remove();
 };
 
-//抽屉框数据
-const drawDataList = ref([]);
-const direction = ref("rtl");
+
 const getSize = computed(() => {
   if (drawInfo.value.type == "add") {
     return "20%";
@@ -381,6 +328,7 @@ const setIsShowType = (val: string) => {
   box-sizing: border-box;
   position: relative;
 }
+
 h4.title {
   height: auto;
   font-size: 24px;
@@ -391,6 +339,7 @@ h4.title {
   text-align: left;
   position: relative;
   padding-left: 15px;
+
   &::before {
     content: "";
     position: absolute;
@@ -402,6 +351,7 @@ h4.title {
     background: linear-gradient(180deg, #0059e8 0%, #37e2c1 100%);
   }
 }
+
 .info-box {
   text-align: left;
   height: auto;
@@ -424,6 +374,7 @@ h4.title {
   height: calc(100% - 52px);
   padding: 0 27px;
   box-sizing: border-box;
+
   & .item {
     flex: 0.3;
     height: 100%;
@@ -431,15 +382,18 @@ h4.title {
     border-radius: 15px;
     margin-bottom: 15px;
     cursor: pointer;
+
     &:last-child {
       margin-right: 0;
     }
+
     .item-img {
       height: calc(100% - 42px);
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
       background-color: #bfbfbf;
     }
+
     .item-title {
       font-size: 14px;
       font-family: "PingFang SC";
@@ -452,11 +406,13 @@ h4.title {
     }
   }
 }
+
 .datasource-empty {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
   ::v-deep .el-empty__image {
     width: 140px !important;
   }

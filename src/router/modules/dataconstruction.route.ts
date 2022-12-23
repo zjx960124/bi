@@ -19,9 +19,9 @@ const constructionRoutes: RouteRecordRaw[] = [
     },
   },
   {
-    path: PageEnum.DATA_SET,
-    name: PageEnum.DATA_SET_NAME,
-    component: importRoute['.DATA_SET'],
+    path: '/dataset',
+    name: 'dataset_index',
+    component: import('@/views/construction/dataset/index.vue'),
     meta: {
       title: '数据集',
       isShow: true
@@ -33,7 +33,7 @@ const constructionRoutes: RouteRecordRaw[] = [
     component: importRoute['.PREVIEW'],
     meta: {
       title: '预览页',
-      isShow: true
+      isShow: false
     },
   },
   {
@@ -46,11 +46,20 @@ const constructionRoutes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/dataset/create',
-    name: 'dataset_create',
+    path: '/dataset/create/excel',
+    name: 'dataset_create_excel',
     component: () => import('@/views/construction/dataset/addExcel.vue'),
     meta: {
-      title: '新建数据集',
+      title: '新建EXCEL数据集/替换数据/追加数据',
+      isShow: false
+    },
+  },
+  {
+    path: '/dataset/create/sql',
+    name: 'dataset_create_sql',
+    component: () => import('@/views/construction/dataset/addSql.vue'),
+    meta: {
+      title: '新建(编辑)sql(数据库)数据集',
       isShow: false
     },
   },

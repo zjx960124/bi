@@ -2,7 +2,7 @@ interface checkDatasourceType {
   dataSourceShowName?: string;
   ipContent?: string;
   port?: number | string;
-  dataSourceName?: string;
+  dataSourceName?: string | undefined;
   username?: string;
   password?: string;
   excelDataSourceShowName?: string
@@ -17,7 +17,7 @@ interface checkDatasourceType {
   updater?: string
   creator?: string
   dataSourceId?: number
-  tableName?:string
+  tableName?: string
 }
 
 
@@ -28,7 +28,8 @@ interface dataTypes {
 
 interface drawerTypes {
   type?: string
-  drawer?: boolean
+  drawer?: boolean,
+  tableName?: string
 }
 
 
@@ -37,7 +38,7 @@ interface DataSourceListType {
   pageNum: number
   pageSize: number
   showName?: string
-  accessType?:number
+  accessType?: number
 }
 
 //状态栏盒子
@@ -53,12 +54,56 @@ interface excelType {
 }
 
 
-//根据id获取excel数据
+//根据id获取excel数据(分页)
 interface excelByIdType {
-  dataSourceId?:number
-  pageNum?:number
-  pageSize?:number
-  counts?:number
+  dataSourceId?: number
+  pageNum: number
+  pageSize: number
+  counts?: number
+}
+
+
+//数据集-sql数据集
+interface sqlItem {
+  dataSourceId?: number | string | undefined | never
+  id?: number
+  tableName?: string | undefined | null | never
+}
+
+//数据集-新增数据集或者文件夹
+interface addDataSetType {
+  createTime?: string
+  creator?: string,
+  dataSetType?: number | string,
+  datasourceId?: number | string,
+  excelFileUrl?: string,
+  id?: number | string,
+  isDeleted?: number,
+  isFileFolder?: number,
+  name?: string,
+  parentId?: number | string,
+  sqlContent?: string,
+  status?: number,
+  tableName?: string,
+  updateTime?: string,
+  updater?: string
+  dataSetDtos?:Array<addDataSetType>
+}
+
+//新增数据集-动态表头
+interface headerType {
+  fieldName?: string
+  showName?: string
+  minWidth?: number
+}
+
+
+//数据集列表页
+interface ruleFormType {
+  fileId?: Array<any>
+  dataSetType?: string
+  isFileFolder?: number | string | null | undefined
+  options?: Array<any>
 }
 
 export {
@@ -68,5 +113,9 @@ export {
   DataSourceListType,
   statusFormType,
   excelType,
-  excelByIdType
+  excelByIdType,
+  sqlItem,
+  headerType,
+  addDataSetType,
+  ruleFormType
 }

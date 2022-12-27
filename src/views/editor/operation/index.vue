@@ -60,7 +60,7 @@ const rangeStyle = computed(() => {
   const background = chartEditStore.getEditCanvasConfig.background;
   const backgroundImage = chartEditStore.getEditCanvasConfig.backgroundImage;
   const backgroundColor =
-    backgroundType === 'background' ? background : backgroundImage;
+    backgroundType === 'background' ? background : backgroundImage as string;
 
   const computedBackground =
     backgroundType === 'background'

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { PropType, computed, ref } from 'vue';
-import { ChevronUp, ChevronDown } from '@vicons/ionicons5';
-import { Coordinates } from '../components';
-import { LegendCommon } from '../components';
-import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
-import { option } from '@/packages/components/Charts/Space/MapChina/config';
+import { PropType, computed, ref } from "vue";
+import { ChevronUp, ChevronDown } from "@vicons/ionicons5";
+import { Coordinates } from "../components";
+import { LegendCommon, ComponentCard } from "../components";
+import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
+import { option } from "@/packages/components/Charts/Space/MapChina/config";
 
 const props = defineProps({
   optionData: {
@@ -18,6 +18,14 @@ const props = defineProps({
   type: {
     type: String,
     requeire: true,
+  },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
+    type: Object,
+    required: true,
   },
 });
 
@@ -35,7 +43,7 @@ const titleFontWeightFlag = ref({ type: false });
 const titleFontStyleFlag = ref({ type: false });
 const labelFontWeightFlag = ref({ type: false });
 const labelFontStyleFlag = ref({ type: false });
-const visualMapType = ref<string>('continuous');
+const visualMapType = ref<string>("continuous");
 const visualColor = ref<number>(1);
 const piecewiseColor = ref<number>(0);
 const piecewiseColorOption = computed(() => {
@@ -47,11 +55,11 @@ const piecewiseColorOption = computed(() => {
 });
 const visualColorOption = ref([
   {
-    label: '最大值',
+    label: "最大值",
     value: 1,
   },
   {
-    label: '最小值',
+    label: "最小值",
     value: 0,
   },
 ]);
@@ -75,7 +83,12 @@ const changeVisualType = (val: string) => {
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2', '3', '4', '5', '6']">
-    <coordinates :attr="props.attr"></coordinates>
+    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <component-card
+      :layout="props.layout"
+      :card="props.card"
+      v-show="props.layout"
+    ></component-card>
     <n-collapse-item title="标题与卡片" name="1">
       <div class="common-item">
         <n-checkbox v-model:checked="title.show">显示主标题</n-checkbox>
@@ -396,7 +409,7 @@ const changeVisualType = (val: string) => {
 
     :deep .n-collapse-item__header {
       color: #293270;
-      font-family: 'PingFang-SC-Bold';
+      font-family: "PingFang-SC-Bold";
       font-weight: bold;
       font-size: 14px;
       height: 33px;

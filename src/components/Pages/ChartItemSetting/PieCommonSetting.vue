@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ChevronUp } from '@vicons/ionicons5';
-import { PropType, reactive } from 'vue';
-import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
-import { option } from '@/packages/components/Charts/Distribution/PieCommon/config';
-import { Coordinates, LegendCommon } from '../components';
+import { ChevronUp } from "@vicons/ionicons5";
+import { PropType, reactive } from "vue";
+import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
+import { option } from "@/packages/components/Charts/Distribution/PieCommon/config";
+import { Coordinates, LegendCommon, ComponentCard } from "../components";
 import {
   chartColorsList,
   ChartColorsNameType,
-} from '@/settings/chartThemes/index';
+} from "@/settings/chartThemes/index";
 
 const props = defineProps({
   optionData: {
@@ -26,6 +26,14 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
+    type: Object,
+    required: true,
+  },
 });
 
 const selectTheme = (theme: ChartColorsNameType) => {
@@ -34,16 +42,16 @@ const selectTheme = (theme: ChartColorsNameType) => {
 
 const legendIconOption = reactive([
   {
-    label: '圆形',
-    value: 'circle',
+    label: "圆形",
+    value: "circle",
   },
   {
-    label: '方形',
-    value: 'rect',
+    label: "方形",
+    value: "rect",
   },
   {
-    label: '圆角方形',
-    value: 'roundRect',
+    label: "圆角方形",
+    value: "roundRect",
   },
 ]);
 
@@ -53,7 +61,12 @@ const selectIcon = (value: string) => {
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2']">
-    <coordinates :attr="props.attr"></coordinates>
+    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <component-card
+      :layout="props.layout"
+      :card="props.card"
+      v-show="props.layout"
+    ></component-card>
     <n-collapse-item title="绘色区域" name="1">
       <div class="common-item">
         <div class="common-sub-title">色系选择</div>
@@ -107,7 +120,7 @@ const selectIcon = (value: string) => {
 
     :deep .n-collapse-item__header {
       color: #293270;
-      font-family: 'PingFang-SC-Bold';
+      font-family: "PingFang-SC-Bold";
       font-weight: bold;
       font-size: 14px;
       height: 33px;

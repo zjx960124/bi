@@ -186,6 +186,7 @@ export interface CreateComponentType extends PublicConfigType {
   themeColor?: { color: ChartColorsNameType } & any;
   requestConfig: PublicRequestType;
   layout?: DashboardLayout;
+  card?: any
 }
 
 // 组件成组实例类

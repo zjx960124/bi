@@ -1,7 +1,7 @@
-import { DashboardItem } from './../types';
-import { ChartList, ChartGenreList } from '@/packages/components/Charts/index';
-import { TextList, TextGenreList } from '@/packages/components/Texts/index';
-import { MediaList, MediaGenreList } from '@/packages/components/Media/index';
+import { DashboardItem } from "./../types";
+import { ChartList, ChartGenreList } from "@/packages/components/Charts/index";
+import { TextList, TextGenreList } from "@/packages/components/Texts/index";
+import { MediaList, MediaGenreList } from "@/packages/components/Media/index";
 import {
   PackagesCategoryEnum,
   PackagesType,
@@ -10,17 +10,17 @@ import {
   FetchComFlagType,
   ChartFrameEnum,
   CreateComponentType,
-} from '@/packages/index.d';
+} from "@/packages/index.d";
 import type {
   GlobalThemeJsonType,
   ChartColorsNameType,
-} from '@/settings/chartThemes/index';
-import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
+} from "@/settings/chartThemes/index";
+import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
 const chartEditStore = useChartEditStore();
 
-const configModules = import.meta.globEager('./components/**/config.vue');
-const indexModules = import.meta.globEager('./components/**/index.vue');
-const dataModules = import.meta.globEager('./components/**/data.vue');
+const configModules = import.meta.globEager("./components/**/config.vue");
+const indexModules = import.meta.globEager("./components/**/index.vue");
+const dataModules = import.meta.globEager("./components/**/data.vue");
 
 /**
  * 获取素材图片
@@ -31,13 +31,13 @@ const getImage = (packages: string, name: string): string => {
 };
 
 const headerModules = Object.keys(
-  import.meta.globEager('/src/assets/img/header/*.png')
+  import.meta.globEager("/src/assets/img/header/*.png")
 );
 const borderModules = Object.keys(
-  import.meta.globEager('/src/assets/img/border/*.png')
+  import.meta.globEager("/src/assets/img/border/*.png")
 );
 const curofflineModules = Object.keys(
-  import.meta.globEager('/src/assets/img/curoffline/*.png')
+  import.meta.globEager("/src/assets/img/curoffline/*.png")
 );
 
 class BasicMaterial implements ConfigType {
@@ -50,21 +50,21 @@ class BasicMaterial implements ConfigType {
   public categoryName: string;
   public package: string;
   public chartFrame?: ChartFrameEnum | undefined;
-  public image: string | (() => Promise<typeof import('*.png')>);
-  public images?: string | (() => Promise<typeof import('*.png')>) | undefined;
+  public image: string | (() => Promise<typeof import("*.png")>);
+  public images?: string | (() => Promise<typeof import("*.png")>) | undefined;
   constructor(
-    image: string | (() => Promise<typeof import('*.png')>),
+    image: string | (() => Promise<typeof import("*.png")>),
     category: string,
     title: string
   ) {
-    this.key = 'MaterialCommon';
-    this.chartKey = 'VMaterialCommon';
-    this.conKey = 'VCMaterialCommon';
-    this.dataKey = 'VDMaterialCommon';
+    this.key = "MaterialCommon";
+    this.chartKey = "VMaterialCommon";
+    this.conKey = "VCMaterialCommon";
+    this.dataKey = "VDMaterialCommon";
     this.title = title;
     this.category = category;
-    this.categoryName = '素材';
-    this.package = 'Material';
+    this.categoryName = "素材";
+    this.package = "Material";
     this.chartFrame = ChartFrameEnum.COMMON;
     this.image = image;
     this.images = image;
@@ -79,31 +79,31 @@ function collect() {
   };
 
   headerModules.forEach((item, index) => {
-    const urlSplit = item.split('/');
+    const urlSplit = item.split("/");
     result.Header.push(
       new BasicMaterial(
-        getImage('header', urlSplit[urlSplit.length - 2] + (index + 1)),
-        'Header',
+        getImage("header", urlSplit[urlSplit.length - 2] + (index + 1)),
+        "Header",
         `头部装饰${index + 1}`
       )
     );
   });
   borderModules.forEach((item, index) => {
-    const urlSplit = item.split('/');
+    const urlSplit = item.split("/");
     result.Border.push(
       new BasicMaterial(
-        getImage('border', urlSplit[urlSplit.length - 2] + (index + 1)),
-        'Border',
+        getImage("border", urlSplit[urlSplit.length - 2] + (index + 1)),
+        "Border",
         `区块边框${index + 1}`
       )
     );
   });
   curofflineModules.forEach((item, index) => {
-    const urlSplit = item.split('/');
+    const urlSplit = item.split("/");
     result.Curoffline.push(
       new BasicMaterial(
-        getImage('curoffline', urlSplit[urlSplit.length - 2] + (index + 1)),
-        'Curoffline',
+        getImage("curoffline", urlSplit[urlSplit.length - 2] + (index + 1)),
+        "Curoffline",
         `分割线${index + 1}`
       )
     );
@@ -171,6 +171,21 @@ export const createDashboardComponent = async (targetData: ConfigType) => {
   );
   const result: dashboardConfig = new chart.default();
   result.layout = chartEditStore.getCurrentLayout(result);
+  result.card = {
+    showMainTitle: true,
+    mainTitleContent: "",
+    mainTitleFontSize: 12,
+    mainTitleFontColor: '#FFFFFF',
+    mainTitleFontStyle: '',
+    mainTitleFontWeight: '',
+    showSubTItle: true,
+    subTitleContent: '',
+    showFootTitle: true,
+    footTitleContent: '',
+    customBack: true,
+    customBackColor: '#FFFFFF',
+    customBackRadius: 1
+  };
   return result;
 };
 
@@ -187,7 +202,7 @@ const fetchComponent = (chartName: string, flag: FetchComFlagType) => {
       ? configModules
       : dataModules;
   for (const key in module) {
-    const urlSplit = key.split('/');
+    const urlSplit = key.split("/");
     if (urlSplit[urlSplit.length - 2] === chartName) {
       return module[key];
     }

@@ -7,6 +7,7 @@ import {
   PaintingCommon,
   Shaft,
   LegendCommon,
+  ComponentCard
 } from '../components';
 
 const props = defineProps({
@@ -26,11 +27,20 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
+    type: Object,
+    required: true,
+  }
 });
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2', '3', '4', '5']">
-    <coordinates :attr="props.attr"></coordinates>
+    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <component-card :layout="props.layout" :card="props.card" v-show="props.layout"></component-card>
     <n-collapse-item title="绘色区域" name="1">
       <painting-common
         :optionData="props.optionData"

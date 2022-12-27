@@ -1,6 +1,8 @@
 <template>
   <common-setting
     :attr="attr"
+    :layout="layout"
+    :card="card"
     :optionData="optionData"
     :themeColor="themeColor"
     type="barCommon"
@@ -32,5 +34,16 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
+    type: Object,
+    required: true,
+  }
 });
+
+console.log(props.layout);
+
 </script>

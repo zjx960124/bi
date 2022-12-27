@@ -72,7 +72,7 @@ const service = axios.create({
   withCredentials: true,
   timeout: 30000,
   // transformRequest: [
-  //   (data) => {
+  //   (data) => {`
   //     data = JSON.stringify(data);
   //     return data;
   //   },

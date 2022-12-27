@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ChevronUp } from '@vicons/ionicons5';
-import { Coordinates } from '../components';
+import { ChevronUp } from "@vicons/ionicons5";
+import { Coordinates, ComponentCard } from "../components";
 
 const props = defineProps({
   optionData: {
@@ -15,11 +15,24 @@ const props = defineProps({
     type: String,
     requeire: true,
   },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
+    type: Object,
+    required: true,
+  },
 });
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2', '3', '4', '5', '6']">
-    <coordinates :attr="props.attr"></coordinates>
+    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <component-card
+      :layout="props.layout"
+      :card="props.card"
+      v-show="props.layout"
+    ></component-card>
     <slot name="target"></slot>
     <slot name="process"></slot>
     <slot name="label"></slot>
@@ -39,7 +52,7 @@ const props = defineProps({
 
     :deep .n-collapse-item__header {
       color: #293270;
-      font-family: 'PingFang-SC-Bold';
+      font-family: "PingFang-SC-Bold";
       font-weight: bold;
       font-size: 14px;
       height: 33px;

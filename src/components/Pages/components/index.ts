@@ -14,6 +14,7 @@ import TextSetting from './TextSetting.vue';
 import ImageSetting from './ImageSetting.vue';
 import VideoSetting from './VideoSetting.vue';
 import ClockSetting from './ClockSetting.vue';
+import ComponentCard from './ComponentCard.vue';
 
 export {
   ConfigItem,
@@ -32,4 +33,5 @@ export {
   ImageSetting,
   VideoSetting,
   ClockSetting,
+  ComponentCard
 };

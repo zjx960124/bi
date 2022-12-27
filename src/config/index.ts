@@ -18,7 +18,7 @@ const prod: IConfig = {
   env: 'production',
   mock: false,
   title: '生产',
-  baseApi: 'http://192.168.1.101', // 正式api请求地址
+  baseApi: 'https://pre.haiyanproduct.com', // 正式api请求地址
   mockApi: 'xxx',
 };
 

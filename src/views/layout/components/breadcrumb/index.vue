@@ -16,7 +16,7 @@ const breadcrumbList = ref(routeStore.breadcrumbList);
       </el-breadcrumb-item>
     </template>
   </el-breadcrumb>
-</template>
+</template>ss
 <style lang="scss" scoped>
 :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner) {
   font-weight: 700;

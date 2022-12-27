@@ -3,6 +3,8 @@
     :attr="attr"
     :optionData="optionData"
     :themeColor="themeColor"
+    :layout="layout"
+    :card="card"
     type="barCommon"
   >
     <template #series>
@@ -16,14 +18,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { PieCommonSetting } from '@/components/Pages/ChartItemSetting';
+import { PropType } from "vue";
+import { PieCommonSetting } from "@/components/Pages/ChartItemSetting";
 import {
   ProgressComponent,
   PieLabelCommon,
-} from '@/components/Pages/components';
-import { GlobalThemeJsonType } from '@/settings/chartThemes/index';
-import { option } from '@/packages/components/Charts/Distribution/PieCommon/config';
+} from "@/components/Pages/components";
+import { GlobalThemeJsonType } from "@/settings/chartThemes/index";
+import { option } from "@/packages/components/Charts/Distribution/PieCommon/config";
 
 const props = defineProps({
   optionData: {
@@ -35,6 +37,14 @@ const props = defineProps({
     required: true,
   },
   themeColor: {
+    type: Object,
+    required: true,
+  },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
     type: Object,
     required: true,
   },

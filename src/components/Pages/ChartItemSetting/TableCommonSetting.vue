@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { ChevronUp, ChevronDown } from '@vicons/ionicons5';
-import { TextAlignCenter, TextAlignLeft, TextAlignRight } from '@vicons/carbon';
-import { Coordinates } from '../components';
+import { ref } from "vue";
+import { ChevronUp, ChevronDown } from "@vicons/ionicons5";
+import { TextAlignCenter, TextAlignLeft, TextAlignRight } from "@vicons/carbon";
+import { Coordinates, ComponentCard } from "../components";
 
 const props = defineProps({
   optionData: {
@@ -16,6 +16,14 @@ const props = defineProps({
   type: {
     type: String,
     requeire: true,
+  },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
+    type: Object,
+    required: true,
   },
 });
 
@@ -36,7 +44,12 @@ const switchCommon = (
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2', '3', '4', '5', '6']">
-    <coordinates :attr="props.attr"></coordinates>
+    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <component-card
+      :layout="props.layout"
+      :card="props.card"
+      v-show="props.layout"
+    ></component-card>
     <n-collapse-item name="1" title="表格">
       <div class="common-item">
         <div class="common-sub-title">每页显示数</div>
@@ -310,7 +323,7 @@ const switchCommon = (
 
     :deep .n-collapse-item__header {
       color: #293270;
-      font-family: 'PingFang-SC-Bold';
+      font-family: "PingFang-SC-Bold";
       font-weight: bold;
       font-size: 14px;
       height: 33px;

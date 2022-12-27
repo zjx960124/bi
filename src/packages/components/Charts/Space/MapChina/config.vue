@@ -2,14 +2,16 @@
   <MapCommonSetting
     :option-data="optionData"
     :attr="attr"
+    :layout="layout"
+    :card="card"
     :themeColor="themeColor"
   ></MapCommonSetting>
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { MapCommonSetting } from '@/components/Pages/ChartItemSetting';
-import { option } from './config';
+import { PropType } from "vue";
+import { MapCommonSetting } from "@/components/Pages/ChartItemSetting";
+import { option } from "./config";
 
 const props = defineProps({
   optionData: {
@@ -21,6 +23,14 @@ const props = defineProps({
     required: true,
   },
   themeColor: {
+    type: Object,
+    required: true,
+  },
+  layout: {
+    type: Object,
+    required: true,
+  },
+  card: {
     type: Object,
     required: true,
   },

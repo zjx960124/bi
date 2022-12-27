@@ -2,36 +2,65 @@
   <div class="excel-create-container">
     <div class="left">
       <el-button type="primary" class="left-button" @click="goBack">
-        <el-icon>
-          <ArrowLeft />
-        </el-icon>返回
+        <el-icon> <ArrowLeft /> </el-icon>返回
       </el-button>
       <div class="upload-file-container">
         <div class="content-list">
           <div class="content-list-title">
-            <span><img src="@/assets/data/search-sql.png" class="search" /><span>当前数据源</span></span>
-            <img src="@/assets/data/rest.png" class="rest" @click="getAllDataSource" />
+            <span
+              ><img src="@/assets/data/search-sql.png" class="search" /><span
+                >当前数据源</span
+              ></span
+            >
+            <img
+              src="@/assets/data/rest.png"
+              class="rest"
+              @click="getAllDataSource"
+            />
           </div>
           <div class="list-box" v-loading="dataLoading">
-            <el-scrollbar style="height: 700px;" v-if="dataList && dataList.length > 0">
-              <div class="item" v-for="(item, idx) in dataList" :class="{ active: currentIndex === idx }"
-                @click="sqlClick(item, idx)">
+            <el-scrollbar
+              style="height: 700px"
+              v-if="dataList && dataList.length > 0"
+            >
+              <div
+                class="item"
+                v-for="(item, idx) in dataList"
+                :class="{ active: currentIndex === idx }"
+                @click="sqlClick(item, idx)"
+              >
                 <span>{{ item?.dataSourceShowName }}</span>
               </div>
             </el-scrollbar>
-            <el-empty v-else :image="noImgUrl" class="datasource-empty" description="暂无内容" />
+            <el-empty
+              v-else
+              :image="noImgUrl"
+              class="datasource-empty"
+              description="暂无内容"
+            />
           </div>
         </div>
       </div>
     </div>
     <div class="right">
-      <section v-if="dataSourceShowName && dataSourceShowName.length > 0">
+      <section>
         <!-- 表标题及操作按钮 -->
         <div class="right-title">
-          <span>{{ dataSourceShowName }}</span>
+          <el-input
+            v-model="dataSetName"
+            style="width: 50%"
+            class="dataSetName"
+          />
           <div class="workBox">
-            <el-button type="primary" style="height: 43px;width: 89px;border-radius: 22px;" @click="sqlSave">
-              <img src="@/assets/data/sql-save.png" style="width: 16px;margin-right: 8px;" />
+            <el-button
+              type="primary"
+              style="height: 43px; width: 89px; border-radius: 22px"
+              @click="sqlSave"
+            >
+              <img
+                src="@/assets/data/sql-save.png"
+                style="width: 16px; margin-right: 8px"
+              />
               保存
             </el-button>
           </div>
@@ -40,36 +69,63 @@
         <div class="right-content">
           <div class="tableBox el-common-tableBox">
             <!-- 内容数据 -->
-            <el-table :data="tableData" :height="680" align="center" fit :highlight-current-row="false" :border="false"
-               style="width: 100%">
-              <el-table-column v-for="(it, idx) in headers" :key="idx" :prop="it.fieldName" :label="it.showName"
-                :min-width="it.minWidth" align="center" :show-overflow-tooltip="true"/>
+            <el-table
+              :data="tableData"
+              :height="680"
+              align="center"
+              fit
+              :highlight-current-row="false"
+              :border="false"
+              style="width: 100%"
+            >
+              <el-table-column
+                v-for="(it, idx) in headers"
+                :key="idx"
+                :prop="it.fieldName"
+                :label="it.showName"
+                :min-width="it.minWidth"
+                align="center"
+                :show-overflow-tooltip="true"
+              />
             </el-table>
-            <div style="display:flex;justify-content:center;margin-top: 5px;">
-              <el-pagination class="pagination" background layout="->,prev, pager, next, total, sizes,jumper"
-                :total="page.counts" :page-size="page.pageSize" :current-page="page.pageNum"
-                @current-change="currentChange" @size-change="sizeChange" />
+            <div
+              style="display: flex; justify-content: center; margin-top: 5px"
+            >
+              <el-pagination
+                class="pagination"
+                background
+                layout="->,prev, pager, next, total, sizes,jumper"
+                :total="page.counts"
+                :page-size="page.pageSize"
+                :current-page="page.pageNum"
+                @current-change="currentChange"
+                @size-change="sizeChange"
+              />
             </div>
             <!-- 内容数据 -->
+            <!-- 暂无数据模块 -->
+            <el-empty
+              :image="excelImgUrl"
+              class="datasource-empty"
+              description="暂无内容"
+            />
+            <!-- 暂无数据模块 -->
           </div>
         </div>
       </section>
-      <!-- 暂无数据模块 -->
-      <el-empty v-else :image="excelImgUrl" class="datasource-empty" description="暂无内容" />
-      <!-- 暂无数据模块 -->
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import excelData from '@/assets/data/excelNo.png';
-import noData from '@/assets/data/noData.png';
-import { ref, onMounted, reactive, toRefs, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
-import { DataSource } from '@/api/dataSource';
-import { addDataSetOrFileFolder, getDataByTableId } from '@/api/dataset';
-import { checkDatasourceType, headerType } from '@/views/construction/types';
+import excelData from "@/assets/data/excelNo.png";
+import noData from "@/assets/data/noData.png";
+import { ref, onMounted, reactive, toRefs, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
+import { DataSource } from "@/api/dataSource";
+import { addDataSetOrFileFolder, getDataByTableId } from "@/api/dataset";
+import { checkDatasourceType, headerType } from "@/views/construction/types";
 
 //暂无数据图片
 const excelImgUrl = ref(excelData);
@@ -95,21 +151,23 @@ if (type) {
   typeName.value = type;
 }
 
-
 //右侧数据
 const State = reactive({
+  //数据集名称
+  dataSetName: "未命名数据集",
   //数据源id
   dataSourceId: 0,
   //数据源名称
-  dataSourceShowName:'',
+  dataSourceShowName: "",
   //表格数据
   tableData: [],
   headers: [] as Array<headerType>,
 });
 
-const { dataSourceId, dataSourceShowName,tableData, headers } = toRefs(State)
+const { dataSourceId, dataSourceShowName, dataSetName, tableData, headers } =
+  toRefs(State);
 
-const { getDatasourceList, getAllExcelDataByDataSourceId } = DataSource;//数据源接口
+const { getDatasourceList, getAllExcelDataByDataSourceId } = DataSource; //数据源接口
 
 //获取所有数据源
 const getAllDataSource = async () => {
@@ -119,17 +177,18 @@ const getAllDataSource = async () => {
   if (counts > 0) {
     dataList.value = data;
   }
-}
-
+};
 
 //数据库数据集-通过表名获取数据
 let page = ref({
   pageNum: 1,
   pageSize: 10,
-  counts: 0
-})
+  counts: 0,
+});
 const getMySqlTableData = async () => {
-  const { data: { data, counts } } = await getAllExcelDataByDataSourceId({
+  const {
+    data: { data, counts },
+  } = await getAllExcelDataByDataSourceId({
     pageNum: page.value.pageNum - 1,
     pageSize: page.value.pageSize,
     dataSourceId: dataSourceId.value,
@@ -142,68 +201,65 @@ const getMySqlTableData = async () => {
         fieldName: it,
         minWidth: 240,
         showName: it,
-      })
+      });
     });
     headers.value = ars;
     tableData.value = arr;
     page.value.counts = counts;
   }
-}
+};
 
 const currentChange = (val: any) => {
   page.value.pageNum = val;
   getMySqlTableData();
-}
+};
 
 const sizeChange = (val: any) => {
   page.value.pageSize = val;
   getMySqlTableData();
-}
+};
 
 //点击表获取sql数据
 const sqlClick = (val: any, key: number) => {
   currentIndex.value = key;
   dataSourceId.value = val.id;
-  dataSourceShowName.value = val.dataSourceShowName
+  dataSourceShowName.value = val.dataSourceShowName;
   getMySqlTableData();
-}
-
+};
 
 //保存
 const sqlSave = async () => {
   const { data } = await addDataSetOrFileFolder({
-    "createTime": "",
-    "creator": "",
-    "dataSetType": type,
-    "datasourceId": dataSourceId.value,
-    "excelFileUrl": "",
-    "id": 0,
-    "isDeleted": 0,
-    "isFileFolder": 2,
-    "name": fileName,
-    "parentId": parentId.value,
-    "sqlContent": '',
-    "status": 0,
-    "tableName": dataSourceShowName.value,
-    "updateTime": "",
-    "updater": ""
+    createTime: "",
+    creator: "",
+    dataSetType: type,
+    datasourceId: dataSourceId.value,
+    excelFileUrl: "",
+    id: 0,
+    isDeleted: 0,
+    isFileFolder: 2,
+    name: dataSetName.value,
+    parentId: parentId.value,
+    sqlContent: "",
+    status: 0,
+    tableName: dataSourceShowName.value,
+    updateTime: "",
+    updater: "",
   });
   if (data && Object.keys(data).length > 0) {
-    ElMessage.success('保存成功');
-    router.push('/dataset/list')
+    ElMessage.success("保存成功");
+    router.push("/dataset/list");
   }
-}
-
+};
 
 //返回上一页
 const goBack = () => {
   window.history.go(-1);
-}
+};
 
 onMounted(() => {
-  getAllDataSource();//获取所有数据源
-})
-
+  getAllDataSource(); //获取所有数据源
+});
 </script>
 <style scoped lang="scss">
 .excel-create-container {
@@ -236,7 +292,7 @@ onMounted(() => {
       padding-top: 12px;
       box-sizing: border-box;
 
-      &>.content-list {
+      & > .content-list {
         width: 100%;
         box-sizing: border-box;
         // padding: 0 15px;
@@ -294,12 +350,12 @@ onMounted(() => {
             font-size: 12px;
             font-family: "PingFang SC";
             font-weight: 400;
-            color: #6B797F;
+            color: #6b797f;
             line-height: 30px;
 
             &.active {
               color: #293270;
-              background: #F3F5FF;
+              background: #f3f5ff;
             }
           }
         }
@@ -321,7 +377,7 @@ onMounted(() => {
       align-items: center;
       height: 43px;
       font-size: 24px;
-      font-family: 'PingFang SC';
+      font-family: "PingFang SC";
       font-weight: bold;
       color: #293270;
       position: relative;
@@ -329,7 +385,7 @@ onMounted(() => {
       box-sizing: border-box;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 0;
@@ -390,18 +446,18 @@ onMounted(() => {
           color: #293270;
           line-height: 30px;
 
-          &>img {
+          & > img {
             width: 34px;
             margin-right: 8px;
           }
         }
 
         & .workspace {
-          &>.el-button {
+          & > .el-button {
             width: 101px;
             height: 27px;
-            background: #FFFFFF;
-            border: 1px solid #DCDDE0;
+            background: #ffffff;
+            border: 1px solid #dcdde0;
             border-radius: 14px;
 
             img {
@@ -413,7 +469,7 @@ onMounted(() => {
               font-size: 14px;
               font-family: "PingFang SC";
               font-weight: 500;
-              color: #BBBCBB;
+              color: #bbbcbb;
               line-height: 30px;
             }
           }
@@ -422,8 +478,8 @@ onMounted(() => {
 
       .table-status {
         height: 300px;
-        background: #FFFFFF;
-        border: 2px solid #FF0100;
+        background: #ffffff;
+        border: 2px solid #ff0100;
         border-radius: 15px;
         padding: 12px;
         box-sizing: border-box;
@@ -440,7 +496,7 @@ onMounted(() => {
             font-size: 14px;
             font-family: "PingFang SC";
             font-weight: bold;
-            color: #FF0100;
+            color: #ff0100;
             align-items: center;
 
             & img {
@@ -453,7 +509,7 @@ onMounted(() => {
             font-size: 14px;
             font-family: "PingFang SC";
             font-weight: bold;
-            color: #FF0100;
+            color: #ff0100;
             display: flex;
             align-items: center;
             margin-top: 8px;
@@ -464,7 +520,7 @@ onMounted(() => {
           font-size: 14px;
           font-family: "PingFang SC";
           font-weight: bold;
-          color: #FF0100;
+          color: #ff0100;
           line-height: 30px;
           display: flex;
           justify-content: flex-start;
@@ -474,12 +530,11 @@ onMounted(() => {
           font-size: 14px;
           font-family: "PingFang SC";
           font-weight: bold;
-          color: #FF0100;
+          color: #ff0100;
           text-align: left;
         }
       }
     }
-
 
     .datasource-empty {
       position: absolute;
@@ -495,41 +550,25 @@ onMounted(() => {
   height: 29px;
 
   ::v-deep .el-input__wrapper {
-    background: #FFFFFF;
-    border: 1px solid #D5D5DE;
+    background: #ffffff;
+    border: 1px solid #d5d5de;
     border-radius: 12px;
     box-shadow: unset;
     height: 29px;
   }
 }
 
-.turn {
-  animation: turn 10s linear infinite;
-}
+.dataSetName {
+  ::v-deep .el-input__wrapper {
+    background: transparent !important;
+    box-shadow: unset;
 
-@keyframes turn {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  20% {
-    transform: rotate(72deg);
-  }
-
-  40% {
-    transform: rotate(144deg);
-  }
-
-  60% {
-    transform: rotate(216deg);
-  }
-
-  80% {
-    transform: rotate(288deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
+    .el-input__inner {
+      font-size: 24px;
+      font-family: "PingFang SC";
+      font-weight: bold;
+      color: #293270;
+    }
   }
 }
 </style>

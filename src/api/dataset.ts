@@ -45,3 +45,20 @@ export function getFileFolderAndDataSets() {
         responseType: 'json',
     })
 }
+
+//数据集-更改文件夹或数据集信息
+export function updateDataSetOrFileFolder(params: any) {
+    return Request('/rest/bi/updateDataSetOrFileFolder', {
+        method: 'put',
+        responseType: 'json',
+        data: params
+    })
+}
+
+//数据集-删除文件夹或数据集
+export function deleteDataSetOrFileFolder(dataSetOrFileFolderId: any) {
+    return Request(`/rest/bi/deleteDataSetOrFileFolder/${dataSetOrFileFolderId}`, {
+        method: 'delete',
+        responseType: 'json',
+    })
+}

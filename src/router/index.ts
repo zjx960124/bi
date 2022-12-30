@@ -14,6 +14,7 @@ const Layout = () => import('@/views/layout/index.vue');
 const editor = () => import('@/views/editor');
 const dashboardEditor = () => import('@/views/analysis/dashboard/editor');
 const preview = () => import('@/views/preview/index.vue');
+const dashboardPreview = () => import('@/views/dashboardPreview/index.vue');
 const canvasd = () => import('@/views/editor/canvas/index.vue');
 
 interface metaType extends RouteMeta {
@@ -101,6 +102,15 @@ const EditorRoute: Array<RouteRecordRaw> = [
       icon: '',
     },
   },
+  {
+    path: '/dashboardPreview',
+    name: 'dashboardPreview',
+    component: dashboardPreview,
+    meta: {
+      titile: '预览',
+      icon: '',
+    }
+  }
 ];
 
 const router = createRouter({

@@ -61,11 +61,11 @@ const selectIcon = (value: string) => {
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2']">
-    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <coordinates :attr="props.attr" v-if="!props.layout"></coordinates>
     <component-card
       :layout="props.layout"
       :card="props.card"
-      v-show="props.layout"
+      v-if="props.layout"
     ></component-card>
     <n-collapse-item title="绘色区域" name="1">
       <div class="common-item">

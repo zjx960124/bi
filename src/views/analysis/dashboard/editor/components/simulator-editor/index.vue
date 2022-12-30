@@ -150,7 +150,6 @@ mitt.on("move", (data: any) => {
       data.e.clientY - data.rect.top,
       data.e.clientX - data.rect.left
     );
-    console.log(new_pos.value);
 
     parent.dragEvent(
       "dragstart",
@@ -163,7 +162,9 @@ mitt.on("move", (data: any) => {
   }
 });
 
-mitt.on("remove", (e) => {
+mitt.on("remove", (e: any) => {
+  console.log(e);
+
   proxy.$refs.gridLayoutDom.dragEvent(
     "dragend",
     "drop",
@@ -173,14 +174,32 @@ mitt.on("remove", (e) => {
     6
   );
 
+  const resultY = Math.floor(e.offsetY / 40);
+  console.log(resultY);
+
   virtualItem.value.length && (virtualItem.value = []);
 
   mitt.emit("transfer", new_pos);
+
+  setTimeout(() => {
+    proxy.$refs.gridLayoutDom.dragEvent(
+      "dragend",
+      (chartEditStore.getComponentList.length - 1).toString(),
+      new_pos.value.x,
+      new_pos.value.y,
+      6,
+      6
+    );
+  }, 200);
 });
 
 mitt.on("delete", (e) => {
   virtualItem.value.length && (virtualItem.value = []);
 });
+
+const moveEvent = (i, newX, newY) => {
+  console.log(i, newX, newY);
+};
 </script>
 
 <template>
@@ -217,6 +236,7 @@ mitt.on("delete", (e) => {
                   :w="item!.w"
                   :h="item!.h"
                   :i="item!.i"
+                  @move="moveEvent"
                 >
                 </grid-item>
                 <grid-item
@@ -228,6 +248,7 @@ mitt.on("delete", (e) => {
                   :i="item!.i"
                   @click="activeComponent($event, item!.id)"
                   :class="{ active: selectId[0] === item!.id }"
+                  @move="moveEvent"
                   :style="{
                     backgroundColor: chartEditStore.getComponentList[index].card
                       .customBack
@@ -386,7 +407,8 @@ mitt.on("delete", (e) => {
     flex-shrink: 0;
     text-align: left;
   }
-  ::v-deep .echarts .edit-content-chart {
+  ::v-deep .echarts,
+  .edit-content-chart {
     height: 0;
     flex: 1;
   }

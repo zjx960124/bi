@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'ComponentsPanel',
+  name: "ComponentsPanel",
 };
 </script>
 <template>
@@ -22,28 +22,28 @@ export default {
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs, watch, PropType, onMounted } from 'vue';
-import omit from 'lodash/omit';
-import { DragKeyEnum } from '@/types';
-import { createComponent, createDashboardComponent } from '@/packages';
-import { ConfigType, CreateComponentType } from '@/packages/index.d';
-import { EditCanvasTypeEnum } from '@/store/chartEditStore/chartEditStore.d';
-import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
-import { componentInstall } from '@/utils';
+import { ref, reactive, toRefs, watch, PropType, onMounted } from "vue";
+import omit from "lodash/omit";
+import { DragKeyEnum } from "@/types";
+import { createComponent, createDashboardComponent } from "@/packages";
+import { ConfigType, CreateComponentType } from "@/packages/index.d";
+import { EditCanvasTypeEnum } from "@/store/chartEditStore/chartEditStore.d";
+import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
+import { componentInstall } from "@/utils";
 import {
   fetchConfigComponent,
   fetchChartComponent,
   fetchDataComponent,
-} from '@/packages/index';
-import { useTargetData } from '@/utils/hooks/useTargetData';
-import mitt from '@/utils/hooks/mitt';
+} from "@/packages/index";
+import { useTargetData } from "@/utils/hooks/useTargetData";
+import mitt from "@/utils/hooks/mitt";
 
 const chartEditStore = useChartEditStore();
 const { layoutList } = useTargetData();
 
 const currentItem = ref<ConfigType>();
 const pos = ref({ x: 0, y: 0 });
-mitt.on('transfer', async (e: any) => {
+mitt.on("transfer", async (e: any) => {
   console.log(e);
 
   pos.value = e.value;
@@ -102,7 +102,7 @@ onMounted(() => {
 });
 
 const drag = (e: DragEvent, item: ConfigType) => {
-  const rect = document.querySelector('#layoutView')!.getBoundingClientRect();
+  const rect = document.querySelector("#layoutView")!.getBoundingClientRect();
   if (
     e.clientX > rect.left &&
     e.clientX < rect.right &&
@@ -110,7 +110,7 @@ const drag = (e: DragEvent, item: ConfigType) => {
     e.clientY < rect.bottom
   ) {
     // 进入指定区域
-    mitt.emit('move', {
+    mitt.emit("move", {
       e,
       rect,
       index: chartEditStore.getComponentList.length,
@@ -118,7 +118,7 @@ const drag = (e: DragEvent, item: ConfigType) => {
     return;
   }
   if (e.clientX !== 0 && e.clientY !== 0) {
-    mitt.emit('delete', e);
+    mitt.emit("delete", e);
   }
 };
 
@@ -133,8 +133,8 @@ const dragStartHandle = (e: DragEvent, item: ConfigType) => {
   // chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, true);
 };
 const dragendHandle = async (e: DragEvent, item: ConfigType) => {
-  console.log('拖拽结束');
-  const rect = document.querySelector('#layoutView')!.getBoundingClientRect();
+  console.log("拖拽结束");
+  const rect = document.querySelector("#layoutView")!.getBoundingClientRect();
   if (
     e.clientX > rect.left &&
     e.clientX < rect.right &&
@@ -142,9 +142,9 @@ const dragendHandle = async (e: DragEvent, item: ConfigType) => {
     e.clientY < rect.bottom
   ) {
     // 成功放入指定区域
-    console.log('成功放入指定区域');
+    console.log("成功放入指定区域");
     currentItem.value = item;
-    mitt.emit('remove');
+    mitt.emit("remove", e);
   }
   chartEditStore.setEditCanvas(EditCanvasTypeEnum.IS_CREATE, false);
 };
@@ -163,7 +163,7 @@ const dblclickHandle = async (item: ConfigType) => {
     // 选中
     chartEditStore.setTargetSelectChart(newComponent.id);
   } catch (error) {
-    window['$message'].warning(`图表正在研发中, 敬请期待...`);
+    window["$message"].warning(`图表正在研发中, 敬请期待...`);
   }
 };
 </script>

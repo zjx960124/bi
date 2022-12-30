@@ -1,15 +1,12 @@
-<script lang='ts'>
+<script lang="ts">
 export default {
-  name: 'Header'
+  name: "Header",
 };
 </script>
 <template>
-  <div class='header'>
+  <div class="header">
     <div class="header-left">
-      <div
-        class="el-button-primary backBtn"
-        @click="handleBack"
-      >
+      <div class="el-button-primary backBtn" @click="handleBack">
         <img
           width="8"
           height="14"
@@ -45,7 +42,7 @@ export default {
           placement="bottom"
         >
           <svg-icon
-            :class-name="`btn ${isBackOff? 'active':''}`"
+            :class-name="`btn ${isBackOff ? 'active' : ''}`"
             icon="backOff"
             @click="handleBackOff"
           ></svg-icon>
@@ -57,7 +54,7 @@ export default {
           placement="bottom"
         >
           <svg-icon
-            :class-name="`btn ${isForward? 'active':''}`"
+            :class-name="`btn ${isForward ? 'active' : ''}`"
             icon="forward"
             @click="handleForward"
           ></svg-icon>
@@ -76,7 +73,7 @@ export default {
           <span class="text">预览</span>
         </div>
         <div
-          class="el-button-primary operation-btn  margin-left-10"
+          class="el-button-primary operation-btn margin-left-10"
           @click="handleSave"
         >
           <img
@@ -85,10 +82,7 @@ export default {
             src="/src/assets/analysis/icon-save.png"
           /><span class="text">保存</span>
         </div>
-        <div
-          class="el-button-primary margin-left-10"
-          @click="handleMore"
-        >
+        <div class="el-button-primary margin-left-10" @click="handleMore">
           <img
             width="14"
             height="13"
@@ -99,43 +93,43 @@ export default {
     </div>
   </div>
 </template>
- 
-<script setup lang='ts'>
-import { ref, reactive, toRefs, computed, onMounted } from 'vue';
-import { ElMessage } from 'element-plus';
-import router from '@/router';
-import Project from '@/store/pageEditStore/pageEditStore';
-import { setLocalStorage, getLocalStorage } from '@/utils';
-import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
-import { useChartHistoryStore } from '@/store/chartHistoryStore/chartHistoryStore';
+
+<script setup lang="ts">
+import { ref, reactive, toRefs, computed, onMounted } from "vue";
+import { ElMessage } from "element-plus";
+import router from "@/router";
+import Project from "@/store/pageEditStore/pageEditStore";
+import { setLocalStorage, getLocalStorage } from "@/utils";
+import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
+import { useChartHistoryStore } from "@/store/chartHistoryStore/chartHistoryStore";
 const chartEditStore = useChartEditStore();
 const chartHistoryStore = useChartHistoryStore();
 const canvasConfig = chartEditStore.getEditCanvasConfig;
 
 const state = reactive({
-  boardSize: '1000*1000',
+  boardSize: "1000*1000",
   boardSizeOptions: [
     {
       id: 0,
-      label: '1000*1000',
-      value: '1000*1000'
+      label: "1000*1000",
+      value: "1000*1000",
     },
     {
       id: 1,
-      label: '1920*1080',
-      value: '1920*1080'
+      label: "1920*1080",
+      value: "1920*1080",
     },
     {
       id: 2,
-      label: '2560*1440',
-      value: '2560*1440'
+      label: "2560*1440",
+      value: "2560*1440",
     },
     {
       id: 3,
-      label: '3840*2160',
-      value: '3840*2160'
-    }
-  ]
+      label: "3840*2160",
+      value: "3840*2160",
+    },
+  ],
 });
 
 const { boardSize, boardSizeOptions } = toRefs(state);
@@ -150,11 +144,14 @@ const isBackOff = computed(() => chartHistoryStore.getBackStack.length > 1);
 const isForward = computed(() => chartHistoryStore.getForwardStack.length > 0);
 
 const handleBack = () => {
+  chartEditStore.componentList = [];
+  chartHistoryStore.clearForwardStack();
+  chartHistoryStore.clearBackStack();
   router.go(-1);
 };
 
 const handleBoardSizeChange = (value: any) => {
-  let sizes = value.split('*');
+  let sizes = value.split("*");
   canvasConfig.width = sizes[0];
   canvasConfig.height = sizes[1];
 };
@@ -162,20 +159,22 @@ const handleBoardSizeChange = (value: any) => {
 const handlePreview = () => {
   const projectInfo = Project.value.getProjectInfo();
   const sessionStorageInfo = getLocalStorage(projectInfo.id) || {};
-  setLocalStorage(projectInfo.id, projectInfo);
+  setLocalStorage(projectInfo.id, projectInfo.list[0].component);
+  console.log(projectInfo.list[0].component);
+
   const { href } = router.resolve({
-    path: '/preview',
+    path: "/dashboardPreview",
     query: {
-      id: projectInfo.id
-    }
+      id: projectInfo.id,
+    },
   });
-  window.open(href, '_blank');
+  window.open(href, "_blank");
 };
 
 const handleSave = () => {
   ElMessage({
-    type: 'success',
-    message: '保存成功'
+    type: "success",
+    message: "保存成功",
   });
 };
 
@@ -196,12 +195,12 @@ const handleForward = () => {
 
 const handleMore = () => {
   ElMessage({
-    type: 'success',
-    message: '点击了更多'
+    type: "success",
+    message: "点击了更多",
   });
 };
 </script>
- 
+
 <style lang="scss" scoped>
 .header {
   display: flex;
@@ -226,7 +225,7 @@ const handleMore = () => {
       line-height: 1;
       text-align: left;
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 0;

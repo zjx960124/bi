@@ -24,6 +24,7 @@ export type ConfigType = {
   chartFrame?: ChartFrameEnum;
   image: string | (() => Promise<typeof import('*.png')>);
   images?: string | (() => Promise<typeof import('*.png')>);
+  label?: string
 };
 
 // 包分类枚举
@@ -66,6 +67,22 @@ export type GenreConfigType = {
 // };
 
 export type GenreType = {
+  [GenreEnum.COMPARE]?: ConfigType;
+  [GenreEnum.TREND]?: ConfigType;
+  [GenreEnum.TABLE]?: ConfigType;
+  [GenreEnum.TARGET]?: ConfigType;
+  [GenreEnum.DISTRIBUTION]?: ConfigType;
+  [GenreEnum.SPACE]?: ConfigType;
+  [GenreEnum.TEXT]?: ConfigType;
+  [GenreEnum.CLOCK]?: ConfigType;
+  [GenreEnum.IMAGE]?: ConfigType;
+  [GenreEnum.VIDEO]?: ConfigType;
+  [GenreEnum.HEADER]?: ConfigType;
+  [GenreEnum.BORDER]?: ConfigType;
+  [GenreEnum.CUROFFLINE]?: ConfigType;
+};
+
+export type AllGenreType = {
   [GenreEnum.COMPARE]?: ConfigType[];
   [GenreEnum.TREND]?: ConfigType[];
   [GenreEnum.TABLE]?: ConfigType[];
@@ -82,10 +99,10 @@ export type GenreType = {
 };
 
 export type PackagesGenreType = {
-  [PackagesCategoryEnum.CHARTS]?: GenreType;
-  [PackagesCategoryEnum.TEXT]?: GenreType;
-  [PackagesCategoryEnum.MEDIA]?: GenreType;
-  [PackagesCategoryEnum.MATERIAL]?: GenreType;
+  [PackagesCategoryEnum.CHARTS]?: AllGenreType;
+  [PackagesCategoryEnum.TEXT]?: AllGenreType;
+  [PackagesCategoryEnum.MEDIA]?: AllGenreType;
+  [PackagesCategoryEnum.MATERIAL]?: AllGenreType;
 };
 
 // 获取组件

@@ -27,11 +27,11 @@ const props = defineProps({
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2', '3', '4', '5', '6']">
-    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <coordinates :attr="props.attr" v-if="!props.layout"></coordinates>
     <component-card
       :layout="props.layout"
       :card="props.card"
-      v-show="props.layout"
+      v-if="props.layout"
     ></component-card>
     <slot name="target"></slot>
     <slot name="process"></slot>

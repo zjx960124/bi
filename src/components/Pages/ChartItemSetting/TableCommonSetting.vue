@@ -44,11 +44,11 @@ const switchCommon = (
 </script>
 <template>
   <n-collapse :default-expanded-names="['1', '2', '3', '4', '5', '6']">
-    <coordinates :attr="props.attr" v-show="!props.layout"></coordinates>
+    <coordinates :attr="props.attr" v-if="!props.layout"></coordinates>
     <component-card
       :layout="props.layout"
       :card="props.card"
-      v-show="props.layout"
+      v-if="props.layout"
     ></component-card>
     <n-collapse-item name="1" title="表格">
       <div class="common-item">

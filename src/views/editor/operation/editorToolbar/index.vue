@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref, toRefs, watch, watchEffect } from 'vue';
-import { loadAsyncComponent } from '@/utils';
-import { useChartEditStore } from '@/store/chartEditStore/chartEditStore';
-import { EditCanvasTypeEnum } from '@/store/chartEditStore/chartEditStore.d';
-import { ReorderFour, AddCircle, RemoveCircle } from '@vicons/ionicons5';
+import { reactive, ref, toRefs, watch, watchEffect } from "vue";
+import { loadAsyncComponent } from "@/utils";
+import { useChartEditStore } from "@/store/chartEditStore/chartEditStore";
+import { EditCanvasTypeEnum } from "@/store/chartEditStore/chartEditStore.d";
+import { ReorderFour, AddCircle, RemoveCircle } from "@vicons/ionicons5";
 
 // 获取全部分类组件
 import {
@@ -11,13 +11,13 @@ import {
   genreMenuOptionsType,
   menuOptions,
   MenuOptionsType,
-} from '@/utils/hooks/useAside';
+} from "@/utils/hooks/useAside";
 
 const chartEditStore = useChartEditStore();
 const { lockScale, scale } = toRefs(chartEditStore.getEditCanvas);
 
 const chartsItem = loadAsyncComponent(
-  () => import('../../charts/components/chartsItem/index.vue')
+  () => import("../../charts/components/chartsItem/index.vue")
 );
 
 // 拖动
@@ -32,10 +32,10 @@ const sliderHandle = (v: number) => {
   chartEditStore.setScale(v / 100);
 };
 const sliderMaks = reactive({
-  100: '',
+  100: "",
 });
 
-const type = ref<string>('');
+const type = ref<string>("");
 
 // 加减Scale
 const handleReduceScale = () => {
@@ -50,11 +50,17 @@ const handleIncreaseScale = () => {
 const currentMenuOptions = ref<genreMenuOptionsType>();
 const handleClick = (item: genreMenuOptionsType, index: number) => {
   const domRect = document
-    .getElementById('editor-toolbar')!
+    .getElementById("editor-toolbar")!
     .getBoundingClientRect();
   x.value = domRect.x;
   y.value = domRect.height + domRect.y;
   currentMenuOptions.value = item as genreMenuOptionsType;
+  if (item.list.Compare) {
+    currentMenu.value = item.list.Compare.key;
+  }
+  if (item.list.Header) {
+    currentMenu.value = item.list.Header.key;
+  }
   if (index === currenIndex.value) {
     showPopover.value = !showPopover.value;
   } else {
@@ -64,9 +70,11 @@ const handleClick = (item: genreMenuOptionsType, index: number) => {
   currenIndex.value = index;
 };
 
+const currentMenu = ref<string>("");
 //滚动到指定位置
 const intoView = (key: string) => {
   console.log(key);
+  currentMenu.value = key;
   const dom = document.getElementById(key);
   console.log(dom);
   if (dom) {
@@ -125,7 +133,11 @@ const y = ref(0);
             </template>
             <div class="popover-menu-btn-view">
               <template v-for="items in currentMenuOptions!.list">
-                <div class="menu-btn" @click="intoView(items!.key)">
+                <div
+                  class="menu-btn"
+                  @click="intoView(items!.key)"
+                  :class="{ 'menu-btn-active': currentMenu === items!.key }"
+                >
                   {{ items!.label }}
                 </div>
               </template>
@@ -168,7 +180,7 @@ const y = ref(0);
       }
       .slider-value {
         margin-left: 11px;
-        font-family: 'PingFang-SC-Regular';
+        font-family: "PingFang-SC-Regular";
         color: #6b797f;
         font-size: 12px;
       }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch } from "vue";
 import {
   getLocalStorage,
   getSessionStorageInfo,
   animationsClass,
-} from '@/utils';
-import { PreviewPage } from './previewPage';
+} from "@/utils";
+import { PreviewPage } from "./previewPage";
 const props = defineProps({
   previewId: {
     type: String,
@@ -16,13 +16,13 @@ const projectInfo = getSessionStorageInfo() || getLocalStorage(props.previewId);
 const currentPageIndex = ref(0);
 
 const indexModules = import.meta.globEager(
-  '@/packages/components/**/index.vue'
+  "@/packages/components/**/index.vue"
 );
 
 for (const key in indexModules) {
-  const url = key.split('/');
-  window['$vue'].component(
-    'V' + url[url.length - 2],
+  const url = key.split("/");
+  window["$vue"].component(
+    "V" + url[url.length - 2],
     indexModules[key].default
   );
 }

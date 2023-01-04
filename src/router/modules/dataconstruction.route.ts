@@ -21,7 +21,7 @@ const constructionRoutes: RouteRecordRaw[] = [
   {
     path: '/dataset',
     name: 'dataset_index',
-    component: import('@/views/construction/dataset/index.vue'),
+    component: () => import('@/views/construction/dataset/index.vue'),
     meta: {
       title: '数据集',
       isShow: true
